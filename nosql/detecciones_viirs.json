@@ -1,0 +1,34 @@
+[
+  {
+    "deteccion_id": "V_2023_0001",
+    "celda_id": "LJ_04521",
+    "fecha": "2023-08-15",
+    "fuente": "VIIRS",
+    "frp_mw": 18.4,
+    "fire_mask": 7,
+    "coordenadas": {
+      "longitud": -79.241,
+      "latitud": -4.082
+    },
+    "calidad": {
+      "valida": true,
+      "observado_mes": true
+    }
+  },
+  {
+    "deteccion_id": "V_2023_0002",
+    "celda_id": "LJ_04522",
+    "fecha": "2023-08-20",
+    "fuente": "VIIRS",
+    "frp_mw": 9.7,
+    "fire_mask": 8,
+    "coordenadas": {
+      "longitud": -79.236,
+      "latitud": -4.079
+    },
+    "calidad": {
+      "valida": true,
+      "observado_mes": true
+    }
+  }
+]
