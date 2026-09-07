@@ -1,12 +1,20 @@
 use("fireforest");
 
-// 1. Consultar detecciones válidas
+print("\n1. DETECCIONES VALIDAS");
+
 db.detecciones_viirs.find(
   { "calidad.valida": true },
-  { _id: 0, deteccion_id: 1, celda_id: 1, fecha: 1, frp_mw: 1 }
-);
+  {
+    _id: 0,
+    deteccion_id: 1,
+    celda_id: 1,
+    fecha: 1,
+    frp_mw: 1
+  }
+).forEach(printjson);
 
-// 2. Obtener la FRP máxima
+print("\n2. RESUMEN DE FRP");
+
 db.detecciones_viirs.aggregate([
   {
     $group: {
@@ -16,9 +24,10 @@ db.detecciones_viirs.aggregate([
       numero_detecciones: { $sum: 1 }
     }
   }
-]);
+]).forEach(printjson);
 
-// 3. Agrupar detecciones por celda
+print("\n3. DETECCIONES POR CELDA");
+
 db.detecciones_viirs.aggregate([
   {
     $group: {
@@ -31,4 +40,4 @@ db.detecciones_viirs.aggregate([
   {
     $sort: { numero_detecciones: -1 }
   }
-]);
+]).forEach(printjson);
