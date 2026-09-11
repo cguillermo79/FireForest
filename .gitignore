@@ -1,0 +1,13 @@
+# Entorno y credenciales
+.env
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs y resultados generados localmente
+logs/*.log
