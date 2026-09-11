@@ -19,13 +19,16 @@ WITH incendio_mes AS (
     GROUP BY df.anio, df.mes, fi.celda_id
 ),
 clima_mes AS (
+    -- CHIRPS es un producto diario: precipitacion_diaria_mm guarda un unico
+    -- valor por celda-dia. Acumulada/media/maxima solo tienen sentido al
+    -- agregar esos valores diarios por mes, aqui mismo.
     SELECT
         df.anio,
         df.mes,
         fc.celda_id,
-        AVG(fc.precipitacion_acumulada_mm) AS precipitacion_promedio_mm,
-        SUM(fc.precipitacion_acumulada_mm) AS precipitacion_total_mm,
-        MAX(fc.precipitacion_maxima_diaria_mm) AS precipitacion_maxima_diaria_mm
+        SUM(fc.precipitacion_diaria_mm) AS precipitacion_acumulada_mensual_mm,
+        AVG(fc.precipitacion_diaria_mm) AS precipitacion_media_diaria_mm,
+        MAX(fc.precipitacion_diaria_mm) AS precipitacion_maxima_diaria_mm
     FROM fact_clima AS fc
     INNER JOIN dim_fecha AS df
         ON df.fecha_id = fc.fecha_id
@@ -40,8 +43,8 @@ SELECT
     i.detecciones_totales,
     i.frp_total_mw,
     i.frp_maxima_mw,
-    c.precipitacion_promedio_mm,
-    c.precipitacion_total_mm,
+    c.precipitacion_acumulada_mensual_mm,
+    c.precipitacion_media_diaria_mm,
     c.precipitacion_maxima_diaria_mm
 FROM incendio_mes AS i
 INNER JOIN clima_mes AS c

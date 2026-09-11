@@ -3,7 +3,9 @@
     "deteccion_id": "V_2023_0001",
     "celda_id": "LJ_04521",
     "fecha": "2023-08-15",
+    "hora_utc": "18:42",
     "fuente": "VIIRS",
+    "sensor": "VIIRS_SNPP_375m",
     "frp_mw": 18.4,
     "fire_mask": 7,
     "coordenadas": {
@@ -11,15 +13,16 @@
       "latitud": -4.082
     },
     "calidad": {
-      "valida": true,
-      "observado_mes": true
+      "valida": true
     }
   },
   {
     "deteccion_id": "V_2023_0002",
     "celda_id": "LJ_04522",
     "fecha": "2023-08-20",
+    "hora_utc": "18:47",
     "fuente": "VIIRS",
+    "sensor": "VIIRS_SNPP_375m",
     "frp_mw": 9.7,
     "fire_mask": 8,
     "coordenadas": {
@@ -27,8 +30,7 @@
       "latitud": -4.079
     },
     "calidad": {
-      "valida": true,
-      "observado_mes": true
+      "valida": true
     }
   }
 ]

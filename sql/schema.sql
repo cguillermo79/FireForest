@@ -31,16 +31,17 @@ CREATE TABLE fact_incendio (
         FOREIGN KEY (celda_id) REFERENCES dim_celda(celda_id),
 
     CONSTRAINT fk_incendio_fecha
-        FOREIGN KEY (fecha_id) REFERENCES dim_fecha(fecha_id)
+        FOREIGN KEY (fecha_id) REFERENCES dim_fecha(fecha_id),
+
+    CONSTRAINT uq_incendio_celda_fecha
+        UNIQUE (celda_id, fecha_id)
 );
 
 CREATE TABLE fact_clima (
     clima_id BIGSERIAL PRIMARY KEY,
     celda_id VARCHAR(30) NOT NULL,
     fecha_id INTEGER NOT NULL,
-    precipitacion_acumulada_mm NUMERIC(12,3),
-    precipitacion_media_diaria_mm NUMERIC(12,3),
-    precipitacion_maxima_diaria_mm NUMERIC(12,3),
+    precipitacion_diaria_mm NUMERIC(12,3),
 
     CONSTRAINT fk_clima_celda
         FOREIGN KEY (celda_id) REFERENCES dim_celda(celda_id),
@@ -51,6 +52,9 @@ CREATE TABLE fact_clima (
     CONSTRAINT uq_clima_celda_fecha
         UNIQUE (celda_id, fecha_id)
 );
+
+COMMENT ON COLUMN fact_incendio.frp_suma_mw IS
+    'Suma descriptiva de los valores de FRP de las detecciones del dia; no representa energia acumulada ni potencia continua.';
 
 SELECT table_name
 FROM information_schema.tables

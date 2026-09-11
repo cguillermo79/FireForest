@@ -30,7 +30,10 @@ El proyecto utilizará un subconjunto controlado de datos para demostrar:
 
 La unidad de análisis será una celda espacial de 500 m × 500 m observada durante un mes.
 
-La identificación principal será:
+La identificación principal del dataset analítico (celda-mes) será:
 
 ```text
-celda_id + fecha
+celda_id + anio + mes
+```
+
+En MongoDB (detección individual) y en las tablas de hechos de PostgreSQL (`fact_incendio`, `fact_clima`) el dato se carga a grano diario (`celda_id + fecha`); el dataset analítico celda-mes se obtiene agregando esos registros diarios por `anio` y `mes` en la consulta SQL.

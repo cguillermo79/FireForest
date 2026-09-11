@@ -16,13 +16,11 @@ INSERT INTO fact_clima
     (
         celda_id,
         fecha_id,
-        precipitacion_acumulada_mm,
-        precipitacion_media_diaria_mm,
-        precipitacion_maxima_diaria_mm
+        precipitacion_diaria_mm
     )
 VALUES
-    ('LJ_04521', 20230815, 12.5, 0.40, 3.2),
-    ('LJ_04522', 20230820, 8.7, 0.28, 2.1)
+    ('LJ_04521', 20230815, 12.5),
+    ('LJ_04522', 20230820, 8.7)
 ON CONFLICT (celda_id, fecha_id) DO NOTHING;
 
 INSERT INTO fact_incendio
