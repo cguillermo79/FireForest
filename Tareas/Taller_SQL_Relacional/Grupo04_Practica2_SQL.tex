@@ -1,0 +1,493 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==========================================================
+% Configuracion general
+% ==========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+% Paleta de color (misma familia que el Avance 1 del Proyecto Integrador)
+\definecolor{myNewColorA}{RGB}{27,94,55}
+\definecolor{myNewColorB}{RGB}{46,125,80}
+\definecolor{myNewColorC}{RGB}{184,218,191}
+
+\titleformat{\section}{\Large\bfseries\color{myNewColorA}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{myNewColorB}}{\thesubsection}{0.5em}{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=myNewColorA,
+    urlcolor=myNewColorA,
+    citecolor=myNewColorA,
+    pdftitle={Practica 2 - Taller SQL Relacional - Grupo 04},
+    pdfauthor={Malan Mullo, Marco Vinicio; Pujos Culque, Viviana Isabel; Chuncho Morocho, Carlos Guillermo}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small Practica 2 -- Taller SQL Relacional}
+\fancyhead[R]{\small M1721 -- Grupo 04}
+\fancyfoot[C]{\small\thepage}
+
+\setlist[itemize]{itemsep=1pt, topsep=2pt}
+\setlist[enumerate]{itemsep=1pt, topsep=2pt}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\emergencystretch=3em
+
+\begin{document}
+
+% ==========================================================
+% PORTADA
+% ==========================================================
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\large ESCUELA SUPERIOR POLIT\'ECNICA DE CHIMBORAZO (ESPOCH)\par}
+\vspace{0.3cm}
+{\large Maestr\'ia en Estad\'istica con menci\'on en Ciencia de Datos e Inteligencia Artificial\par}
+
+\vspace{2.5cm}
+{\Huge\bfseries\color{myNewColorA} Pr\'actica 2 -- Taller SQL\par}
+\vspace{0.5cm}
+{\large Modelado, normalizaci\'on y consultas\par}
+
+\vspace{1.5cm}
+\begin{minipage}{0.85\textwidth}
+\centering
+{\Large\bfseries Caso aplicado\par}
+\vspace{0.3cm}
+{\large Detecciones de incendio, precipitaci\'on y cobertura vegetal por celda espacial\\
+y fecha, en el cant\'on Loja\par}
+\end{minipage}
+
+\vspace{2cm}
+{\large\bfseries Integrantes\par}
+\vspace{0.3cm}
+{\large
+MALAN MULLO MARCO VINICIO \\
+PUJOS CULQUE VIVIANA ISABEL \\
+CARLOS GUILLERMO CHUNCHO M. \par}
+
+\vspace{2cm}
+{\large\bfseries Grupo 04}\par
+
+\vspace{1.5cm}
+{\large Pr\'actica 2 -- M1721 \par}
+{\large 2026 \par}
+
+\vfill
+\end{titlepage}
+
+% ==========================================================
+% 1. CASO APLICADO
+% ==========================================================
+\section{Caso aplicado}
+
+\textbf{Contexto.} Las detecciones satelitales de incendio, los registros de precipitaci\'on y la
+cobertura vegetal de una zona suelen analizarse por separado, sin relacionarlos entre s\'i por
+celda espacial y fecha. Este taller usa el mismo dominio tem\'atico que el Proyecto Integrador
+FireForest (incendios forestales, cant\'on Loja), pero como una pr\'actica \textbf{independiente},
+con su propio esquema, sus propios datos de ejemplo y su propia base de datos PostgreSQL
+(\texttt{taller\_sql\_fireforest}).
+
+\textbf{Problema.} Sin una estructura relacional integrada, preguntas simples como "¿qu\'e
+celdas con cierto tipo de cobertura vegetal concentran m\'as detecciones?" o "¿hay meses con
+varias detecciones y poca lluvia?" requieren cruzar manualmente fuentes distintas.
+
+\textbf{Prop\'osito de la base de datos.} Diseñar e implementar una base de datos relacional en
+PostgreSQL que integre, sin redundancia, detecciones de incendio, precipitaci\'on diaria y
+cobertura vegetal por celda y fecha, y que pueda consultarse mediante SQL para responder
+preguntas operativas y anal\'iticas descriptivas.
+
+\textbf{Usuarios potenciales.} Estudiantes y docentes del curso, como ejercicio de modelado y
+SQL; y, como referencia conceptual, personal t\'ecnico ambiental que quisiera una primera
+aproximaci\'on relacional (sin que exista convenio real con ninguna instituci\'on).
+
+\textbf{Preguntas operativas.}
+\begin{enumerate}[itemsep=0pt]
+    \item ¿Qu\'e detecciones de incendio existen para una celda y un periodo espec\'ificos?
+    \item ¿Cu\'al fue la precipitaci\'on registrada para una celda y una fecha determinadas?
+    \item ¿Qu\'e celdas no tienen registro de precipitaci\'on para una fecha con incendio
+          observado?
+\end{enumerate}
+
+\textbf{Preguntas anal\'iticas.}
+\begin{enumerate}[itemsep=0pt]
+    \item ¿Cu\'antas detecciones y qu\'e FRP promedio/m\'aximo presenta cada celda?
+    \item ¿Qu\'e celdas y meses acumulan precipitaci\'on mensual baja?
+    \item ¿Qu\'e combinaciones celda-mes presentan a la vez detecciones y precipitaci\'on baja?
+    \item ¿Qu\'e tipo de cobertura vegetal concentra m\'as detecciones? (usa la relaci\'on N:M)
+\end{enumerate}
+
+\textit{Nota: todos los datos usados en este taller son de ejemplo, controlados, generados
+espec\'ificamente para esta pr\'actica. No son datos reales de VIIRS ni de CHIRPS.}
+
+% ==========================================================
+% 2. MODELO RELACIONAL
+% ==========================================================
+\section{Modelo relacional}
+
+\textbf{Entidades principales:} celda espacial (\texttt{dim\_celda}), fecha
+(\texttt{dim\_fecha}), cobertura vegetal (\texttt{dim\_cobertura\_vegetal}), detecci\'on de
+incendio (\texttt{fact\_incendio}) y registro de precipitaci\'on (\texttt{fact\_clima}).
+
+\textbf{Relaciones 1:N:} \texttt{dim\_celda} con \texttt{fact\_incendio} y con
+\texttt{fact\_clima}; \texttt{dim\_fecha} con \texttt{fact\_incendio} y con \texttt{fact\_clima}.
+
+\textbf{Relaci\'on N:M:} una celda puede tener m\'as de un tipo de cobertura vegetal registrado
+en un mismo a\~no (mosaico de uso de suelo), y un tipo de cobertura aplica a muchas celdas. Esta
+relaci\'on muchos-a-muchos entre \texttt{dim\_celda} y \texttt{dim\_cobertura\_vegetal} se
+resuelve con la tabla intermedia \texttt{celda\_cobertura(celda\_id, cobertura\_id, anio)}.
+
+\begin{center}
+\scriptsize
+\begin{tabular}{@{}L{3.2cm}L{3.8cm}L{1.8cm}L{2.6cm}L{3.4cm}@{}}
+\toprule
+\textbf{Tabla} & \textbf{Prop\'osito} & \textbf{PK} & \textbf{FK} & \textbf{Cardinalidad} \\
+\midrule
+\texttt{dim\_celda} & Celda espacial de referencia (500 m $\times$ 500 m) & \texttt{celda\_id} & --- & 1 celda -- N incendio/clima/cobertura \\
+\texttt{dim\_fecha} & Calendario diario del periodo & \texttt{fecha\_id} & --- & 1 fecha -- N incendio/clima \\
+\texttt{dim\_cobertura\_vegetal} & Cat\'alogo de tipos de cobertura & \texttt{cobertura\_id} & --- & 1 cobertura -- N celda\_cobertura \\
+\texttt{celda\_cobertura} & Relaci\'on N:M celda$\leftrightarrow$cobertura por a\~no & \texttt{(celda\_id, cobertura\_id, anio)} & celda\_id, cobertura\_id & N:M \\
+\texttt{fact\_incendio} & Detecci\'on diaria de incendio por celda & \texttt{incendio\_id} & celda\_id, fecha\_id & N -- 1 celda; N -- 1 fecha \\
+\texttt{fact\_clima} & Precipitaci\'on diaria por celda & \texttt{clima\_id} & celda\_id, fecha\_id & N -- 1 celda; N -- 1 fecha \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw=myNewColorA, rounded corners, fill=myNewColorC!30,
+              align=left, text width=3.5cm, font=\scriptsize, inner sep=3pt},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, myNewColorA},
+  lbl/.style={font=\scriptsize, fill=white, inner sep=1pt}
+]
+\node[box] (celda) at (0,4) {\textbf{dim\_celda}\\ PK: celda\_id};
+\node[box] (cobertura) at (7,4) {\textbf{dim\_cobertura\_vegetal}\\ PK: cobertura\_id};
+\node[box] (cc) at (3.5,2) {\textbf{celda\_cobertura}\\ PK: (celda\_id,\\ cobertura\_id, anio)\\ FK: ambas};
+\node[box] (fecha) at (0,0) {\textbf{dim\_fecha}\\ PK: fecha\_id};
+\node[box] (incendio) at (-2.5,-2.2) {\textbf{fact\_incendio}\\ PK: incendio\_id\\ FK: celda\_id, fecha\_id};
+\node[box] (clima) at (2.5,-2.2) {\textbf{fact\_clima}\\ PK: clima\_id\\ FK: celda\_id, fecha\_id};
+
+\draw[arr] (celda) -- (cc) node[lbl, midway] {1:N};
+\draw[arr] (cobertura) -- (cc) node[lbl, midway] {1:N};
+\draw[arr] (celda) -- (incendio) node[lbl, pos=0.35] {1:N};
+\draw[arr] (celda) -- (clima) node[lbl, pos=0.35] {1:N};
+\draw[arr] (fecha) -- (incendio) node[lbl, midway] {1:N};
+\draw[arr] (fecha) -- (clima) node[lbl, midway] {1:N};
+\end{tikzpicture}
+\caption{Modelo relacional final. La relaci\'on N:M entre \texttt{dim\_celda} y
+\texttt{dim\_cobertura\_vegetal} queda resuelta por \texttt{celda\_cobertura}.}
+\label{fig:modelo}
+\end{figure}
+
+% ==========================================================
+% 3. NORMALIZACION
+% ==========================================================
+\section{Normalizaci\'on}
+
+\textbf{Modelo inicial (desnormalizado).} Antes de dividir en tablas, la informaci\'on cabr\'ia
+en un registro plano por celda-d\'ia, con columnas repetidas para cobertura vegetal
+(\texttt{cobertura\_1/pct\_1}, \texttt{cobertura\_2/pct\_2}, ...) porque una celda puede tener
+m\'as de un tipo de cobertura.
+
+\textbf{1FN.} Se eliminan los grupos repetitivos de cobertura extray\'endolos a
+\texttt{celda\_cobertura} (una fila por combinaci\'on celda-cobertura-a\~no). Todos los atributos
+del esquema final son at\'omicos (sin listas ni valores compuestos) y cada tabla tiene PK
+expl\'icita.
+
+\textbf{2FN.} Las tablas con PK simple no pueden tener dependencia parcial. La \'unica tabla con
+PK compuesta es \texttt{celda\_cobertura(celda\_id, cobertura\_id, anio)}, donde
+$(\texttt{celda\_id}, \texttt{cobertura\_id}, \texttt{anio}) \rightarrow
+\texttt{porcentaje\_cobertura}$: el porcentaje depende de los tres atributos a la vez (el mismo
+tipo de cobertura puede tener otro porcentaje en otra celda o en otro a\~no), sin dependencia
+parcial.
+
+\textbf{3FN.} Por tabla: \texttt{dim\_celda}: \texttt{celda\_id} $\rightarrow$
+\texttt{nombre\_referencia, longitud, latitud, area\_km2}; \texttt{fact\_incendio}:
+\texttt{incendio\_id} $\rightarrow$ (celda\_id, fecha\_id, fuente, numero\_detecciones,
+frp\_suma\_mw, frp\_maxima\_mw, fire\_mask\_maximo, incendio\_observado); \texttt{fact\_clima}:
+\texttt{clima\_id} $\rightarrow$ (celda\_id, fecha\_id, precipitacion\_diaria\_mm). En ninguna de
+estas tablas un atributo no clave determina a otro atributo no clave, por lo que cumplen 3FN.
+
+\textbf{Excepci\'on deliberada en \texttt{dim\_fecha}.} En esta tabla,
+$\texttt{fecha\_id} \rightarrow \texttt{fecha} \rightarrow \texttt{anio}, \texttt{mes}$: una
+fecha calendario determina su a\~no y mes, pero \texttt{anio}/\texttt{mes} no dependen
+directamente de la PK sin pasar por \texttt{fecha}. Es, en sentido estricto, una dependencia
+transitiva. Se conserva de forma deliberada porque es el patr\'on est\'andar de una dimensi\'on
+de tiempo (evita recalcular \texttt{EXTRACT()} en cada consulta de agregaci\'on mensual), y su
+riesgo de inconsistencia queda controlado por el \texttt{CHECK chk\_fecha\_id\_consistente} y por
+la restricci\'on \texttt{UNIQUE} sobre \texttt{fecha}.
+
+% ==========================================================
+% 4. IMPLEMENTACION SQL
+% ==========================================================
+\section{Implementaci\'on SQL}
+
+El esquema se implement\'o en PostgreSQL con las 6 tablas descritas (\texttt{dim\_celda},
+\texttt{dim\_fecha}, \texttt{dim\_cobertura\_vegetal}, \texttt{celda\_cobertura},
+\texttt{fact\_incendio}, \texttt{fact\_clima}), todas con clave primaria expl\'icita y claves
+for\'aneas donde corresponde. El script completo est\'a en
+\texttt{Grupo04\_Practica2\_SQL.sql}; a continuaci\'on, un fragmento representativo:
+
+\begin{scriptsize}
+\begin{verbatim}
+CREATE TABLE fact_incendio (
+    incendio_id         VARCHAR(20) PRIMARY KEY,
+    celda_id            VARCHAR(20) NOT NULL REFERENCES dim_celda(celda_id),
+    fecha_id            INTEGER NOT NULL REFERENCES dim_fecha(fecha_id),
+    numero_detecciones  INTEGER NOT NULL DEFAULT 0 CHECK (numero_detecciones >= 0),
+    incendio_observado  BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT uq_incendio_celda_fecha UNIQUE (celda_id, fecha_id)
+);
+\end{verbatim}
+\end{scriptsize}
+
+En conjunto, el esquema usa: \texttt{PRIMARY KEY} (simple y compuesta), \texttt{FOREIGN KEY}
+(\texttt{REFERENCES}), \texttt{UNIQUE} (coordenadas de celda, fecha, nombre de cobertura,
+\texttt{(celda\_id, fecha\_id)}), \texttt{CHECK} (rango de mes, valores no negativos, porcentaje
+de cobertura, coherencia \texttt{fecha\_id}$\leftrightarrow$\texttt{fecha}, coherencia
+observado/detecciones), \texttt{NOT NULL} en los atributos de negocio, y \texttt{DEFAULT} (\'area
+por defecto, fuente \texttt{'VIIRS'}, \texttt{incendio\_observado = FALSE}).
+
+Los datos de ejemplo son controlados: \textbf{82 registros} distribuidos en las 6 tablas (6
+celdas, 12 fechas, 5 tipos de cobertura, 11 filas de \texttt{celda\_cobertura}, 18 registros de
+incendio y 30 de clima), con variedad de FRP, precipitaci\'on y d\'ias con y sin detecci\'on.
+
+% ==========================================================
+% 5. CONSULTAS SQL
+% ==========================================================
+\section{Consultas SQL}
+
+Las 8 consultas obligatorias y una adicional, ejecutadas contra \texttt{taller\_sql\_fireforest}.
+Resultados y consultas completas verificables en \texttt{05\_resultados/resultados\_consultas.md}
+y en \texttt{Grupo04\_Practica2\_SQL.sql}.
+
+\subsection*{Consulta 1 -- SELECT + WHERE}
+\textbf{Pregunta:} ¿Qu\'e detecciones de incendio existen para LJ\_001 entre julio y agosto de
+2023?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT fi.incendio_id, fi.celda_id, df.fecha, fi.numero_detecciones, fi.frp_maxima_mw
+FROM fact_incendio fi JOIN dim_fecha df ON df.fecha_id = fi.fecha_id
+WHERE fi.celda_id = 'LJ_001' AND df.fecha BETWEEN '2023-07-01' AND '2023-08-31';
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (2 filas):} INC\_0001, 2023-07-05, 2 detecciones, FRP m\'ax. 15.2 MW;
+INC\_0002, 2023-08-15, 1 detecci\'on, FRP m\'ax. 10.1 MW. \\
+\textbf{Interpretaci\'on:} LJ\_001 registra dos fechas con incendio observado en el rango
+consultado; no hay otras fechas con registro para esta celda en ese periodo.
+
+\subsection*{Consulta 2 -- SELECT + WHERE}
+\textbf{Pregunta:} ¿Cu\'al fue la precipitaci\'on diaria en LJ\_003 durante septiembre de 2023?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT fc.celda_id, df.fecha, fc.precipitacion_diaria_mm
+FROM fact_clima fc JOIN dim_fecha df ON df.fecha_id = fc.fecha_id
+WHERE fc.celda_id = 'LJ_003' AND df.anio = 2023 AND df.mes = 9;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (1 fila):} 2023-09-20, 6.40 mm. \\
+\textbf{Interpretaci\'on:} para LJ\_003 solo existe un registro de precipitaci\'on cargado en
+septiembre de 2023.
+
+\subsection*{Consulta 3 -- ORDER BY + LIMIT}
+\textbf{Pregunta:} ¿Cu\'ales son las 5 detecciones con mayor FRP m\'axima del periodo?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT fi.incendio_id, fi.celda_id, df.fecha, fi.frp_maxima_mw, fi.numero_detecciones
+FROM fact_incendio fi JOIN dim_fecha df ON df.fecha_id = fi.fecha_id
+WHERE fi.incendio_observado = TRUE
+ORDER BY fi.frp_maxima_mw DESC LIMIT 5;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (5 filas):} LJ\_005 (25.6 MW), LJ\_003 (22.1 MW), LJ\_002 (20.3 MW), LJ\_001
+(15.2 MW), LJ\_006 (14.5 MW), cada una en una fecha distinta. \\
+\textbf{Interpretaci\'on:} las cinco detecciones de mayor intensidad provienen de cinco celdas
+distintas; ninguna concentra m\'as de un evento en este top 5.
+
+\subsection*{Consulta 4 -- LEFT JOIN}
+\textbf{Pregunta:} ¿Qu\'e celdas tienen incendio observado sin registro de precipitaci\'on en la
+misma fecha?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT fi.celda_id, df.fecha, fi.numero_detecciones, fc.precipitacion_diaria_mm
+FROM fact_incendio fi JOIN dim_fecha df ON df.fecha_id = fi.fecha_id
+LEFT JOIN fact_clima fc ON fc.celda_id = fi.celda_id AND fc.fecha_id = fi.fecha_id
+WHERE fi.incendio_observado = TRUE AND fc.clima_id IS NULL;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (1 fila):} LJ\_001, 2023-07-05, 2 detecciones, precipitaci\'on sin registro. \\
+\textbf{Interpretaci\'on:} existe un \'unico caso sin correspondencia en todo el periodo; en el
+resto de fechas con incendio observado s\'i hay un registro de precipitaci\'on asociado.
+
+\subsection*{Consulta 5 -- INNER JOIN (3 tablas)}
+\textbf{Pregunta:} listado legible de detecciones observadas, con nombre de celda y fecha
+calendario.
+\begin{scriptsize}
+\begin{verbatim}
+SELECT dc.nombre_referencia, df.fecha, df.mes, fi.numero_detecciones, fi.frp_maxima_mw
+FROM fact_incendio fi
+JOIN dim_celda dc ON dc.celda_id = fi.celda_id
+JOIN dim_fecha df ON df.fecha_id = fi.fecha_id
+WHERE fi.incendio_observado = TRUE ORDER BY df.fecha;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado representativo (10 filas en total; primeras 3):} Sector La Toma (2023-07-05, 2
+det., 15.2 MW); Sector Zamora Huayco (2023-07-15, 2 det., 14.5 MW); Sector El Pedestal
+(2023-07-25, 4 det., 22.1 MW). Resultado completo en \texttt{05\_resultados/resultados\_consultas.md}. \\
+\textbf{Interpretaci\'on:} las 10 fechas con incendio observado se distribuyen en los tres meses
+del periodo, sin que uno solo concentre la mayor\'ia de los casos.
+
+\subsection*{Consulta 6 -- GROUP BY + COUNT/SUM/AVG/MAX}
+\textbf{Pregunta:} ¿cu\'antas detecciones totales y qu\'e FRP promedio/m\'aximo presenta cada
+celda?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT dc.celda_id, COUNT(fi.incendio_id) dias, SUM(fi.numero_detecciones) detecciones,
+       ROUND(AVG(fi.frp_maxima_mw),2) frp_prom, MAX(fi.frp_maxima_mw) frp_max
+FROM dim_celda dc JOIN fact_incendio fi ON fi.celda_id = dc.celda_id
+GROUP BY dc.celda_id ORDER BY detecciones DESC;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (6 filas):} LJ\_003 y LJ\_005 lideran con 6 detecciones cada una; LJ\_004 solo
+1. FRP m\'aximo m\'as alto: LJ\_005 (25.6 MW); FRP promedio m\'as alto: LJ\_003 (17.05 MW). \\
+\textbf{Interpretaci\'on (anal\'itica):} LJ\_003 y LJ\_005 concentran m\'as detecciones que las
+dem\'as celdas. LJ\_005 tiene el pico m\'aximo de FRP, pero LJ\_003 mantiene un promedio
+ligeramente mayor, es decir, una intensidad m\'as consistente entre sus eventos. Es una
+comparaci\'on entre celdas, no una tendencia temporal.
+
+\subsection*{Consulta 7 -- GROUP BY + HAVING}
+\textbf{Pregunta:} ¿qu\'e celdas y meses acumulan precipitaci\'on total por debajo de 20 mm?
+\begin{scriptsize}
+\begin{verbatim}
+SELECT fc.celda_id, df.anio, df.mes, SUM(fc.precipitacion_diaria_mm) precip_mm,
+       MIN(fc.precipitacion_diaria_mm) precip_min
+FROM fact_clima fc JOIN dim_fecha df ON df.fecha_id = fc.fecha_id
+GROUP BY fc.celda_id, df.anio, df.mes
+HAVING SUM(fc.precipitacion_diaria_mm) < 20 ORDER BY precip_mm ASC;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado representativo (9 filas en total; extremos):} LJ\_002/jul (0.00 mm, 1 d\'ia);
+LJ\_001/jul (18.40 mm, 1 d\'ia, el m\'as cercano al umbral). Resultado completo en
+\texttt{05\_resultados/resultados\_consultas.md}. \\
+\textbf{Interpretaci\'on (anal\'itica):} 9 combinaciones celda-mes acumulan menos de 20 mm. La
+mayor\'ia (7 de 9) tienen solo 1 o 2 d\'ias con registro en el mes, por lo que el acumulado bajo
+puede reflejar tambi\'en cobertura de datos incompleta, no solo ausencia real de lluvia.
+
+\subsection*{Consulta 8 -- CTE}
+\textbf{Pregunta:} ¿qu\'e combinaciones celda-mes presentan a la vez detecciones y precipitaci\'on
+mensual baja (< 20 mm)?
+\begin{scriptsize}
+\begin{verbatim}
+WITH detecciones_mes AS (
+    SELECT fi.celda_id, df.anio, df.mes, SUM(fi.numero_detecciones) det
+    FROM fact_incendio fi JOIN dim_fecha df ON df.fecha_id = fi.fecha_id
+    GROUP BY fi.celda_id, df.anio, df.mes),
+clima_mes AS (
+    SELECT fc.celda_id, df.anio, df.mes, SUM(fc.precipitacion_diaria_mm) precip
+    FROM fact_clima fc JOIN dim_fecha df ON df.fecha_id = fc.fecha_id
+    GROUP BY fc.celda_id, df.anio, df.mes)
+SELECT d.celda_id, d.anio, d.mes, d.det, c.precip
+FROM detecciones_mes d JOIN clima_mes c USING (celda_id, anio, mes)
+WHERE d.det > 0 AND c.precip < 20 ORDER BY c.precip ASC;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (5 filas):} LJ\_003/jul (4 det., 2.10 mm); LJ\_005/ago (5 det., 4.50 mm);
+LJ\_003/sep (2 det., 6.40 mm); LJ\_004/ago (1 det., 14.40 mm); LJ\_001/jul (2 det., 18.40 mm). \\
+\textbf{Interpretaci\'on (anal\'itica):} en 5 combinaciones celda-mes coexisten detecciones y
+precipitaci\'on mensual baja, destacando LJ\_003 en julio y LJ\_005 en agosto. Es una asociaci\'on
+descriptiva observada en los datos de ejemplo, sin que constituya evidencia de causalidad ni deba
+extrapolarse a otros periodos o celdas.
+
+\subsection*{Consulta adicional -- fuera del m\'inimo exigido por la gu\'ia}
+\textbf{Pregunta:} ¿qu\'e tipo de cobertura vegetal concentra m\'as detecciones? (usa la relaci\'on
+N:M \texttt{dim\_celda} $\leftrightarrow$ \texttt{dim\_cobertura\_vegetal}).
+\begin{scriptsize}
+\begin{verbatim}
+SELECT cv.nombre, COUNT(DISTINCT cc.celda_id) celdas, SUM(fi.numero_detecciones) detecciones
+FROM dim_cobertura_vegetal cv
+JOIN celda_cobertura cc ON cc.cobertura_id = cv.cobertura_id
+JOIN fact_incendio fi ON fi.celda_id = cc.celda_id
+GROUP BY cv.nombre ORDER BY detecciones DESC;
+\end{verbatim}
+\end{scriptsize}
+\textbf{Resultado (5 filas):} Matorral (2 celdas, 10 det.); Pastizal (4 celdas, 10 det.); Bosque
+nativo (2 celdas, 9 det.); Cultivo (2 celdas, 7 det.); \'Area urbana (1 celda, 2 det.). \\
+\textbf{Interpretaci\'on (anal\'itica):} Matorral y Pastizal concentran el mayor n\'umero de
+detecciones acumuladas, aunque Pastizal aparece en el doble de celdas que Matorral, por lo que su
+detecci\'on promedio por celda es menor. Es una concentraci\'on descriptiva observada en los
+datos de ejemplo; no implica que el tipo de cobertura sea causa de la ocurrencia de incendios.
+
+% ==========================================================
+% 6. VALIDACIONES
+% ==========================================================
+\section{Validaciones}
+
+Ejecutadas contra \texttt{taller\_sql\_fireforest} (detalle completo en
+\texttt{05\_resultados/\allowbreak validaciones.md} y en la secci\'on 5 de
+\texttt{Grupo04\_Practica2\_SQL.sql}):
+
+\begin{itemize}
+    \item \textbf{Conteo de filas:} 82 en total (6+12+5+11+18+30 por tabla), como se dise\~n\'o.
+    \item \textbf{PK \'unicas:} \texttt{fact\_incendio.incendio\_id} y \texttt{fact\_clima.clima\_id}
+          sin duplicados (verificado comparando conteo total vs. conteo de valores distintos).
+    \item \textbf{FK \'integras:} 0 filas de \texttt{fact\_incendio}/\texttt{fact\_clima} con
+          celda o fecha inexistente.
+    \item \textbf{Duplicados l\'ogicos:} 0 pares \texttt{(celda\_id, fecha\_id)} repetidos en
+          \texttt{fact\_incendio}.
+    \item \textbf{Valores negativos:} 0 precipitaciones y 0 valores de FRP negativos.
+    \item \textbf{Cobertura $\leq$ 100\%:} 0 celdas superan el 100\% de cobertura acumulada por
+          a\~no.
+    \item \textbf{Coherencia de fechas:} de las 12 filas de \texttt{dim\_fecha}, 0 presentan
+          \texttt{fecha\_id}, \texttt{anio} o \texttt{mes} incoherentes con \texttt{fecha}
+          (verificado con consulta expl\'icita, no solo por la existencia del \texttt{CHECK}).
+    \item \textbf{Pruebas de \texttt{CHECK}:} las 3 pruebas realizadas (mes fuera de rango,
+          precipitaci\'on negativa, cobertura $>$100\%) fueron rechazadas correctamente por la
+          base de datos.
+\end{itemize}
+
+% ==========================================================
+% 7. CONCLUSIONES
+% ==========================================================
+\section{Conclusiones}
+
+El modelo relacional dise\~nado permite integrar detecciones de incendio, precipitaci\'on y
+cobertura vegetal por celda y fecha en una \'unica estructura consistente, con integridad
+referencial verificada y sin necesidad de cruces manuales entre fuentes. La normalizaci\'on hasta
+3FN (con la excepci\'on justificada de \texttt{dim\_fecha}) redujo la redundancia identificada en
+el modelo inicial desnormalizado y facilit\'o el mantenimiento de los datos. Las 9 consultas
+implementadas muestran que el esquema responde tanto preguntas operativas (filtrado puntual por
+celda y fecha) como anal\'iticas (comparaciones entre celdas, meses y tipos de cobertura vegetal)
+sin ambig\"uedad, siempre a partir de datos de ejemplo controlados.
+
+Esta pr\'actica puede utilizarse como referencia o punto de partida conceptual para el componente
+SQL del Proyecto Integrador FireForest, en tanto pr\'actica independiente: no modifica archivos,
+esquema ni datos del Proyecto Integrador, y su incorporaci\'on eventual quedar\'ia sujeta a un
+trabajo de integraci\'on posterior y expl\'icito.
+
+\end{document}
