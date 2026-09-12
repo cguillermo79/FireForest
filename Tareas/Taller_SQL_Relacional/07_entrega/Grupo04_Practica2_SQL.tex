@@ -414,10 +414,15 @@ LJ\_001 & 2023-07-05 & 2 & \textit{sin registro} \\
 \vspace{-4pt}
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,keepaspectratio]{06_capturas/04_incendios_sin_precipitacion.png}
-\caption{\footnotesize Captura del resultado en VS Code/PostgreSQL.}
+\includegraphics[
+    width=0.97\textwidth,
+    trim=0 60 0 360,
+    clip,
+    keepaspectratio
+]{../06_capturas/04_incendios_sin_precipitacion.png}
+\caption{\footnotesize Resultado de la consulta ejecutada en VS Code/PostgreSQL.}
 \end{figure}
-\vspace{-8pt}
+\vspace{-6pt}
 \textbf{Interpretaci\'on:} existe un \'unico caso sin correspondencia en todo el periodo; en el
 resto de fechas con incendio observado s\'i hay un registro de precipitaci\'on asociado.
 
@@ -455,10 +460,15 @@ Sector El Pedestal & 2023-09-20 & 9 & 2 & 12.000 \\
 \vspace{-4pt}
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,keepaspectratio]{06_capturas/05_detalle_incendios.png}
-\caption{\footnotesize Captura del resultado en VS Code/PostgreSQL.}
+\includegraphics[
+    width=0.97\textwidth,
+    trim=0 38 0 341,
+    clip,
+    keepaspectratio
+]{../06_capturas/05_detalle_incendios.png}
+\caption{\footnotesize Resultado de la consulta ejecutada en VS Code/PostgreSQL.}
 \end{figure}
-\vspace{-8pt}
+\vspace{-6pt}
 \textbf{Interpretaci\'on:} las 10 fechas con incendio observado se distribuyen en los tres meses
 del periodo, sin que uno solo concentre la mayor\'ia de los casos.
 
@@ -526,10 +536,15 @@ LJ\_001 & 2023 & 7 & 18.40 & 18.40 \\
 \vspace{-4pt}
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,keepaspectratio]{06_capturas/07_meses_con_precipitacion.png}
-\caption{\footnotesize Captura del resultado en VS Code/PostgreSQL.}
+\includegraphics[
+    width=0.97\textwidth,
+    trim=0 22 0 341,
+    clip,
+    keepaspectratio
+]{../06_capturas/07_meses_con_precipitacion.png}
+\caption{\footnotesize Resultado de la consulta ejecutada en VS Code/PostgreSQL.}
 \end{figure}
-\vspace{-8pt}
+\vspace{-6pt}
 \textbf{Interpretaci\'on (anal\'itica):} 9 combinaciones celda-mes acumulan menos de 20 mm. La
 mayor\'ia (7 de 9) tienen solo 1 o 2 d\'ias con registro en el mes, por lo que el acumulado bajo
 puede reflejar tambi\'en cobertura de datos incompleta, no solo ausencia real de lluvia.
@@ -569,10 +584,15 @@ LJ\_001 & 2023 & 7 & 2 & 18.40 \\
 \vspace{-4pt}
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,keepaspectratio]{06_capturas/08_cte_incendio.png}
-\caption{\footnotesize Captura del resultado en VS Code/PostgreSQL.}
+\includegraphics[
+    width=0.97\textwidth,
+    trim=0 30 0 352,
+    clip,
+    keepaspectratio
+]{../06_capturas/08_cte_incendio.png}
+\caption{\footnotesize Resultado de la consulta ejecutada en VS Code/PostgreSQL.}
 \end{figure}
-\vspace{-8pt}
+\vspace{-6pt}
 \textbf{Interpretaci\'on (anal\'itica):} en 5 combinaciones celda-mes coexisten detecciones y
 precipitaci\'on mensual baja, destacando LJ\_003 en julio y LJ\_005 en agosto. Es una asociaci\'on
 descriptiva observada en los datos de ejemplo, sin que constituya evidencia de causalidad ni deba
@@ -607,10 +627,15 @@ Cultivo & 2 & 7 \\
 \vspace{-4pt}
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,keepaspectratio]{06_capturas/09_extra_cobertura_vegetal.png}
-\caption{\footnotesize Captura del resultado en VS Code/PostgreSQL.}
+\includegraphics[
+    width=0.97\textwidth,
+    trim=0 22 0 341,
+    clip,
+    keepaspectratio
+]{../06_capturas/09_extra_cobertura_vegetal.png}
+\caption{\footnotesize Resultado de la consulta ejecutada en VS Code/PostgreSQL.}
 \end{figure}
-\vspace{-8pt}
+\vspace{-6pt}
 \textbf{Interpretaci\'on (anal\'itica):} las celdas que contienen matorral y las que contienen
 pastizal son las que acumulan m\'as detecciones asociadas (10 en cada caso), aunque el doble de
 celdas contiene pastizal (4) que matorral (2), por lo que la asociaci\'on promedio por celda es
