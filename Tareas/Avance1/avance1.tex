@@ -98,10 +98,6 @@ Chuncho Morocho, Carlos Guillermo \par}
 \vfill
 \end{titlepage}
 
-\tableofcontents
-\thispagestyle{empty}
-\newpage
-
 % ==========================================================
 % 1. DEFINICIÓN DEL PROBLEMA
 % ==========================================================
@@ -149,7 +145,7 @@ Se identificaron tres fuentes principales, que combinan datos estructurados, sem
 
 \subsection{Fuente 1: Malla espacial}
 \begin{itemize}
-    \item \textbf{Origen:} malla regular de 500 m generada sobre el l\'imite oficial del cant\'on Loja. Fuente institucional oficial del l\'imite pendiente de selecci\'on y validaci\'on durante la fase de ingesta (candidatas: Instituto Geogr\'afico Militar, GAD Provincial de Loja).
+    \item \textbf{Origen:} en este avance se utiliza una malla de \textbf{ejemplo/controlada} (2 celdas ilustrativas) para demostrar el modelo y su carga en PostgreSQL/PostGIS. Cuando se incorporen datos reales, la malla de 500 m se generar\'a a partir de un l\'imite oficial del cant\'on Loja cuya fuente institucional ser\'a seleccionada, validada y documentada en la fase de ingesta (Avance 2).
     \item \textbf{Tipo de dato:} geoespacial estructurado.
     \item \textbf{Forma de captura:} no es una captura en tiempo real; se genera una \'unica vez mediante Python o un SIG, a partir del l\'imite oficial del cant\'on y un sistema de referencia proyectado (EPSG 32717, UTM 17S), y luego se reutiliza para todo el periodo de estudio.
     \item \textbf{Formato:} GeoJSON, GeoPackage o CSV.
@@ -185,17 +181,12 @@ Se identificaron tres fuentes principales, que combinan datos estructurados, sem
     \item \textbf{Fecha de descarga en este avance:} no aplica a\'un; se trabaja con datos de ejemplo controlados.
 \end{itemize}
 
-\subsection*{Aclaraci\'on: ocurrencia, frecuencia e intensidad no son lo mismo}
-Para evitar interpretaciones incorrectas de los resultados: \texttt{incendio\_observado} indica \'unicamente presencia o ausencia de al menos una detecci\'on; \texttt{numero\_detecciones} mide la frecuencia de detecciones satelitales, no el n\'umero de incendios distintos; y el FRP es una medida de intensidad radiativa del fuego, no de energ\'ia acumulada ni de potencia continua. En particular, \texttt{frp\_suma\_mw} es una suma \emph{descriptiva} de los valores de FRP de las detecciones de un d\'ia (o mes, tras agregarlo), \'util para comparar celdas entre s\'i, pero no debe interpretarse como una cantidad f\'isica de energ\'ia total liberada. Ninguna de estas variables equivale a superficie quemada, que no forma parte de este dataset.
+\subsection*{Aclaraci\'on y riesgos transversales}
+\footnotesize
+\textbf{Ocurrencia, frecuencia e intensidad no son lo mismo:} \texttt{incendio\_observado} indica presencia/ausencia de al menos una detecci\'on; \texttt{numero\_detecciones} mide frecuencia, no n\'umero de incendios distintos; el FRP (y su suma descriptiva \texttt{frp\_suma\_mw}) mide intensidad radiativa, no energ\'ia acumulada ni superficie quemada.
 
-\subsection*{Riesgos transversales}
-\begin{itemize}
-    \item \textbf{Disponibilidad:} ca\'ida del servicio de origen o cambios en las APIs de FIRMS/CHIRPS; se mitiga guardando copia local de cada descarga y registrando versi\'on y fecha de acceso.
-    \item \textbf{Actualizaci\'on:} los productos satelitales pueden reprocesarse despu\'es de publicados; se documenta la versi\'on/colecci\'on usada.
-    \item \textbf{Seguridad:} archivos pesados o credenciales expuestas en el repositorio; se controla con \texttt{.gitignore} y sin subir secretos.
-    \item \textbf{Privacidad:} no se prev\'e el uso de datos personales, ya que las fuentes son geoespaciales, satelitales y clim\'aticas; aun as\'i, se mantiene control de acceso sobre los archivos y bases de datos del proyecto.
-    \item \textbf{Integraci\'on:} desalineaci\'on de fecha o celda entre VIIRS, CHIRPS y la malla; se controla validando siempre la clave \texttt{celda\_id + anio + mes} antes de consolidar el dataset.
-\end{itemize}
+\textbf{Riesgos transversales} (adem\'as de los ya descritos por fuente): \emph{disponibilidad} (ca\'ida o cambios en las APIs de FIRMS/CHIRPS, mitigada con copia local y registro de versi\'on/fecha); \emph{actualizaci\'on} (reprocesamiento de productos satelitales, se documenta la versi\'on usada); \emph{seguridad} (\texttt{.gitignore}, sin subir secretos ni archivos pesados); \emph{privacidad} (no se usan datos personales); e \emph{integraci\'on} (desalineaci\'on entre fuentes, controlada validando \texttt{celda\_id + anio + mes} antes de consolidar).
+\normalsize
 
 % ==========================================================
 % 3. DISEÑO COMPARATIVO SQL vs NoSQL
@@ -232,34 +223,22 @@ Para evitar interpretaciones incorrectas de los resultados: \texttt{incendio\_ob
 \textbf{¿Por qu\'e MongoDB para otros datos?} Porque las detecciones satelitales individuales llegan en JSON semiestructurado y anidado, y su forma puede variar entre versiones del producto sin obligar a migrar un esquema relacional. MongoDB conserva el detalle crudo y trazable de cada detecci\'on diaria y permite agregaciones documentales previas a resumir hacia PostgreSQL.
 
 \subsection{Consultas que se espera resolver}
-\textbf{En SQL:} n\'umero de detecciones, FRP total y m\'axima por celda-mes; precipitaci\'on acumulada/media/m\'axima por celda-mes cruzada con incendio; ranking de celdas con incendio observado y menor precipitaci\'on. Ejemplo ilustrativo, cruzando incendio y clima por celda-mes (ver \texttt{consultas/consulta\_01\_incendios\_clima\_mensual.sql} para la versi\'on completa):
+\textbf{En SQL:} n\'umero de detecciones, FRP total y m\'axima por celda-mes; precipitaci\'on acumulada/media/m\'axima por celda-mes cruzada con incendio (\texttt{JOIN} + \texttt{GROUP BY anio, mes}); ranking de celdas con incendio observado y menor precipitaci\'on. Ejemplo ilustrativo (versi\'on completa en \texttt{consultas/consulta\_01\_incendios\_clima\_mensual.sql}):
 
 \begin{footnotesize}
 \begin{verbatim}
 SELECT df.anio, df.mes, fi.celda_id,
-       SUM(fi.numero_detecciones)      AS detecciones_totales,
-       MAX(fi.frp_maxima_mw)           AS frp_maxima_mw,
+       SUM(fi.numero_detecciones) AS detecciones_totales,
+       MAX(fi.frp_maxima_mw) AS frp_maxima_mw,
        SUM(fc.precipitacion_diaria_mm) AS precipitacion_mensual_mm
 FROM fact_incendio AS fi
-JOIN fact_clima  AS fc ON fc.celda_id = fi.celda_id
-                       AND fc.fecha_id = fi.fecha_id
-JOIN dim_fecha   AS df ON df.fecha_id = fi.fecha_id
+JOIN fact_clima AS fc ON fc.celda_id = fi.celda_id AND fc.fecha_id = fi.fecha_id
+JOIN dim_fecha  AS df ON df.fecha_id = fi.fecha_id
 GROUP BY df.anio, df.mes, fi.celda_id;
 \end{verbatim}
 \end{footnotesize}
 
-\textbf{En MongoDB:} conteo de detecciones v\'alidas por \texttt{celda\_id}; FRP promedio/m\'aximo por \texttt{celda\_id} y mes; filtrado de detecciones por umbral m\'inimo de \texttt{fire\_mask}. Ejemplo ilustrativo:
-
-\begin{footnotesize}
-\begin{verbatim}
-db.detecciones_viirs.aggregate([
-  { $match: { "calidad.valida": true } },
-  { $group: { _id: "$celda_id",
-              detecciones: { $sum: 1 },
-              frp_promedio: { $avg: "$frp_mw" } } }
-]);
-\end{verbatim}
-\end{footnotesize}
+\textbf{En MongoDB:} conteo y FRP promedio/m\'aximo de detecciones v\'alidas por \texttt{celda\_id} y mes, filtrando por umbral m\'inimo de \texttt{fire\_mask}, mediante \texttt{aggregate()} con \texttt{\$match} y \texttt{\$group} (ver \texttt{nosql/consultas\_mongodb.js}).
 
 % ==========================================================
 % 4. MODELO PRELIMINAR DE DATOS
@@ -418,7 +397,7 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 1 & Identificaci\'on de fuentes & Fuentes disponibles documentadas & Completado \\
 2 & Dise\~no relacional (SQL) & Esquema con PK/FK & Completado \\
 3 & Dise\~no NoSQL & Colecci\'on y documento de ejemplo & Completado \\
-4 & Ingesta & Archivos y scripts de carga de datos de prueba listos & Preparada \\
+4 & Ingesta & Datos de ejemplo cargados en PostgreSQL/PostGIS y MongoDB & Completada (datos de ejemplo) \\
 5 & Limpieza y validaci\'on & Datos consistentes & Pendiente \\
 6 & Integraci\'on & Dataset consolidado celda-mes & Pendiente \\
 7 & An\'alisis & Indicadores / modelos & Pendiente \\
@@ -427,7 +406,7 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 \end{tabular}
 \end{center}
 
-\noindent\textbf{Avance 1 (esta entrega):} etapas 1 a 3 completadas; etapa 4 preparada mediante archivos y scripts de datos de prueba, con la carga en bases de datos activas pendiente de verificar (a\'un no se ha realizado la ingesta de datos reales de VIIRS ni CHIRPS).\\
+\noindent\textbf{Avance 1 (esta entrega):} etapas 1 a 4 completadas con datos de ejemplo controlados, verificados en PostgreSQL/PostGIS y MongoDB locales; a\'un no se ha incorporado datos reales completos de VIIRS ni de CHIRPS.\\
 \textbf{Avance 2 (siguiente entrega):} cerrar etapas 4 y 5, avanzar etapa 6.\\
 \textbf{Informe final:} etapas 7 y 8, con el dataset integrado y el an\'alisis de la pregunta planteada.
 
@@ -441,10 +420,8 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 \label{sec:alcance}
 
 \begin{itemize}
-    \item Este avance corresponde a un \textbf{prototipo acad\'emico}, no a un sistema operativo de alerta temprana de incendios.
-    \item Los datos utilizados en esta entrega son \textbf{de ejemplo, controlados o simulados}; a\'un no se ha realizado la descarga ni ingesta de datos reales de VIIRS o CHIRPS.
-    \item Las consultas y resultados presentados son ilustrativos y no permiten todav\'ia establecer una relaci\'on causal entre precipitaci\'on e incendios, solo asociaciones descriptivas a explorar en etapas posteriores.
-    \item No se incluye a\'un ning\'un modelo predictivo; su desarrollo, de ser pertinente, corresponder\'ia a la etapa de an\'alisis (etapa~7 del plan de implementaci\'on).
+    \item Este avance corresponde a un \textbf{prototipo acad\'emico}, no a un sistema operativo de alerta temprana de incendios. Los datos utilizados son \textbf{de ejemplo, controlados}; a\'un no se ha incorporado datos reales completos de VIIRS ni de CHIRPS.
+    \item Las consultas mostradas son ilustrativas y no permiten a\'un establecer relaci\'on causal entre precipitaci\'on e incendios, ni incluyen modelo predictivo (correspondería a la etapa~7 del plan).
 \end{itemize}
 
 % ==========================================================
@@ -452,12 +429,14 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 % ==========================================================
 \section{Referencias}
 
+\footnotesize
 \begin{itemize}
-    \item NASA EOSDIS FIRMS. \textit{VIIRS 375 m Active Fire and Thermal Anomalies product (VNP14IMG/VJ114IMG)}. Fire Information for Resource Management System. \url{https://firms.modaps.eosdis.nasa.gov} (consultado por definir en la fase de ingesta, Avance 2).
-    \item Funk, C., Peterson, P., Landsfeld, M. et al. (2015). \textit{The climate hazards infrared precipitation with stations---a new environmental record for monitoring extremes}. Scientific Data, 2, 150066. DOI: \url{https://doi.org/10.1038/sdata.2015.66}. Datos: Climate Hazards Center, UC Santa B\'arbara, \url{https://www.chc.ucsb.edu/data/chirps} (consultado por definir en la fase de ingesta, Avance 2).
+    \item NASA EOSDIS FIRMS. \textit{VIIRS 375 m Active Fire and Thermal Anomalies (VNP14IMG/VJ114IMG)}. \url{https://firms.modaps.eosdis.nasa.gov}
+    \item Funk, C. et al. (2015). \textit{The climate hazards infrared precipitation with stations}. Scientific Data, 2, 150066. \url{https://www.chc.ucsb.edu/data/chirps}
     \item PostgreSQL Global Development Group. \textit{PostgreSQL Documentation}. \url{https://www.postgresql.org/docs/}
     \item PostGIS Project Steering Committee. \textit{PostGIS Documentation}. \url{https://postgis.net/documentation/}
     \item MongoDB, Inc. \textit{MongoDB Manual}. \url{https://www.mongodb.com/docs/}
 \end{itemize}
+\normalsize
 
 \end{document}
