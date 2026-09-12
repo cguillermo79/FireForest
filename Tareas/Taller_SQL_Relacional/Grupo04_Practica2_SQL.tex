@@ -215,6 +215,28 @@ en un registro plano por celda-d\'ia, con columnas repetidas para cobertura vege
 (\texttt{cobertura\_1/pct\_1}, \texttt{cobertura\_2/pct\_2}, ...) porque una celda puede tener
 m\'as de un tipo de cobertura.
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw=myNewColorA, rounded corners, fill=myNewColorC!20,
+              align=left, text width=8.2cm, font=\scriptsize, inner sep=5pt},
+  rep/.style={draw=myNewColorB, dashed, rounded corners, inner sep=3pt}
+]
+\node[box] (reg) {
+  \textbf{REGISTRO\_DIARIO} (sin PK definida; una fila por celda-d\'ia)\\[2pt]
+  celda\_id, longitud, latitud, area\_km2\\
+  fecha, anio, mes\\[4pt]
+  \tikz[baseline]{\node[rep, inner sep=3pt] {cobertura\_1, pct\_1, cobertura\_2, pct\_2, \ldots};}\\[2pt]
+  {\scriptsize\color{myNewColorB} (grupo repetitivo, de longitud variable)}\\[4pt]
+  numero\_detecciones, frp\_suma\_mw, frp\_maxima\_mw, incendio\_observado\\
+  precipitacion\_diaria\_mm
+};
+\end{tikzpicture}
+\caption{Modelo inicial (desnormalizado): una \'unica entidad plana, con un grupo repetitivo de
+cobertura vegetal que impide una PK simple y viola 1FN.}
+\label{fig:modelo-inicial}
+\end{figure}
+
 \textbf{1FN.} Se eliminan los grupos repetitivos de cobertura extray\'endolos a
 \texttt{celda\_cobertura} (una fila por combinaci\'on celda-cobertura-a\~no). Todos los atributos
 del esquema final son at\'omicos (sin listas ni valores compuestos) y cada tabla tiene PK
