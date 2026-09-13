@@ -1,0 +1,118 @@
+RESULTADOS REALES - Carga, indices y verificacion
+Fuente: ejecucion real de mongosh sobre
+07_entrega/Grupo04_Laboratorio_NoSQL_MongoDB.js (taller_nosql_fireforest)
+Comando: mongosh "mongodb://localhost:27017" Tareas/Taller_NoSQL/07_entrega/Grupo04_Laboratorio_NoSQL_MongoDB.js
+
+
+
+==================================================
+INICIO: base 'taller_nosql_fireforest', coleccion 'evidencia_viirs_celda_mes'
+==================================================
+
+
+==================================================
+PASO 1: Reconstruccion exclusiva de la coleccion
+==================================================
+Coleccion previa eliminada para recarga idempotente: taller_nosql_fireforest.evidencia_viirs_celda_mes
+
+
+==================================================
+PASO 2: Carga de documentos
+==================================================
+Documentos insertados: 105
+
+
+==================================================
+PASO 3: Creacion de indices
+==================================================
+Indices creados:
+ - _id_
+ - ux_celda_anio_mes
+ - ix_fecha_inicio
+ - ix_frp_maxima
+ - ix_evidencias_categoria_fuego
+
+
+==================================================
+PASO 4: Verificaciones de la carga
+==================================================
+Conteo total de documentos: 105
+_id unicos: 105
+Combinaciones celda-anio-mes unicas: 105
+Documentos con 'periodo.fecha_inicio' tipo date: 105
+Documentos con 'metricas' tipo object (anidado): 105
+Documentos con 'evidencias' tipo array: 105
+Documentos con 'metadatos.datos_simulados' tipo bool: 105
+Documentos CON evidencia de fuego (categoria 'todas'): 70
+Documentos SIN evidencia de fuego (categoria 'todas'): 35
+Documentos con evidencia nominal/alta: 68
+
+
+==================================================
+Documento de ejemplo completo (JSON/BSON)
+==================================================
+{
+  _id: 'VCM_0001',
+  celda: {
+    cell_index: 1803,
+    unidad_espacial: 'celda_500m'
+  },
+  periodo: {
+    anio: 2019,
+    mes: 1,
+    anio_mes: '2019-01',
+    fecha_inicio: ISODate('2019-01-01T00:00:00.000Z')
+  },
+  fuente_satelital: {
+    fuente_primaria: 'NASA FIRMS - VIIRS',
+    asset_gee: 'VIIRS_PREP_2019_01',
+    soporte_nativo_m: 926.625433055833,
+    procedencia: 'registros_previamente_procesados',
+    version_origen: 'v1.0.3'
+  },
+  metricas: {
+    detecciones: {
+      media_todas: 1,
+      media_nominal_alta: 0
+    },
+    presencia: {
+      fraccion_todas: 1,
+      fraccion_nominal_alta: 0
+    },
+    frp: {
+      suma_observada_media_mw: 4.699999809265137,
+      maxima_media_mw: 4.699999809265137
+    }
+  },
+  calidad_observacion: {
+    dias_validos_media: 31,
+    disponibilidad_pct: 100,
+    observado_media: 1,
+    cobertura_fuente_fraccion: 1,
+    soporte_observado_fraccion: 1
+  },
+  evidencias: [
+    {
+      categoria: 'todas',
+      detecciones_media: 1,
+      presencia_fraccion: 1,
+      evidencia_fuego: true
+    },
+    {
+      categoria: 'nominal_alta',
+      detecciones_media: 0,
+      presencia_fraccion: 0,
+      evidencia_fuego: false
+    }
+  ],
+  muestreo: {
+    estrato: 'con_fuego',
+    metodo: 'estratificado_por_anio_y_evidencia',
+    semilla: 2026
+  },
+  metadatos: {
+    unidad_analisis: 'celda_mes_500m',
+    datos_simulados: false,
+    uso: 'Laboratorio NoSQL MongoDB - M1721'
+  }
+}

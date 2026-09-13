@@ -1,0 +1,70 @@
+AUDITORIA TECNICA - Taller NoSQL MongoDB (Grupo 04)
+Base evaluada: taller_nosql_fireforest.evidencia_viirs_celda_mes
+
+1) PRUEBA DE IDEMPOTENCIA
+-------------------------
+Comando ejecutado dos veces de forma consecutiva:
+  mongosh "mongodb://localhost:27017" Tareas/Taller_NoSQL/07_entrega/Grupo04_Laboratorio_NoSQL_MongoDB.js
+
+Metodo: se comparo la salida completa de ambas ejecuciones (1525 lineas
+cada una) enmascarando unicamente las marcas de tiempo ISO
+(fecha_procesamiento de la bitacora operativa, que por diseno cambia en
+cada ejecucion). Resultado del diff: SIN DIFERENCIAS.
+
+Conclusion: el script es idempotente. Cada ejecucion produce exactamente
+105 documentos, los mismos 5 indices, los mismos resultados en las 10
+consultas y el mismo efecto en las 3 actualizaciones (unico cambio
+esperado: la marca de tiempo operativa de bitacora_laboratorio).
+
+2) CONTEO Y UNICIDAD (ejecucion real, PASO 4)
+----------------------------------------------
+Conteo total de documentos: 105
+_id unicos: 105
+Combinaciones celda-anio-mes unicas: 105
+Documentos con 'periodo.fecha_inicio' tipo date: 105
+Documentos con 'metricas' tipo object (anidado): 105
+Documentos con 'evidencias' tipo array: 105
+Documentos con 'metadatos.datos_simulados' tipo bool: 105
+Documentos CON evidencia de fuego (categoria 'todas'): 70
+Documentos SIN evidencia de fuego (categoria 'todas'): 35
+Documentos con evidencia nominal/alta: 68
+
+3) INDICES CREADOS (ejecucion real, PASO 3)
+--------------------------------------------
+ - _id_ (automatico)
+ - ux_celda_anio_mes -> { "celda.cell_index": 1, "periodo.anio": 1, "periodo.mes": 1 } (unique)
+ - ix_fecha_inicio -> { "periodo.fecha_inicio": 1 }
+ - ix_frp_maxima -> { "metricas.frp.maxima_media_mw": -1 }
+ - ix_evidencias_categoria_fuego -> { "evidencias.categoria": 1, "evidencias.evidencia_fuego": 1 } (multiclave)
+
+4) AISLAMIENTO RESPECTO DE OTRAS BASES/COLECCIONES
+-----------------------------------------------------
+Verificado antes de ejecutar el script definitivo (mongosh --eval):
+  fireforest.evidencia_viirs_celda_mes -> 105 documentos (SIN TOCAR)
+  fireforest.detecciones_viirs         -> 2 documentos (SIN TOCAR)
+  taller_nosql_fireforest              -> no existia (base nueva)
+
+El script solo ejecuta drop() sobre
+'taller_nosql_fireforest.evidencia_viirs_celda_mes' (getSiblingDB +
+getCollection explicitos). No contiene ninguna sentencia dropDatabase()
+ni drop() sobre otra coleccion o base.
+
+5) VALORES DE REFERENCIA CONTRASTADOS CONTRA LA GUIA / ENUNCIADO
+-------------------------------------------------------------------
+FRP maxima de la muestra:              122.31617512422449 MW (esperado ~122,3162) -> COINCIDE
+Septiembre, FRP acumulada:             350.83 MW (esperado ~350,83)               -> COINCIDE
+Octubre, FRP promedio:                 30.58 MW (esperado ~30,58)                 -> COINCIDE
+Octubre, FRP maxima:                   122.32 MW (esperado ~122,32)               -> COINCIDE
+Anio con mayor FRP acumulada/promedio: 2023 (349.58 MW acumulada, 34.96 MW prom.) -> COINCIDE
+Con evidencia de fuego (total):        70                                        -> COINCIDE
+Con evidencia nominal/alta:            68                                        -> COINCIDE
+Sin evidencia de fuego:                35                                        -> COINCIDE
+
+6) HERRAMIENTAS VERIFICADAS EN EL EQUIPO DE EJECUCION
+---------------------------------------------------------
+mongosh: 2.9.2
+mongoimport: 100.18.0
+MongoDB local (localhost:27017): responde { ok: 1 } a ping
+Python del entorno virtual (.venv): 3.14.7
+pandas: 3.0.5
+pdflatex (MiKTeX): 4.27 / MiKTeX 26.5

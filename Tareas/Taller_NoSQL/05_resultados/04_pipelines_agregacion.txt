@@ -1,0 +1,367 @@
+RESULTADOS REALES - Pipelines de agregacion (consultas 7, 8, 9 y 10)
+Fuente: ejecucion real de mongosh sobre
+07_entrega/Grupo04_Laboratorio_NoSQL_MongoDB.js (taller_nosql_fireforest)
+
+
+
+==================================================
+CONSULTA 7: Pipeline $match+$group+$sort - intensidad termica por mes calendario
+==================================================
+{
+  registros_con_fuego: 22,
+  mes: 9,
+  frp_total_muestra_mw: 350.83,
+  frp_promedio_mw: 15.95,
+  frp_maxima_mw: 90
+}
+{
+  registros_con_fuego: 11,
+  mes: 10,
+  frp_total_muestra_mw: 336.41,
+  frp_promedio_mw: 30.58,
+  frp_maxima_mw: 122.32
+}
+{
+  registros_con_fuego: 12,
+  mes: 11,
+  frp_total_muestra_mw: 162.65,
+  frp_promedio_mw: 13.55,
+  frp_maxima_mw: 36.9
+}
+{
+  registros_con_fuego: 10,
+  mes: 12,
+  frp_total_muestra_mw: 113.22,
+  frp_promedio_mw: 11.32,
+  frp_maxima_mw: 58.2
+}
+{
+  registros_con_fuego: 7,
+  mes: 8,
+  frp_total_muestra_mw: 108.24,
+  frp_promedio_mw: 15.46,
+  frp_maxima_mw: 66.6
+}
+{
+  registros_con_fuego: 4,
+  mes: 7,
+  frp_total_muestra_mw: 49.09,
+  frp_promedio_mw: 12.27,
+  frp_maxima_mw: 35.2
+}
+{
+  registros_con_fuego: 2,
+  mes: 1,
+  frp_total_muestra_mw: 15.4,
+  frp_promedio_mw: 7.7,
+  frp_maxima_mw: 10.7
+}
+{
+  registros_con_fuego: 1,
+  mes: 3,
+  frp_total_muestra_mw: 6.75,
+  frp_promedio_mw: 6.75,
+  frp_maxima_mw: 6.75
+}
+{
+  registros_con_fuego: 1,
+  mes: 2,
+  frp_total_muestra_mw: 2.34,
+  frp_promedio_mw: 2.34,
+  frp_maxima_mw: 2.34
+}
+
+
+==================================================
+CONSULTA 8: Pipeline $match+$group+$sort - variacion anual de metricas de fuego
+==================================================
+{
+  registros_con_fuego: 10,
+  anio: 2023,
+  detecciones_promedio: 0.733,
+  frp_promedio_mw: 34.96,
+  frp_total_muestra_mw: 349.58,
+  frp_maxima_mw: 122.32
+}
+{
+  registros_con_fuego: 10,
+  anio: 2020,
+  detecciones_promedio: 0.654,
+  frp_promedio_mw: 20.12,
+  frp_total_muestra_mw: 201.22,
+  frp_maxima_mw: 52.6
+}
+{
+  registros_con_fuego: 10,
+  anio: 2019,
+  detecciones_promedio: 0.834,
+  frp_promedio_mw: 18.05,
+  frp_total_muestra_mw: 180.51,
+  frp_maxima_mw: 90
+}
+{
+  registros_con_fuego: 10,
+  anio: 2024,
+  detecciones_promedio: 0.661,
+  frp_promedio_mw: 14.89,
+  frp_total_muestra_mw: 148.86,
+  frp_maxima_mw: 36.9
+}
+{
+  registros_con_fuego: 10,
+  anio: 2025,
+  detecciones_promedio: 0.626,
+  frp_promedio_mw: 11.91,
+  frp_total_muestra_mw: 119.12,
+  frp_maxima_mw: 58.2
+}
+{
+  registros_con_fuego: 10,
+  anio: 2021,
+  detecciones_promedio: 0.494,
+  frp_promedio_mw: 8.69,
+  frp_total_muestra_mw: 86.91,
+  frp_maxima_mw: 35.2
+}
+{
+  registros_con_fuego: 10,
+  anio: 2022,
+  detecciones_promedio: 0.448,
+  frp_promedio_mw: 5.87,
+  frp_total_muestra_mw: 58.74,
+  frp_maxima_mw: 16.64
+}
+
+
+==================================================
+CONSULTA 9: $unwind+$group - evidencia total vs. nominal/alta
+==================================================
+{
+  documentos_evaluados: 105,
+  documentos_con_fuego: 68,
+  categoria: 'nominal_alta',
+  detecciones_promedio: 0.408,
+  presencia_promedio: 0.384
+}
+{
+  documentos_evaluados: 105,
+  documentos_con_fuego: 70,
+  categoria: 'todas',
+  detecciones_promedio: 0.424,
+  presencia_promedio: 0.4
+}
+
+
+==================================================
+CONSULTA 10: Integradora - dataset plano celda-mes para analisis estadistico/ML
+==================================================
+{
+  registro_id: 'VCM_0073',
+  cell_index: 1146,
+  anio: 2023,
+  mes: 10,
+  anio_mes: '2023-10',
+  detecciones_media: 2,
+  frp_total_media_mw: 188.27,
+  frp_maxima_mw: 122.32,
+  frp_por_deteccion_mw: 94.14,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0009',
+  cell_index: 1415,
+  anio: 2019,
+  mes: 9,
+  anio_mes: '2019-09',
+  detecciones_media: 2,
+  frp_total_media_mw: 104.4,
+  frp_maxima_mw: 90,
+  frp_por_deteccion_mw: 52.2,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0066',
+  cell_index: 5353,
+  anio: 2023,
+  mes: 8,
+  anio_mes: '2023-08',
+  detecciones_media: 1,
+  frp_total_media_mw: 66.6,
+  frp_maxima_mw: 66.6,
+  frp_por_deteccion_mw: 66.6,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0101',
+  cell_index: 7104,
+  anio: 2025,
+  mes: 12,
+  anio_mes: '2025-12',
+  detecciones_media: 1,
+  frp_total_media_mw: 58.2,
+  frp_maxima_mw: 58.2,
+  frp_por_deteccion_mw: 58.2,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 96.7741928100586,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0020',
+  cell_index: 5727,
+  anio: 2020,
+  mes: 9,
+  anio_mes: '2020-09',
+  detecciones_media: 1,
+  frp_total_media_mw: 52.6,
+  frp_maxima_mw: 52.6,
+  frp_por_deteccion_mw: 52.6,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0024',
+  cell_index: 1644,
+  anio: 2020,
+  mes: 10,
+  anio_mes: '2020-10',
+  detecciones_media: 1,
+  frp_total_media_mw: 44.8,
+  frp_maxima_mw: 44.8,
+  frp_por_deteccion_mw: 44.8,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0034',
+  cell_index: 4675,
+  anio: 2021,
+  mes: 7,
+  anio_mes: '2021-07',
+  detecciones_media: 1,
+  frp_total_media_mw: 35.2,
+  frp_maxima_mw: 35.2,
+  frp_por_deteccion_mw: 35.2,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0029',
+  cell_index: 7032,
+  anio: 2020,
+  mes: 11,
+  anio_mes: '2020-11',
+  detecciones_media: 0.824,
+  frp_total_media_mw: 35,
+  frp_maxima_mw: 35,
+  frp_por_deteccion_mw: 42.5,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0068',
+  cell_index: 1297,
+  anio: 2023,
+  mes: 9,
+  anio_mes: '2023-09',
+  detecciones_media: 1,
+  frp_total_media_mw: 33.64,
+  frp_maxima_mw: 33.64,
+  frp_por_deteccion_mw: 33.64,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0078',
+  cell_index: 1079,
+  anio: 2024,
+  mes: 9,
+  anio_mes: '2024-09',
+  detecciones_media: 1,
+  frp_total_media_mw: 28.6,
+  frp_maxima_mw: 28.6,
+  frp_por_deteccion_mw: 28.6,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 96.66666412353516,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0023',
+  cell_index: 1594,
+  anio: 2020,
+  mes: 10,
+  anio_mes: '2020-10',
+  detecciones_media: 0.6,
+  frp_total_media_mw: 26.88,
+  frp_maxima_mw: 26.88,
+  frp_por_deteccion_mw: 44.8,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0065',
+  cell_index: 5277,
+  anio: 2023,
+  mes: 8,
+  anio_mes: '2023-08',
+  detecciones_media: 0.412,
+  frp_total_media_mw: 23.84,
+  frp_maxima_mw: 23.84,
+  frp_por_deteccion_mw: 57.9,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0028',
+  cell_index: 6394,
+  anio: 2020,
+  mes: 11,
+  anio_mes: '2020-11',
+  detecciones_media: 1,
+  frp_total_media_mw: 17.9,
+  frp_maxima_mw: 17.9,
+  frp_por_deteccion_mw: 17.9,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0013',
+  cell_index: 3034,
+  anio: 2019,
+  mes: 10,
+  anio_mes: '2019-10',
+  detecciones_media: 0.5,
+  frp_total_media_mw: 17.75,
+  frp_maxima_mw: 17.75,
+  frp_por_deteccion_mw: 35.5,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}
+{
+  registro_id: 'VCM_0042',
+  cell_index: 5226,
+  anio: 2021,
+  mes: 9,
+  anio_mes: '2021-09',
+  detecciones_media: 0.543,
+  frp_total_media_mw: 16.79,
+  frp_maxima_mw: 16.79,
+  frp_por_deteccion_mw: 30.9,
+  proporcion_nominal_alta: 1,
+  disponibilidad_pct: 100,
+  presencia_fuego: 1
+}

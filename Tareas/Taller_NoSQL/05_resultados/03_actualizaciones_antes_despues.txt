@@ -1,0 +1,82 @@
+RESULTADOS REALES - Operaciones de actualizacion (Parte D de la guia)
+Fuente: ejecucion real de mongosh sobre
+07_entrega/Grupo04_Laboratorio_NoSQL_MongoDB.js (taller_nosql_fireforest)
+
+
+
+==================================================
+ACTUALIZACION 1: campo simple con updateOne() (revisado_manualmente)
+==================================================
+Documento seleccionado (mayor FRP maxima de la muestra): VCM_0073
+ANTES:
+{
+  _id: 'VCM_0073'
+}
+Resultado updateOne -> matched: 1, modified: 1
+DESPUES:
+{
+  _id: 'VCM_0073',
+  revisado_manualmente: true
+}
+Efecto: agrega el metadato operativo booleano 'revisado_manualmente' a un unico documento (el de mayor FRP de la muestra); no altera ningun valor satelital.
+
+
+==================================================
+ACTUALIZACION 2: campo anidado con updateMany() (metadatos.estado_revision)
+==================================================
+ANTES (3 documentos con evidencia de fuego, ordenados por _id):
+{
+  _id: 'VCM_0001',
+  metadatos: {}
+}
+{
+  _id: 'VCM_0002',
+  metadatos: {}
+}
+{
+  _id: 'VCM_0005',
+  metadatos: {}
+}
+Resultado updateMany -> matched: 70, modified: 70
+DESPUES (mismos 3 documentos):
+{
+  _id: 'VCM_0001',
+  metadatos: {
+    estado_revision: 'revisado_taller_nosql'
+  }
+}
+{
+  _id: 'VCM_0002',
+  metadatos: {
+    estado_revision: 'revisado_taller_nosql'
+  }
+}
+{
+  _id: 'VCM_0005',
+  metadatos: {
+    estado_revision: 'revisado_taller_nosql'
+  }
+}
+Efecto: agrega el campo anidado 'metadatos.estado_revision' (metadato operativo) a los 70 documentos con evidencia de fuego; los valores satelitales no cambian.
+
+
+==================================================
+ACTUALIZACION 3: incorporacion de informacion nueva con $push (bitacora_laboratorio)
+==================================================
+ANTES (un documento de referencia):
+{
+  _id: 'VCM_0001'
+}
+Resultado updateMany -> matched: 105, modified: 105
+DESPUES (mismo documento de referencia):
+{
+  _id: 'VCM_0001',
+  bitacora_laboratorio: [
+    {
+      accion: 'carga_taller_nosql_fireforest',
+      responsable: 'Grupo04',
+      fecha_procesamiento: ISODate('2026-09-13T14:47:04.161Z')
+    }
+  ]
+}
+Efecto: incorpora en los 105 documentos un nuevo arreglo de metadatos operativos 'bitacora_laboratorio' mediante $push, sin modificar los campos satelitales originales.

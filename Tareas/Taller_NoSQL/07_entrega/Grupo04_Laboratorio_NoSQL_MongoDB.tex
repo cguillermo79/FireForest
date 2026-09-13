@@ -1,0 +1,452 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.1cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\sloppy
+\emergencystretch=3em
+\setlength{\headheight}{14.5pt}
+\usepackage{xcolor}
+\definecolor{vino}{RGB}{150,25,40}
+\definecolor{grisclaro}{RGB}{242,242,242}
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\Large\bfseries\color{vino}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{vino}}{\thesubsection}{0.5em}{}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=vino, urlcolor=vino, citecolor=vino}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{Laboratorio NoSQL --- MongoDB (M1721)}
+\fancyhead[R]{Grupo 04}
+\fancyfoot[C]{\thepage}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+\lstdefinelanguage{JSMongo}{
+  morekeywords={const,function,print,printjson,forEach,db},
+  sensitive=true,
+  morecomment=[l]{//},
+  morestring=[b]",
+}
+\lstset{
+  language=JSMongo,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{vino}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{teal},
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  backgroundcolor=\color{grisclaro},
+  frame=single,
+  rulecolor=\color{gray!40},
+  xleftmargin=2pt, xrightmargin=2pt,
+  showstringspaces=false,
+  tabsize=2,
+}
+
+\title{\vspace{-1.5cm}\textbf{\Huge Laboratorio NoSQL --- MongoDB}\\[0.3cm]
+\Large Diseño documental y consultas sobre evidencia VIIRS de fuego (celda-mes)\\[0.2cm]
+\normalsize Asignatura M1721 --- Bases de datos para Datos Estructurados, no Estructurados\\
+e Introducción a Big Data para Ciencia de Datos}
+\author{Grupo 04 \\ Proyecto FireForest (componente NoSQL independiente)}
+\date{Quito/Loja, 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\vspace{1cm}
+\begin{center}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Base de datos independiente} & \texttt{taller\_nosql\_fireforest} \\
+\textbf{Colección principal} & \texttt{evidencia\_viirs\_celda\_mes} \\
+\textbf{Documentos cargados} & 105 (datos reales de VIIRS, no simulados) \\
+\textbf{Fuente} & Registros reales de VIIRS procesados previamente (solo lectura), v1.0.3, 2019--2025 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\newpage
+
+\section{Descripción del caso y justificación de MongoDB}
+
+Los incendios forestales del cantón Loja generan información heterogénea:
+detecciones satelitales VIIRS agregadas por celda espacial de 500\,m y mes,
+indicadores de calidad de observación, evidencia de fuego bajo distintos
+criterios de confianza, y metadatos operativos que se agregan \emph{después}
+de la carga inicial (revisiones, bitácora de procesamiento). Esta
+heterogeneidad —estructuras anidadas, un arreglo de evidencia de cardinalidad
+fija, y campos que aparecen solo después de una actualización— es más
+natural de representar como documentos que como tablas relacionales rígidas:
+un único \lstinline!findOne()! recupera toda la unidad celda-mes sin
+necesidad de \texttt{JOIN}, y los metadatos operativos se incorporan con
+\lstinline!\$set!/\lstinline!\$push! sin alterar el esquema.
+
+Este laboratorio reutiliza la unidad de análisis celda-mes del Proyecto
+Integrador FireForest (ver \texttt{AGENTS.md}) y constituye su componente
+NoSQL. Preguntas que responde: (1) ¿qué registros celda-mes superan un
+umbral de FRP relevante y cuándo ocurrieron? (2) ¿en qué meses y años se
+concentra la mayor intensidad térmica, y cómo difiere la evidencia de fuego
+entre el criterio amplio y el criterio nominal/alta de confianza?
+
+\section{Colección principal y unidad documental}
+
+\textbf{Colección principal:} \texttt{evidencia\_viirs\_celda\_mes}, dentro
+de la base independiente \texttt{taller\_nosql\_fireforest} (distinta de la
+base \texttt{fireforest} del Proyecto Integrador, que no fue modificada).
+
+\textbf{Unidad documental:} cada documento representa \textbf{una celda
+espacial de 500\,m observada durante un mes calendario} (celda-mes),
+identificada de forma única por \lstinline!celda.cell_index + periodo.anio + periodo.mes!
+(reforzado por el índice único \texttt{ux\_celda\_anio\_mes}).
+
+\section{Esquema del documento}
+
+\begin{lstlisting}[language={}, basicstyle=\ttfamily\footnotesize]
+evidencia_viirs_celda_mes
+|- _id                          string
+|- celda            { cell_index, unidad_espacial }
+|- periodo          { anio, mes, anio_mes, fecha_inicio: Date }
+|- fuente_satelital { fuente_primaria, asset_gee, procedencia, version_origen }
+|- metricas
+|   |- detecciones  { media_todas, media_nominal_alta }
+|   |- presencia    { fraccion_todas, fraccion_nominal_alta }
+|   \- frp          { suma_observada_media_mw, maxima_media_mw }
+|- calidad_observacion { dias_validos_media, disponibilidad_pct, ... }
+|- evidencias [ { categoria, detecciones_media, presencia_fraccion,
+|                 evidencia_fuego: bool }, ... ]   (2 elementos)
+|- muestreo         { estrato, metodo, semilla }
+|- metadatos        { unidad_analisis, datos_simulados, uso, estado_revision? }
+|- revisado_manualmente?        bool
+\- bitacora_laboratorio? [ { accion, responsable, fecha_procesamiento: Date } ]
+\end{lstlisting}
+
+\section{Decisiones de embebido y referencia}
+
+Se \textbf{embebieron} \lstinline!celda!, \lstinline!periodo!,
+\lstinline!fuente_satelital!, \lstinline!metricas! y
+\lstinline!calidad_observacion! porque tienen cardinalidad 1--1, se leen
+siempre junto con el documento y no cambian tras la carga. El arreglo
+\lstinline!evidencias! se embebió por tener cardinalidad fija y pequeña (2
+elementos: \texttt{todas} y \texttt{nominal\_alta}), consultado con
+\lstinline!$elemMatch! (consultas 2 y 6) o aplanado puntualmente con
+\lstinline!$unwind! (consulta 9). Los metadatos operativos
+(\lstinline!metadatos.estado_revision!, \lstinline!revisado_manualmente!,
+\lstinline!bitacora_laboratorio!) también se embebieron pese a evolucionar
+después de la carga, porque su cardinalidad sigue siendo pequeña y ligada al
+documento.
+
+\textbf{No se usaron referencias ni \lstinline!$lookup!}: no existe en este
+caso una entidad de cardinalidad alta e independiente que se consulte por
+separado del documento celda-mes; las 10 consultas exigidas se resuelven
+íntegramente sobre esta única colección. Una bitácora de revisión más
+extensa (con múltiples analistas y comentarios largos) sí ameritaría una
+colección referenciada aparte; no es el caso de este taller.
+
+\section{Documento JSON/BSON completo (ejemplo real)}
+
+\begin{lstlisting}
+{
+  "_id": "VCM_0001",
+  "celda": { "cell_index": 1803, "unidad_espacial": "celda_500m" },
+  "periodo": { "anio": 2019, "mes": 1, "anio_mes": "2019-01",
+               "fecha_inicio": ISODate("2019-01-01T00:00:00Z") },
+  "fuente_satelital": { "fuente_primaria": "NASA FIRMS - VIIRS",
+    "asset_gee": "VIIRS_PREP_2019_01",
+    "procedencia": "registros_previamente_procesados",
+    "version_origen": "v1.0.3" },
+  "metricas": {
+    "detecciones": { "media_todas": 1, "media_nominal_alta": 0 },
+    "presencia": { "fraccion_todas": 1, "fraccion_nominal_alta": 0 },
+    "frp": { "suma_observada_media_mw": 4.7, "maxima_media_mw": 4.7 }
+  },
+  "calidad_observacion": { "dias_validos_media": 31,
+    "disponibilidad_pct": 100, "observado_media": 1 },
+  "evidencias": [
+    { "categoria": "todas", "detecciones_media": 1,
+      "presencia_fraccion": 1, "evidencia_fuego": true },
+    { "categoria": "nominal_alta", "detecciones_media": 0,
+      "presencia_fraccion": 0, "evidencia_fuego": false }
+  ],
+  "muestreo": { "estrato": "con_fuego",
+    "metodo": "estratificado_por_anio_y_evidencia", "semilla": 2026 },
+  "metadatos": { "unidad_analisis": "celda_mes_500m",
+    "datos_simulados": false, "uso": "Laboratorio NoSQL MongoDB - M1721" }
+}
+\end{lstlisting}
+
+\section{Evidencia de carga de los 105 documentos}
+
+Verificado mediante ejecución real de
+\texttt{07\_entrega/Grupo04\_Laboratorio\_NoSQL\_MongoDB.js} contra
+\texttt{taller\_nosql\_fireforest} (detalle completo en
+\texttt{05\_resultados/01\_validacion\_carga.txt}):
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Verificación} & \textbf{Resultado real} \\
+\midrule
+Conteo total de documentos & 105 \\
+\texttt{\_id} únicos & 105 \\
+Combinaciones celda-año-mes únicas & 105 \\
+Fechas BSON (\texttt{periodo.fecha\_inicio}) & 105 \\
+Objetos anidados (\texttt{metricas}) & 105 \\
+Arreglos (\texttt{evidencias}) & 105 \\
+Booleanos (\texttt{metadatos.datos\_simulados}) & 105 \\
+Con evidencia de fuego (criterio \texttt{todas}) & 70 \\
+Sin evidencia de fuego & 35 \\
+Con evidencia nominal/alta & 68 \\
+FRP máxima de la muestra & 122,3162 MW (VCM\_0073, 2023-10) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Índices creados:} \texttt{ux\_celda\_anio\_mes} (único, sobre
+\lstinline!celda.cell_index+periodo.anio+periodo.mes!), \texttt{ix\_fecha\_inicio},
+\texttt{ix\_frp\_maxima} (descendente) y \texttt{ix\_evidencias\_categoria\_fuego}
+(multiclave, sobre \lstinline!evidencias.categoria! y
+\lstinline!evidencias.evidencia_fuego!).
+
+\section{Consultas MongoDB (Parte C) --- resumen de las 10 consultas}
+
+Todas las consultas incluyen orden secundario por \texttt{\_id} (o la clave
+de agrupación) para evitar ambigüedad ante empates. Código completo,
+resultado sin recortar e interpretación de cada consulta:
+\texttt{04\_consultas/01\_consultas\_1\_a\_10.md} y
+\texttt{05\_resultados/02\_resultado\_consultas\_1\_10.txt}.
+
+\begin{center}
+\small
+\begin{longtable}{p{0.4cm}p{2.6cm}p{4.6cm}p{5.6cm}}
+\toprule
+\textbf{\#} & \textbf{Tipo} & \textbf{Pregunta} & \textbf{Resultado real (clave)} \\
+\midrule
+1 & Filtro \lstinline!$gt! & FRP máxima $>$ 20 MW? & 13 registros; máximo VCM\_0073 (122{,}32 MW) \\\midrule
+2 & Filtro combinado & 2023-2024 con FRP $\geq$10 y evid. nominal/alta? & 11 registros cumplen ambos criterios \\\midrule
+3 & Proyección & Campos esenciales de 10 registros con fuego & 10 documentos, solo 5 campos c/u \\\midrule
+4 & Orden y límite & 5 registros con mayor FRP máxima & VCM\_0073 (122{,}32), VCM\_0009 (90{,}0), \ldots \\\midrule
+5 & Campos anidados & Disponibilidad 100\% y $\geq$1 detección media & 10 registros cumplen ambas condiciones \\\midrule
+6 & Arreglos \lstinline!$elemMatch! & Evidencia nominal/alta con detección $>$0 & 10 registros \\\midrule
+7 & Pipeline mensual & Mes con mayor intensidad térmica & Sep.: 350{,}83 MW acum.; Oct.: 30{,}58 MW prom., máx. 122{,}32 MW \\\midrule
+8 & Pipeline anual & Variación anual de métricas de fuego & 2023: mayor FRP acum. (349{,}58) y prom. (34{,}96 MW) \\\midrule
+9 & \lstinline!$unwind! & Evidencia total vs. nominal/alta & 70 vs. 68 documentos con fuego, sobre 105 evaluados \\\midrule
+10 & Integradora & Dataset plano celda-mes para análisis/ML & 15 filas; encabeza VCM\_0073 (188{,}27 MW) \\\midrule
+\caption{Resumen de las 10 consultas exigidas por la guía, con resultado real obtenido.}
+\end{longtable}
+\end{center}
+
+\subsection{Código completo de las 10 consultas}
+
+\begin{lstlisting}
+// Consulta 1 (filtro $gt)
+coleccion.find(
+  { "metricas.frp.maxima_media_mw": { $gt: 20 } },
+  { _id: 1, "celda.cell_index": 1, "periodo.anio_mes": 1,
+    "metricas.frp.maxima_media_mw": 1 }
+).sort({ "metricas.frp.maxima_media_mw": -1, _id: 1 }).forEach(printjson);
+
+// Consulta 2 (filtro combinado $in + $gte + $elemMatch)
+coleccion.find(
+  { "periodo.anio": { $in: [2023, 2024] },
+    "metricas.frp.maxima_media_mw": { $gte: 10 },
+    evidencias: { $elemMatch: { categoria: "nominal_alta", evidencia_fuego: true } } },
+  { _id: 1, "periodo.anio_mes": 1, "celda.cell_index": 1,
+    "metricas.frp.maxima_media_mw": 1 }
+).sort({ "periodo.fecha_inicio": 1, _id: 1 }).forEach(printjson);
+
+// Consulta 3 (proyeccion)
+coleccion.find(
+  { "metricas.frp.suma_observada_media_mw": { $gt: 0 } },
+  { _id: 1, "celda.cell_index": 1, "periodo.anio_mes": 1,
+    "metricas.detecciones.media_todas": 1,
+    "metricas.frp.suma_observada_media_mw": 1 }
+).sort({ "periodo.fecha_inicio": 1, _id: 1 }).limit(10).forEach(printjson);
+
+// Consulta 4 (orden y limite)
+coleccion.find(
+  {}, { _id: 1, "celda.cell_index": 1, "periodo.anio_mes": 1,
+        "metricas.frp.maxima_media_mw": 1 }
+).sort({ "metricas.frp.maxima_media_mw": -1, _id: 1 }).limit(5).forEach(printjson);
+
+// Consulta 5 (campos anidados)
+coleccion.find(
+  { "calidad_observacion.disponibilidad_pct": 100,
+    "metricas.detecciones.media_todas": { $gte: 1 } },
+  { _id: 1, "periodo.anio_mes": 1, "celda.cell_index": 1,
+    "calidad_observacion.disponibilidad_pct": 1,
+    "metricas.detecciones.media_todas": 1 }
+).sort({ "metricas.detecciones.media_todas": -1, _id: 1 }).limit(10).forEach(printjson);
+
+// Consulta 6 (arreglos con $elemMatch)
+coleccion.find(
+  { evidencias: { $elemMatch: { categoria: "nominal_alta",
+      evidencia_fuego: true, detecciones_media: { $gt: 0 } } } },
+  { _id: 1, "celda.cell_index": 1, "periodo.anio_mes": 1,
+    evidencias: { $elemMatch: { categoria: "nominal_alta" } } }
+).sort({ "periodo.fecha_inicio": 1, _id: 1 }).limit(10).forEach(printjson);
+
+// Consulta 7 ($match + $group + $sort, por mes calendario)
+coleccion.aggregate([
+  { $match: { "metricas.frp.suma_observada_media_mw": { $gt: 0 } } },
+  { $group: { _id: "$periodo.mes", registros_con_fuego: { $sum: 1 },
+      frp_total_muestra_mw: { $sum: "$metricas.frp.suma_observada_media_mw" },
+      frp_promedio_mw: { $avg: "$metricas.frp.suma_observada_media_mw" },
+      frp_maxima_mw: { $max: "$metricas.frp.maxima_media_mw" } } },
+  { $project: { _id: 0, mes: "$_id", registros_con_fuego: 1,
+      frp_total_muestra_mw: { $round: ["$frp_total_muestra_mw", 2] },
+      frp_promedio_mw: { $round: ["$frp_promedio_mw", 2] },
+      frp_maxima_mw: { $round: ["$frp_maxima_mw", 2] } } },
+  { $sort: { frp_total_muestra_mw: -1, mes: 1 } }
+]).forEach(printjson);
+
+// Consulta 8 ($match + $group + $sort, por anio)
+coleccion.aggregate([
+  { $match: { "metricas.frp.suma_observada_media_mw": { $gt: 0 } } },
+  { $group: { _id: "$periodo.anio", registros_con_fuego: { $sum: 1 },
+      frp_promedio_mw: { $avg: "$metricas.frp.suma_observada_media_mw" },
+      frp_total_muestra_mw: { $sum: "$metricas.frp.suma_observada_media_mw" },
+      frp_maxima_mw: { $max: "$metricas.frp.maxima_media_mw" } } },
+  { $project: { _id: 0, anio: "$_id", registros_con_fuego: 1,
+      frp_promedio_mw: { $round: ["$frp_promedio_mw", 2] },
+      frp_total_muestra_mw: { $round: ["$frp_total_muestra_mw", 2] },
+      frp_maxima_mw: { $round: ["$frp_maxima_mw", 2] } } },
+  { $sort: { frp_total_muestra_mw: -1, anio: 1 } }
+]).forEach(printjson);
+
+// Consulta 9 ($unwind + $group, evidencia total vs. nominal/alta)
+coleccion.aggregate([
+  { $unwind: "$evidencias" },
+  { $group: { _id: "$evidencias.categoria", documentos_evaluados: { $sum: 1 },
+      documentos_con_fuego: { $sum: { $cond: ["$evidencias.evidencia_fuego", 1, 0] } },
+      detecciones_promedio: { $avg: "$evidencias.detecciones_media" } } },
+  { $project: { _id: 0, categoria: "$_id", documentos_evaluados: 1,
+      documentos_con_fuego: 1,
+      detecciones_promedio: { $round: ["$detecciones_promedio", 3] } } },
+  { $sort: { categoria: 1 } }
+]).forEach(printjson);
+
+// Consulta 10 (integradora: dataset plano para analisis/ML)
+coleccion.aggregate([
+  { $match: { "metricas.frp.suma_observada_media_mw": { $gt: 0 },
+      "calidad_observacion.disponibilidad_pct": { $gte: 95 } } },
+  { $set: { frp_por_deteccion_mw: { $cond: [
+        { $gt: ["$metricas.detecciones.media_todas", 0] },
+        { $divide: ["$metricas.frp.suma_observada_media_mw",
+                    "$metricas.detecciones.media_todas"] }, 0 ] } } },
+  { $project: { _id: 0, registro_id: "$_id", anio_mes: "$periodo.anio_mes",
+      frp_total_media_mw: { $round: ["$metricas.frp.suma_observada_media_mw", 2] },
+      frp_por_deteccion_mw: { $round: ["$frp_por_deteccion_mw", 2] } } },
+  { $sort: { frp_total_media_mw: -1, registro_id: 1 } },
+  { $limit: 15 }
+]).forEach(printjson);
+\end{lstlisting}
+
+\subsection{Interpretación de los dos pipelines analíticos principales}
+
+\textbf{Consulta 7 (por mes calendario):} septiembre concentra la mayor FRP
+acumulada de la muestra (350,83~MW en 22 registros), mientras que octubre
+presenta la mayor FRP promedio (30,58~MW) y el máximo absoluto
+(122,32~MW): más eventos en septiembre, pero más intensos en octubre.
+
+\textbf{Consulta 8 (por año):} 2023 combina la mayor FRP acumulada
+(349,58~MW) y la mayor FRP promedio (34,96~MW) entre los siete años de la
+muestra; 2022 presenta los valores más bajos (58,74~MW acumulados, 5,87~MW
+promedio).
+
+\section{Operaciones de actualización (Parte D)}
+
+Las tres actualizaciones agregan o modifican \textbf{únicamente metadatos
+operativos del laboratorio}; ningún valor satelital real se modifica.
+Evidencia completa antes/después en
+\texttt{05\_resultados/03\_actualizaciones\_antes\_despues.txt}.
+
+\begin{center}
+\small
+\begin{tabular}{p{2.4cm}p{2.4cm}p{5.3cm}p{2.6cm}}
+\toprule
+\textbf{Operación} & \textbf{Alcance} & \textbf{Efecto real} & \textbf{Resultado} \\
+\midrule
+\texttt{updateOne()},\newline campo simple &
+1 documento &
+Agrega \lstinline!revisado_manualmente: true! al documento de mayor FRP (VCM\_0073) &
+matched:1, modified:1 \\
+\midrule
+\texttt{updateMany()},\newline campo anidado &
+70 documentos &
+Agrega \lstinline!metadatos.estado_revision: "revisado_taller_nosql"! a los documentos con fuego &
+matched:70, modified:70 \\
+\midrule
+\texttt{updateMany()} + \lstinline!$push! &
+105 documentos &
+Incorpora el arreglo \lstinline!bitacora_laboratorio! (acción, responsable, fecha) &
+matched:105, modified:105 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Unidad de análisis y conexión con Ciencia de Datos}
+
+\textbf{Unidad de análisis:} una celda-mes
+(\lstinline!celda.cell_index+periodo.anio+periodo.mes!), consistente con la
+unidad declarada para todo el Proyecto Integrador FireForest.
+
+\textbf{Variable objetivo:} \lstinline!metricas.frp.maxima_media_mw!
+(continua, intensidad térmica máxima) o
+\lstinline!evidencias[categoria="todas"].evidencia_fuego! (binaria,
+presencia de fuego).
+
+\textbf{Variables derivadas} (calculadas en la consulta 10 mediante
+\lstinline!$set!): \lstinline!frp_por_deteccion_mw! (FRP total dividido
+entre detecciones medias) y \lstinline!proporcion_nominal_alta! (fracción de
+detecciones de alta confianza).
+
+\textbf{Extracción para análisis estadístico/ML:} la consulta 10 es
+exactamente el mecanismo de extracción: un pipeline
+\lstinline!$match+$set+$project! que produce un dataset plano —una fila por
+celda-mes con columnas escalares— exportable directamente a
+\texttt{pandas.DataFrame} para entrenar modelos o calcular estadísticas
+descriptivas.
+
+\section{Conclusiones}
+
+\begin{enumerate}[itemsep=1pt]
+  \item El modelo documental (objetos anidados + arreglo \texttt{evidencias}
+  de cardinalidad fija) fue suficiente para responder las 10 consultas y
+  los 2 pipelines analíticos exigidos sin necesidad de colecciones
+  adicionales ni \lstinline!$lookup!.
+  \item Los metadatos operativos del laboratorio se incorporaron de forma
+  incremental (\lstinline!$set!, \lstinline!$push!) sin afectar ningún valor
+  satelital, demostrando que el esquema soporta evolución posterior a la
+  carga.
+  \item Los hallazgos analíticos (estacionalidad septiembre-octubre, 2023
+  como año de mayor intensidad) son válidos \textbf{dentro de esta muestra
+  estratificada} y sirven de prueba de concepto para las agregaciones que
+  el Proyecto Integrador ejecutaría sobre la población completa de
+  celdas-mes.
+\end{enumerate}
+
+\textbf{Relación con el Proyecto Integrador:} este taller reutiliza la
+unidad de análisis celda-mes de \texttt{AGENTS.md} y demuestra el componente
+MongoDB de la arquitectura híbrida SQL--NoSQL de FireForest; el mismo
+patrón de pipeline (consulta 10) alimentaría, en el proyecto completo, el
+dataset analítico celda-mes junto con las tablas de hechos de
+PostgreSQL/PostGIS (\texttt{fact\_incendio}, \texttt{fact\_clima}).
+
+\textbf{Limitación del muestreo estratificado:} la muestra fija
+deliberadamente 10 casos con fuego y 5 sin fuego por año (semilla 2026), por
+lo que la proporción observada (70/35, 66,7\,\% con fuego) \textbf{no estima
+la prevalencia real de incendios en el cantón Loja} y no debe generalizarse
+a la población completa de celdas-mes. Ver
+\texttt{03\_datos/README.md} para el detalle del método de muestreo.
+
+\end{document}
