@@ -22,6 +22,9 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=vino, urlcolor=vino, citecolor=vino}
 \usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -58,7 +61,13 @@
 \Large Diseño documental y consultas sobre evidencia VIIRS de fuego (celda-mes)\\[0.2cm]
 \normalsize Asignatura M1721 --- Bases de datos para Datos Estructurados, no Estructurados\\
 e Introducción a Big Data para Ciencia de Datos}
-\author{Grupo 04 \\ Proyecto FireForest (componente NoSQL independiente)}
+\author{
+\textbf{Grupo 04}\\[0.2cm]
+Malan Mullo, Marco Vinicio\\
+Pujos Culque, Viviana Isabel\\
+Chuncho Morocho, Carlos Guillermo\\[0.2cm]
+Proyecto FireForest (componente NoSQL independiente)
+}
 \date{Quito/Loja, 2026}
 
 \begin{document}
@@ -416,6 +425,111 @@ exactamente el mecanismo de extracción: un pipeline
 celda-mes con columnas escalares— exportable directamente a
 \texttt{pandas.DataFrame} para entrenar modelos o calcular estadísticas
 descriptivas.
+
+
+\section{Capturas de Resultados}
+
+% =========================================================
+% PÁGINA 1 - CAPTURAS 1 A 4
+% =========================================================
+\begin{figure}[H]
+    \centering
+
+    % Fila 1
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1Conteo105.png}
+        \captionof{figure}{Conteo de documentos registrados en la colección.}
+        \label{fig:conteo105}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{2DocumentoCompleto.png}
+        \captionof{figure}{Visualización de un documento completo.}
+        \label{fig:documentoCompleto}
+    \end{minipage}
+
+    \vspace{0.4cm}
+
+    % Fila 2
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3Consulta1Filtro.png}
+        \captionof{figure}{Resultado de la Consulta 1 mediante filtro.}
+        \label{fig:consulta1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4Pipelinepormes.png}
+        \captionof{figure}{Resultado del pipeline de agregación por mes.}
+        \label{fig:pipelineMes}
+    \end{minipage}
+\end{figure}
+
+\clearpage
+
+% =========================================================
+% PÁGINA 2 - CAPTURAS 5 A 8
+% =========================================================
+\begin{figure}[H]
+    \centering
+
+    % Fila 1
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{5Pipelineporanio.png}
+        \captionof{figure}{Resultado del pipeline de agregación por año.}
+        \label{fig:pipelineAnio}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{6_1Actualizacion1.png}
+        \captionof{figure}{Primera actualización de la información.}
+        \label{fig:actualizacion1}
+    \end{minipage}
+
+    \vspace{0.4cm}
+
+    % Fila 2
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{6_2Actualizacion2.png}
+        \captionof{figure}{Segunda actualización de la información.}
+        \label{fig:actualizacion2}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{6_3Actualizacion3.png}
+        \captionof{figure}{Tercera actualización de la información.}
+        \label{fig:actualizacion3}
+    \end{minipage}
+\end{figure}
+
+\clearpage
+
+\section{Conclusiones}
+
+\begin{enumerate}[itemsep=1pt]
+  \item El modelo documental (objetos anidados + arreglo \texttt{evidencias}
+  de cardinalidad fija) fue suficiente para responder las 10 consultas y
+  los 2 pipelines analíticos exigidos sin necesidad de colecciones
+  adicionales ni \lstinline!$lookup!.
+
+  \item Los metadatos operativos del laboratorio se incorporaron de forma
+  incremental (\lstinline!$set!, \lstinline!$push!) sin afectar ningún valor
+  satelital, demostrando que el esquema soporta evolución posterior a la
+  carga.
+
+  \item Los hallazgos analíticos (estacionalidad septiembre-octubre, 2023
+  como año de mayor intensidad) son válidos \textbf{dentro de esta muestra
+  estratificada} y sirven de prueba de concepto para las agregaciones que
+  el Proyecto Integrador ejecutaría sobre la población completa de
+  celdas-mes.
+\end{enumerate}
 
 \section{Conclusiones}
 
