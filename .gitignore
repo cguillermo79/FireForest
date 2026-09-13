@@ -9,5 +9,6 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Logs y resultados generados localmente
-logs/*.log
+# Nota: los ignorados especificos de Tareas/Proyecto_integrador (Airflow,
+# datos crudos pesados, resultados locales de Spark, etc.) viven en
+# Tareas/Proyecto_integrador/.gitignore, no aqui.
