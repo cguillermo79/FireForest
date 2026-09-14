@@ -211,8 +211,7 @@ Se identificaron tres fuentes principales, que combinan datos estructurados, sem
     \item \texttt{fact\_clima.celda\_id} $\rightarrow$ \texttt{dim\_celda.celda\_id} (FK);\\ \texttt{fact\_clima.fecha\_id} $\rightarrow$ \texttt{dim\_fecha.fecha\_id} (FK).
     \item Ambas tablas de hechos tienen \texttt{UNIQUE(celda\_id, fecha\_id)} (una fila por celda y d\'ia; ver la nota de granularidad temporal en la secci\'on~4.1).
     \item \texttt{fact\_incendio} y \texttt{fact\_clima} se cruzan mediante \texttt{JOIN} por \texttt{celda\_id + fecha\_id} (no hay FK directa entre ambas).
-    \item La colecci\'on NoSQL \texttt{detecciones\_viirs} no tiene FK hacia PostgreSQL: cada documento trae \texttt{celda\_id + fecha} (d\'ia), y ese detalle diario se agrega por \texttt{celda\_id + anio + mes} para poblar \texttt{fact\_incendio}.
-    \item Esta integraci\'on MongoDB $\to$ PostgreSQL no es autom\'atica ni por FK: se realiza mediante un proceso ETL/ELT (script de transformaci\'on) que lee las detecciones individuales de \texttt{detecciones\_viirs}, las agrupa por \texttt{celda\_id + fecha} y escribe un registro diario resumido en \texttt{fact\_incendio}.
+    \item \texttt{detecciones\_viirs} no tiene FK hacia PostgreSQL; la integraci\'on es un proceso ETL/ELT, no autom\'atico: detecci\'on individual en MongoDB (\texttt{celda\_id + fecha}) $\to$ agrupaci\'on por \texttt{celda\_id + fecha} $\to$ registro \textbf{diario} en \texttt{fact\_incendio} $\to$ agregaci\'on por \texttt{celda\_id + anio + mes} $\to$ dataset anal\'itico (secci\'on~3.5). \texttt{fact\_incendio} nunca se puebla directamente a celda-mes.
 \end{itemize}
 
 \subsection{Datos estables y relacionales (SQL) vs. datos flexibles o anidados (NoSQL)}
@@ -304,7 +303,7 @@ ORDER BY c.anio, c.mes, c.celda_id;
 \end{enumerate}
 
 \vspace{0.15cm}
-\noindent\textbf{Ausencia de incendio frente a dato faltante:} \textbf{cero} detecciones (\texttt{detecciones\_totales = 0}, \texttt{frp\_total\_mw = 0}) significa que hubo observaci\'on ese mes y no se detect\'o fuego (informaci\'on v\'alida); \texttt{NULL} se reserva para cuando el dato realmente falta o no se evalu\'o. Ambos casos \textbf{no son equivalentes}, y el dataset final debe \textbf{conservar} las celdas y meses sin incendio, tal como hace la consulta de la secci\'on~3.5 con \texttt{LEFT JOIN} + \texttt{COALESCE(...,0)}.
+\noindent\textbf{Ausencia de incendio frente a dato faltante:} el \texttt{LEFT JOIN} de 3.5 \textbf{no demuestra por s\'i solo} que hubo observaci\'on VIIRS; solo evita descartar el mes de \texttt{clima\_mes}. \textbf{Cero} (\texttt{detecciones\_totales=0}, \texttt{frp\_total\_mw=0}) solo debe leerse como ausencia real de fuego si se verific\'o aparte que la cobertura e ingesta VIIRS de ese mes fueron correctas; \texttt{NULL} es informaci\'on faltante, no procesada o no evaluada --- \textbf{no son equivalentes}. El Avance~2 incorporar\'a una bandera de cobertura VIIRS (\texttt{viirs\_disponible}, secci\'on~7); \texttt{COALESCE(...,0)} solo debe aplicarse \textbf{despu\'es} de validar esa cobertura.
 
 \subsection{Diccionario de variables principales}
 
@@ -442,7 +441,7 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 \end{center}
 
 \noindent\textbf{Avance 1 (esta entrega):} etapas 1 a 4 completadas con datos de ejemplo controlados, verificados en PostgreSQL/PostGIS y MongoDB locales; a\'un no se ha incorporado datos reales completos de VIIRS ni de CHIRPS.\\
-\textbf{Avance 2 (siguiente entrega):} cerrar etapas 4 y 5, avanzar etapa 6.\\
+\textbf{Avance 2 (siguiente entrega):} cerrar etapas 4 y 5, avanzar etapa 6; incorporar la bandera \texttt{viirs\_disponible} (cobertura VIIRS) para distinguir ausencia real de fuego de dato faltante (secci\'on~4.1).\\
 \textbf{Informe final:} etapas 7 y 8, con el dataset integrado y el an\'alisis de la pregunta planteada.
 
 \vspace{0.3cm}
