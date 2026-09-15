@@ -319,14 +319,46 @@
   \end{center}
 \end{frame}
 
+% ============================================================
+% 6 - AMBITO TERRITORIAL Y LOCALIZACION DE LAS CELDAS DEL PROTOTIPO
+% ============================================================
+\begin{frame}{\'Ambito territorial y localizaci\'on de las celdas del prototipo}
+  \begin{columns}[T]
+    \column{0.56\textwidth}
+      \centering
+      \includegraphics[width=0.97\linewidth]{figuras/mapa_ambito_territorial_celdas.png}
+    \column{0.44\textwidth}
+      \footnotesize
+      El dominio territorial previsto es el cant\'on Loja. El prototipo utiliza dos celdas controladas de 500$\times$500 m, verificadas dentro de la parroquia El Cisne; no constituyen una muestra representativa del territorio cantonal.
+
+      \vspace{0.12cm}
+      \raggedright{\scriptsize\textbf{Tabla 1. Celdas controladas utilizadas en la validaci\'on del prototipo}\par}
+      \vspace{0.04cm}
+      \tiny
+      \setlength{\tabcolsep}{2.5pt}
+      \begin{tabular}{@{}lccc c@{}}
+      \toprule
+      \textbf{Celda} & \textbf{Long.} & \textbf{Lat.} & \textbf{Parroquia} & \textbf{Dist. l\'im.} \\
+      \midrule
+      LJ\_TEST\_001 & -79,520851 & -3,805328 & El Cisne & 1085,00 m \\
+      LJ\_TEST\_002 & -79,516342 & -3,809842 & El Cisne & 1066,01 m \\
+      \bottomrule
+      \end{tabular}
+
+      \vspace{0.1cm}
+      {\scriptsize Malla de 500 m anclada a m\'ultiplos de 500 (EPSG:32717); selecci\'on determin\'istica ordenando por X y luego Y; pol\'igono completo dentro del cant\'on, margen $\geq$ 1\,km. No se seleccionaron para representar diversidad ambiental.\par}
+  \end{columns}
+  \fuente{\tiny INEC, Marco Geoestad\'istico Nacional (\texttt{11\_LOJA.zip}, capa \texttt{zon\_a}, EPSG:31992$\to$32717); l\'imite disuelto por c\'odigo DPA. Verificado en PostGIS.}
+\end{frame}
+
 \renewcommand{\seccionactual}{II. Metodolog\'ia}
 % ============================================================
-% 6 - ARQUITECTURA GENERAL DEL SISTEMA
+% 7 - ARQUITECTURA GENERAL DEL SISTEMA
 % ============================================================
 \begin{frame}{Arquitectura general del sistema}
   \centering
   \begin{tikzpicture}
-    \node[origenbox] (fuentes) {\textbf{Fuentes originales} \\ \tiny NASA FIRMS \textbar\ CHIRPS \textbar\ l\'imite espacial institucional (pendiente)};
+    \node[origenbox] (fuentes) {\textbf{Fuentes originales} \\ \tiny NASA FIRMS \textbar\ CHIRPS \textbar\ l\'imite institucional INEC (verificaci\'on; malla completa pendiente)};
     \node[procesobox, below=0.2cm of fuentes] (adq) {\textbf{Adquisici\'on e ingesta} \\ \tiny API o descarga directa \textbar\ lectura de archivos \textbar\ validaci\'on inicial};
     \node[procesobox, below=0.2cm of adq] (val) {\textbf{Validaci\'on y transformaci\'on} \\ \tiny estructura \textbar\ fechas \textbar\ coordenadas \textbar\ calidad \textbar\ duplicados};
     \node[docbox, below=0.4cm of val, xshift=-3.25cm] (mongo) {\textbf{MongoDB} \\ \tiny Detecciones individuales y metadatos};
@@ -354,7 +386,7 @@
 \end{frame}
 
 % ============================================================
-% 7 - IMPLEMENTACION LOCAL Y COLABORACION MEDIANTE GITHUB
+% 8 - IMPLEMENTACION LOCAL Y COLABORACION MEDIANTE GITHUB
 % ============================================================
 \begin{frame}{Implementaci\'on local y colaboraci\'on mediante GitHub}
   \begin{columns}[T]
@@ -381,10 +413,10 @@
 \end{frame}
 
 % ============================================================
-% 8 - FUENTES Y VARIABLES
+% 9 - FUENTES Y VARIABLES
 % ============================================================
 \begin{frame}{Fuentes y variables}
-  \raggedright{\small\textbf{Tabla 1. Fuentes, variables y transformaciones del proyecto}\par}
+  \raggedright{\small\textbf{Tabla 2. Fuentes, variables y transformaciones del proyecto}\par}
   \vspace{0.05cm}
   \begin{center}
   \tiny
@@ -404,7 +436,7 @@
   \vspace{0.2cm}
   {\scriptsize\begin{itemize}\scriptsize
     \item \textbf{Fuente original y acceso:} VIIRS es distribuido por NASA FIRMS (API/descarga directa por \'area y periodo); CHIRPS v2.0 se descarga directamente del repositorio del Climate Hazards Center. La arquitectura no utiliza Google Earth Engine.
-    \item Nombres adaptados exactamente a \texttt{schema.sql} y a la consulta corregida; \textbf{malla = 2 celdas controladas}, fuente institucional definitiva pendiente.
+    \item Nombres adaptados exactamente a \texttt{schema.sql} y a la consulta corregida; \textbf{malla = 2 celdas controladas}, verificadas con la capa oficial del INEC (diapositiva 6); malla completa de producci\'on para todo el cant\'on todav\'ia pendiente.
     \item Producto VIIRS definitivo y campo de calidad (\texttt{fire\_mask} vs.\ \texttt{confidence}) \textbf{pendientes} de confirmar.
     \item CHIRPS v2.0 ($\sim$5 km nativo) asignada a la malla de 500 m: \textbf{no mejora} su resoluci\'on real.
   \end{itemize}}
@@ -412,7 +444,7 @@
 \end{frame}
 
 % ============================================================
-% 9 - UNIDAD DE ANALISIS Y GRANULARIDAD
+% 10 - UNIDAD DE ANALISIS Y GRANULARIDAD
 % ============================================================
 \begin{frame}{Unidad de an\'alisis y granularidad}
   \begin{center}
@@ -435,11 +467,10 @@
 \end{frame}
 
 % ============================================================
-% 10 - MODELO RELACIONAL
+% 11 - MODELO RELACIONAL
 % ============================================================
 \begin{frame}{Modelo relacional}
-  \raggedright{\small\textbf{Tabla 2. Estructura del modelo relacional}\par}
-  \vspace{0.05cm}
+  \raggedright{\small\textbf{Tabla 3. Estructura del modelo relacional}\par}
   \small
   \begin{center}
   \setlength{\tabcolsep}{3pt}
@@ -454,13 +485,12 @@
   \bottomrule
   \end{tabular}
   \end{center}
-  \vspace{0.05cm}
   {\small \texttt{fact\_incendio} y \texttt{fact\_clima} \textbf{no} tienen FK entre s\'i: se cruzan mediante \texttt{JOIN} por \texttt{celda\_id} + \texttt{fecha\_id} cuando se necesita comparar incendio y clima.}
   \fuente{\texttt{03\_postgresql\_postgis/cargas/schema.sql}.}
 \end{frame}
 
 % ============================================================
-% 11 - MODELO DOCUMENTAL
+% 12 - MODELO DOCUMENTAL
 % ============================================================
 \begin{frame}[fragile]{Modelo documental}
   \begin{columns}[T]
@@ -468,14 +498,14 @@
       \begin{footnotesize}
       \begin{verbatim}
 {
- "deteccion_id": "V_2023_0001",
- "celda_id": "LJ_04521",
+ "deteccion_id": "V_2023_TEST_001",
+ "celda_id": "LJ_TEST_001",
  "fecha": "2023-08-15",
  "frp_mw": 18.4,
  "fire_mask": 7,
  "coordenadas": {
-   "longitud": -79.241,
-   "latitud": -4.082
+   "longitud": -79.520851,
+   "latitud": -3.805328
  },
  "calidad": { "valida": true }
 }
@@ -492,7 +522,7 @@
 \end{frame}
 
 % ============================================================
-% 12 - ESTANDARIZACION ESPACIAL
+% 13 - ESTANDARIZACION ESPACIAL
 % ============================================================
 \begin{frame}{Estandarizaci\'on espacial}
   \begin{columns}[T]
@@ -544,7 +574,7 @@
 \end{frame}
 
 % ============================================================
-% 13 - ESTANDARIZACION TEMPORAL
+% 14 - ESTANDARIZACION TEMPORAL
 % ============================================================
 \begin{frame}{Estandarizaci\'on temporal}
   \begin{columns}[T]
@@ -605,7 +635,7 @@
 \end{frame}
 
 % ============================================================
-% 14 - ETL Y CONTROL DE CALIDAD
+% 15 - ETL Y CONTROL DE CALIDAD
 % ============================================================
 \begin{frame}{ETL y control de calidad}
   \centering
@@ -650,7 +680,7 @@
 
 \renewcommand{\seccionactual}{III. Resultados preliminares}
 % ============================================================
-% 15 - RESULTADO POSTGIS
+% 16 - RESULTADO POSTGIS
 % ============================================================
 \begin{frame}[fragile]{Resultado PostGIS}
   \centering
@@ -673,19 +703,19 @@ FROM dim_celda;
   \end{footnotesize}
 
   \vspace{0.05cm}
-  \raggedright{\small\textbf{Tabla 3. Validaci\'on espacial de las celdas controladas}\par}
+  \raggedright{\small\textbf{Tabla 4. Validaci\'on espacial de las celdas controladas}\par}
   \centering
   \begin{tabular}{@{}lccc l@{}}
   \toprule
   \textbf{celda\_id} & \textbf{SRID} & \textbf{\'Area (m\textsuperscript{2})} & \textbf{ST\_IsValid} & \textbf{Interpretaci\'on} \\
   \midrule
-  LJ\_04521 & 32717 & 250\,000 & true & Celda controlada 1 \\
-  LJ\_04522 & 32717 & 250\,000 & true & Celda controlada 2 \\
+  LJ\_TEST\_001 & 32717 & 250\,000 & true & Celda controlada 1 (El Cisne) \\
+  LJ\_TEST\_002 & 32717 & 250\,000 & true & Celda controlada 2 (El Cisne) \\
   \bottomrule
   \end{tabular}
 
   \vspace{0.1cm}
-  {\footnotesize Las dos geometr\'ias se almacenaron en EPSG:32717, son v\'alidas y poseen un \'area de 250\,000 m\textsuperscript{2}, consistente con celdas de 500$\times$500 m. \texttt{LJ\_04521} y \texttt{LJ\_04522} son \textbf{identificadores internos}, no c\'odigos administrativos ni sectores oficiales de Loja.\par}
+  {\footnotesize Las dos geometr\'ias se almacenaron en EPSG:32717, son v\'alidas y poseen un \'area de 250\,000 m\textsuperscript{2}, consistente con celdas de 500$\times$500 m. \texttt{LJ\_TEST\_001} y \texttt{LJ\_TEST\_002} son \textbf{identificadores internos de prueba}, no c\'odigos administrativos ni sectores oficiales de Loja; est\'an verificadas dentro del cant\'on Loja, parroquia El Cisne (diapositiva 6).\par}
   \vspace{0.08cm}
   \begin{tikzpicture}
     \node[warnbox=10.8cm, inner sep=3pt] {\footnotesize\textbf{Datos controlados del prototipo; sin representatividad cantonal.}};
@@ -694,7 +724,7 @@ FROM dim_celda;
 \end{frame}
 
 % ============================================================
-% 16 - RESULTADO MONGODB
+% 17 - RESULTADO MONGODB
 % ============================================================
 \begin{frame}[fragile]{Resultado MongoDB}
   \begin{center}
@@ -703,7 +733,7 @@ FROM dim_celda;
   \end{tikzpicture}
   \end{center}
   \vspace{0.15cm}
-  \raggedright{\small\textbf{Tabla 4. Detecciones controladas almacenadas en MongoDB}\par}
+  \raggedright{\small\textbf{Tabla 5. Detecciones controladas almacenadas en MongoDB}\par}
   \vspace{0.05cm}
   \begin{columns}[T]
     \column{0.52\textwidth}
@@ -722,8 +752,8 @@ db.detecciones_viirs.find(
       \toprule
       \textbf{Documento} & \textbf{Celda} & \textbf{FRP (MW)} \\
       \midrule
-      V\_2023\_0001 & LJ\_04521 & 18,4 \\
-      V\_2023\_0002 & LJ\_04522 & 9,7 \\
+      V\_2023\_TEST\_001 & LJ\_TEST\_001 & 18,4 \\
+      V\_2023\_TEST\_002 & LJ\_TEST\_002 & 9,7 \\
       \bottomrule
       \end{tabular}
   \end{columns}
@@ -735,7 +765,7 @@ db.detecciones_viirs.find(
 \end{frame}
 
 % ============================================================
-% 17 - RESULTADO DE INTEGRACION SQL
+% 18 - RESULTADO DE INTEGRACION SQL
 % ============================================================
 \begin{frame}[fragile]{Resultado de integraci\'on SQL}
   \begin{footnotesize}
@@ -746,7 +776,7 @@ LEFT JOIN incendio_mes AS i
   \end{verbatim}
   \end{footnotesize}
   \vspace{0.08cm}
-  \raggedright{\small\textbf{Tabla 5. Resultado de la integraci\'on mensual en PostgreSQL}\par}
+  \raggedright{\small\textbf{Tabla 6. Resultado de la integraci\'on mensual en PostgreSQL}\par}
   \vspace{0.03cm}
   \tiny
   \setlength{\tabcolsep}{3pt}
@@ -755,18 +785,18 @@ LEFT JOIN incendio_mes AS i
   \toprule
   \textbf{A\~no} & \textbf{Mes} & \textbf{celda\_id} & \textbf{Detecciones} & \textbf{FRP tot./m\'ax (MW)} & \textbf{Precip. acum. (mm)} \\
   \midrule
-  2023 & 8 & LJ\_04521 & 1 & 18,4 / 18,4 & 12,5 \\
-  2023 & 8 & LJ\_04522 & 1 & 9,7 / 9,7 & 8,7 \\
+  2023 & 8 & LJ\_TEST\_001 & 1 & 18,4 / 18,4 & 12,5 \\
+  2023 & 8 & LJ\_TEST\_002 & 1 & 9,7 / 9,7 & 8,7 \\
   \midrule
   \rowcolor{Fuego!10}
-  2023 & 9 & LJ\_04521* & \textbf{0} & \textbf{0 / 0} & 15,2 \\
+  2023 & 9 & LJ\_TEST\_001* & \textbf{0} & \textbf{0 / 0} & 15,2 \\
   \bottomrule
   \end{tabular}
   \end{center}
   \vspace{0.1cm}
   {\scriptsize\color{Fuego} *Fila temporal utilizada para validar el comportamiento del \texttt{LEFT JOIN}; eliminada mediante \texttt{ROLLBACK}. No es un resultado persistente de la base.}
   \vspace{0.08cm}
-  {\scriptsize Confirm\'o que el \texttt{LEFT JOIN} conserva el mes clim\'atico con m\'etricas en cero, en vez de descartarlo; ese cero refleja el escenario controlado de la prueba, no una cobertura VIIRS verificada de forma independiente.}
+  {\tiny En la prueba sint\'etica, \texttt{LEFT JOIN} conserv\'o la fila clim\'atica y \texttt{COALESCE} represent\'o con cero la ausencia de una fila coincidente de incendio. En datos reales, ese cero solo podr\'a interpretarse como ausencia de detecciones cuando la cobertura e ingesta VIIRS hayan sido verificadas independientemente. \texttt{NULL} representa informaci\'on faltante, no procesada o no evaluada.}
   \vspace{0.06cm}
   {\scriptsize\textbf{Datos controlados del prototipo; sin representatividad cantonal.}}
   \fuente{resultados de la consulta ejecutada sobre la base \texttt{fireforest}, 2026.}
@@ -774,7 +804,7 @@ LEFT JOIN incendio_mes AS i
 
 \renewcommand{\seccionactual}{IV. Discusi\'on preliminar}
 % ============================================================
-% 18 - DISCUSION PRELIMINAR Y LIMITACIONES
+% 19 - DISCUSION PRELIMINAR Y LIMITACIONES
 % ============================================================
 \begin{frame}{Discusi\'on preliminar y limitaciones}
   \small
@@ -793,12 +823,12 @@ LEFT JOIN incendio_mes AS i
   \end{tikzpicture}
   \end{center}
   \vspace{0.15cm}
-  {\scriptsize\textbf{Limitaciones:} 2 celdas y 2 detecciones controladas $\cdot$ sin datos reales completos $\cdot$ fuente institucional de la malla pendiente $\cdot$ producto VIIRS y campo de calidad pendientes $\cdot$ cobertura temporal VIIRS a\'un no implementada $\cdot$ la orquestaci\'on completa mediante Airflow permanece en fase de validaci\'on $\cdot$ la carga PostgreSQL requiere mejorar su idempotencia para admitir ejecuciones repetidas $\cdot$ sin an\'alisis inferencial ni predictivo.}
+  {\scriptsize\textbf{Limitaciones:} 2 celdas y 2 detecciones controladas $\cdot$ sin datos reales completos $\cdot$ malla completa de producci\'on pendiente (fuente de verificaci\'on: INEC) $\cdot$ producto VIIRS y campo de calidad pendientes $\cdot$ cobertura temporal VIIRS a\'un no implementada $\cdot$ Airflow en fase de validaci\'on $\cdot$ idempotencia de la carga PostgreSQL pendiente $\cdot$ sin an\'alisis inferencial ni predictivo.}
 \end{frame}
 
 \renewcommand{\seccionactual}{V. Conclusiones}
 % ============================================================
-% 19 - CONCLUSIONES PRELIMINARES Y PROXIMOS PASOS
+% 20 - CONCLUSIONES PRELIMINARES Y PROXIMOS PASOS
 % ============================================================
 \begin{frame}{Conclusiones preliminares y pr\'oximos pasos}
   \begin{columns}[T]
@@ -814,7 +844,7 @@ LEFT JOIN incendio_mes AS i
     \column{0.48\textwidth}
       \textbf{\color{Tierra}\small Pr\'oximos pasos}
       \begin{enumerate}\scriptsize
-        \item Seleccionar el l\'imite institucional
+        \item Extender la verificaci\'on INEC a la malla completa
         \item Generar la malla completa
         \item Confirmar producto VIIRS y campo de calidad
         \item Incorporar VIIRS y CHIRPS reales
@@ -829,7 +859,7 @@ LEFT JOIN incendio_mes AS i
 \renewcommand{\seccionactual}{Referencias}
 
 % ============================================================
-% 20 - REFERENCIAS (sin tiempo de exposicion)
+% 21 - REFERENCIAS (sin tiempo de exposicion)
 % ============================================================
 \begin{frame}{Referencias}
   \footnotesize

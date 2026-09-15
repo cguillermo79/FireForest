@@ -25,9 +25,19 @@ completa del mes mientras VIIRS legítimamente no detectó fuego.
 final: ahora `clima_mes` es la base y se usa `LEFT JOIN` hacia
 `incendio_mes`, con `COALESCE(..., 0)` en `detecciones_totales`,
 `frp_total_mw`, `frp_maxima_mw` y `numero_dias_con_incendio`. Un mes
-sin incendio ahora aparece con estos valores en `0` (fuego con
-intensidad cero, es decir, ausencia confirmada), en lugar de no
+sin incendio ahora aparece con estos valores en `0`, en lugar de no
 aparecer en absoluto.
+
+**Precisión sobre el significado de ese `0` (mantener en todos los
+documentos, no generalizar):** en la prueba controlada, `LEFT JOIN`
+conservó la fila climática y `COALESCE` representó con cero la
+ausencia de una fila coincidente de incendio. En datos reales, este
+cero solo podrá interpretarse como ausencia de detecciones cuando la
+cobertura e ingesta VIIRS hayan sido verificadas independientemente. El
+comportamiento de la consulta (`LEFT JOIN`/`COALESCE`) no debe
+convertirse en evidencia de cobertura satelital: demuestra que el
+`JOIN` conserva el mes climático, no que VIIRS observó esa celda ese
+mes.
 
 **Validación realizada** (sin alterar datos, ver `01_avance_1/evidencias/evaluacion_cumplimiento_guia.md`
 para el detalle completo):
@@ -53,7 +63,7 @@ esta regla:
 
 | Situación | Representación correcta |
 |---|---|
-| CHIRPS tiene el mes completo y VIIRS no detectó fuego en esa celda-mes | `detecciones_totales = 0`, `frp_total_mw = 0`, `frp_maxima_mw = 0` (fuego con intensidad cero, **no** `NULL`) |
+| CHIRPS tiene el mes completo y la fila de `fact_incendio` no existe para esa celda-mes (comportamiento de `LEFT JOIN`/`COALESCE`, ver precisión en §1) | `detecciones_totales = 0`, `frp_total_mw = 0`, `frp_maxima_mw = 0` (**no** `NULL`); en datos reales, "ausencia de detecciones" requiere además verificar la cobertura VIIRS |
 | Falta realmente el dato de origen (p. ej. VIIRS no tiene cobertura ese periodo, o la fuente no fue consultada) | `NULL` únicamente en ese caso, y debe documentarse la causa (ver `06_calidad_datos/`) |
 
 **Implicación para el diseño futuro del dataset integrado (etapa 6):**
@@ -97,7 +107,7 @@ ninguna respuesta):
 
 | Pendiente | Detalle |
 |---|---|
-| Fuente institucional del límite del cantón Loja | Por confirmar entre las candidatas mencionadas en `inventario_fuentes.md` (Instituto Geográfico Militar, GAD Provincial de Loja); documentar fecha de descarga, versión y EPSG definitivos en la fase de ingesta (Avance 2) |
+| Fuente institucional del límite del cantón Loja | **Identificada y usada para verificación** (no para la malla completa de producción todavía): INEC, Marco Geoestadístico Nacional, capa `zon_a`, EPSG:31992 nativo, descargada 2026-09-14. Se usó para reconstruir el límite del cantón Loja por disolución de código DPA y verificar espacialmente las celdas de prueba (ver §6 más abajo y `../03_postgresql_postgis/evidencias/verificacion_territorial_celdas.md`). Sigue pendiente generar la malla espacial completa del cantón para el prototipo de producción (Avance 2) |
 | Producto VIIRS definitivo | El Avance 1 referencia VIIRS Active Fire ~375 m (NASA FIRMS); debe confirmarse la colección exacta (p. ej. VNP14IMG vs. VJ114IMG, NRT vs. Standard) antes de la ingesta real, y evitar mezclar campos de productos/versiones distintas en un mismo dataset |
 | Campo de calidad VIIRS | El documento de ejemplo usa `fire_mask`; **no se debe asumir automáticamente** que ese sea el campo definitivo — algunos productos VIIRS usan `confidence` (categórico: low/nominal/high) en lugar de o además de `fire_mask` (numérico). Debe verificarse contra la estructura real del producto elegido antes de fijar el criterio de filtrado de calidad |
 | Criterio de filtrado de calidad | Pendiente de documentar de forma exacta (p. ej. `fire_mask >= 7` o `confidence IN ('nominal','high')`) una vez confirmado el producto y el campo |
@@ -118,3 +128,75 @@ dato faltante). **No se modificaron** `avance1.tex` ni
 hash). La versión corregida se mantiene como propuesta, sin sustituir
 la entrega original, hasta su revisión y aprobación. Detalle completo
 en `01_avance_1/evidencias/evaluacion_cumplimiento_guia.md`.
+
+## 6. Verificación territorial y sustitución de celdas controladas (2026-09-14)
+
+Antes de incorporar un mapa territorial a la presentación, se auditó si
+las celdas controladas del prototipo (`LJ_04521`, `LJ_04522`) pertenecían
+realmente al cantón Loja — algo que nunca se había verificado contra una
+capa oficial. Resultado y decisiones:
+
+- **Fuente usada**: INEC, Marco Geoestadístico Nacional (paquete
+  provincial `11_LOJA.zip`, capa `zon_a`). SRID nativo de la capa:
+  **EPSG:31992** (SIRGAS 1995 / UTM 17S). Todo el procesamiento espacial
+  del proyecto (incluida esta verificación) se realiza en **EPSG:32717**
+  (WGS84 / UTM 17S), el mismo CRS de `dim_celda.geom`; la diferencia
+  numérica entre calcular en 31992 nativo o en 32717 reproyectado se
+  verificó en 0,0000 m para este territorio, por lo que no afecta ningún
+  resultado. Metadatos completos, hashes y comandos de reproducción en
+  `../02_datos/metadatos/README_fuente_inec.md`.
+- **El paquete del INEC no incluye una capa cantonal ya disuelta.** El
+  límite del cantón Loja (y de sus 14 parroquias) se **reconstruyó por
+  disolución** de las zonas censales (`zon_a`) agrupadas por código DPA
+  (prefijo de 4 dígitos = cantón, de 6 dígitos = parroquia). Ese fue,
+  efectivamente, el procedimiento aplicado — no se encontró ni se usó
+  ninguna capa administrativa directa.
+- **Hallazgo**: `LJ_04521` y `LJ_04522` quedaron **fuera** del cantón
+  Loja (dentro del cantón Catamayo, parroquia El Tambo). No se
+  reinterpretan: quedan documentadas como hallazgo de control de calidad
+  en `../03_postgresql_postgis/evidencias/verificacion_territorial_celdas.md`,
+  que también explica por qué una primera medición exploratoria (distancia
+  del centroide) y la medición final (distancia del polígono completo de
+  500×500 m) dieron cifras distintas para la misma celda.
+- **Sustitución**: se generaron `LJ_TEST_001` y `LJ_TEST_002`
+  (identificadores de prueba — el sufijo `TEST` es literal, no son
+  códigos administrativos oficiales) mediante una malla sistemática de
+  500×500 m anclada a múltiplos de 500 en EPSG:32717, conservando solo
+  celdas totalmente contenidas en el cantón Loja y con margen ≥ 1 km al
+  límite, **ordenadas por coordenada X y luego Y** y tomando las dos
+  primeras — sin selección visual ni conocimiento previo no documentado.
+  Ambas caen en la parroquia **El Cisne**.
+- **Alcance declarado de las celdas nuevas**: igual que las anteriores,
+  son datos controlados para validar el flujo técnico (almacenamiento,
+  reproyección, agregación temporal, integración SQL/NoSQL). El criterio
+  de selección **no** pretende capturar diversidad ambiental, altitudinal
+  ni climática del cantón, y dos ubicaciones en una sola parroquia no son
+  una muestra representativa del territorio cantonal.
+- **Migración en PostgreSQL: completada, con tres etapas diferenciadas**:
+  (a) **prueba transaccional inicial**, con `../03_postgresql_postgis/validacion/validar_celdas_postgis.py`
+  contra la base `fireforest` real, dentro de una transacción finalizada
+  en `ROLLBACK`; solo confirmó que la migración era funcional, sin
+  persistir ningún cambio (resultado en
+  `../03_postgresql_postgis/evidencias/salida_validacion_postgis_celdas.txt`).
+  (b) **migración permanente**, ejecutada localmente por el usuario el
+  2026-09-14 con `../03_postgresql_postgis/validacion/aplicar_celdas_postgis.py`
+  (script independiente del anterior, que no se modificó): respaldo
+  previo de las filas de `LJ_04521`/`LJ_04522` en
+  `../03_postgresql_postgis/evidencias/respaldo_celdas_anteriores.json`,
+  migración aplicada dentro de una única transacción y confirmada con
+  `COMMIT` real; log completo en
+  `../03_postgresql_postgis/evidencias/salida_aplicacion_postgis_celdas.txt`.
+  (c) **verificación del estado persistido**, en una conexión nueva y
+  exclusivamente de lectura (dentro del mismo log anterior), más una
+  reejecución adicional de cierre en
+  `../03_postgresql_postgis/evidencias/salida_reejecucion_cierre_postgis_mongodb.txt`.
+  Confirmado contra la base real: `LJ_04521`/`LJ_04522` ausentes de
+  `dim_celda`/`fact_incendio`/`fact_clima`; `LJ_TEST_001`/`LJ_TEST_002`
+  presentes, sin huérfanos ni duplicados, SRID 32717, geometría válida,
+  área 250 000 m², dentro del cantón Loja y de la parroquia El Cisne,
+  distancia al límite 1085,00 m y 1066,01 m, integración celda-mes con
+  2 filas correctas. MongoDB ya estaba actualizado de forma permanente
+  desde una fase anterior (`detecciones_viirs`). PostgreSQL y MongoDB
+  quedan así sincronizados con `LJ_TEST_001`/`LJ_TEST_002`.
+  Fe de erratas territorial completa:
+  `../01_avance_1/evidencias/fe_de_erratas_territorial.md`.

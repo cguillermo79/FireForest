@@ -1,3 +1,13 @@
+-- Celdas controladas LJ_TEST_001 / LJ_TEST_002 (identificadores de PRUEBA,
+-- el sufijo TEST es literal). Sustituyen a las celdas originales LJ_04521 /
+-- LJ_04522, que una verificacion espacial contra la capa oficial del INEC
+-- determino que estaban fuera del canton Loja (dentro del canton
+-- Catamayo, parroquia El Tambo). No se reutilizan esos identificadores con
+-- coordenadas distintas. Evidencia completa, criterio de seleccion
+-- deterministico y tabla de validacion en
+-- 03_postgresql_postgis/evidencias/verificacion_territorial_celdas.md y
+-- 03_postgresql_postgis/evidencias/tabla_validacion_celdas_nuevas.csv.
+--
 -- longitud/latitud se conservan tal como llegan del origen, en grados
 -- EPSG:4326. La columna "epsg" no se fuerza a 4326 aqui: describe el
 -- sistema de referencia de "geom" (columna espacial autoritativa de la
@@ -5,8 +15,8 @@
 INSERT INTO dim_celda
     (celda_id, longitud, latitud, area_km2)
 VALUES
-    ('LJ_04521', -79.241, -4.082, 0.25),
-    ('LJ_04522', -79.236, -4.079, 0.25)
+    ('LJ_TEST_001', -79.520851, -3.805328, 0.25),
+    ('LJ_TEST_002', -79.516342, -3.809842, 0.25)
 ON CONFLICT (celda_id) DO NOTHING;
 
 -- Geometria real de cada celda (poligono de 500 x 500 m = 0.25 km2,
@@ -31,7 +41,7 @@ FROM (
                32717
            ) AS punto_utm
     FROM dim_celda
-    WHERE celda_id IN ('LJ_04521', 'LJ_04522')
+    WHERE celda_id IN ('LJ_TEST_001', 'LJ_TEST_002')
 ) AS t
 WHERE dc.celda_id = t.celda_id;
 
@@ -49,8 +59,8 @@ INSERT INTO fact_clima
         precipitacion_diaria_mm
     )
 VALUES
-    ('LJ_04521', 20230815, 12.5),
-    ('LJ_04522', 20230820, 8.7)
+    ('LJ_TEST_001', 20230815, 12.5),
+    ('LJ_TEST_002', 20230820, 8.7)
 ON CONFLICT (celda_id, fecha_id) DO NOTHING;
 
 INSERT INTO fact_incendio
@@ -66,6 +76,6 @@ INSERT INTO fact_incendio
         incendio_observado
     )
 VALUES
-    ('V_2023_0001', 'LJ_04521', 20230815, 'VIIRS', 1, 18.4, 18.4, 7, TRUE),
-    ('V_2023_0002', 'LJ_04522', 20230820, 'VIIRS', 1, 9.7, 9.7, 8, TRUE)
+    ('V_2023_TEST_001', 'LJ_TEST_001', 20230815, 'VIIRS', 1, 18.4, 18.4, 7, TRUE),
+    ('V_2023_TEST_002', 'LJ_TEST_002', 20230820, 'VIIRS', 1, 9.7, 9.7, 8, TRUE)
 ON CONFLICT (incendio_id) DO NOTHING;

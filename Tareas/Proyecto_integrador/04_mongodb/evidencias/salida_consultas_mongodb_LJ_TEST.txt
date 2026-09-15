@@ -1,0 +1,36 @@
+
+1. DETECCIONES VALIDAS
+{
+  deteccion_id: 'V_2023_TEST_001',
+  celda_id: 'LJ_TEST_001',
+  fecha: '2023-08-15',
+  frp_mw: 18.4
+}
+{
+  deteccion_id: 'V_2023_TEST_002',
+  celda_id: 'LJ_TEST_002',
+  fecha: '2023-08-20',
+  frp_mw: 9.7
+}
+
+2. RESUMEN DE FRP
+{
+  _id: null,
+  frp_maxima: 18.4,
+  frp_promedio: 14.049999999999999,
+  numero_detecciones: 2
+}
+
+3. DETECCIONES POR CELDA
+{
+  _id: 'LJ_TEST_002',
+  numero_detecciones: 1,
+  frp_promedio: 9.7,
+  frp_maxima: 9.7
+}
+{
+  _id: 'LJ_TEST_001',
+  numero_detecciones: 1,
+  frp_promedio: 18.4,
+  frp_maxima: 18.4
+}
