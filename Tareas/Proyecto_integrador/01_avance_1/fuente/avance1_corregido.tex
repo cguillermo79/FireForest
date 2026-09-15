@@ -106,9 +106,9 @@ Chuncho Morocho, Carlos Guillermo \par}
 % ==========================================================
 \section{Definici\'on y justificaci\'on del problema}
 
-Los incendios forestales en el cant\'on Loja se concentran en temporadas secas y afectan ecosistemas, biodiversidad y comunidades rurales cercanas a zonas de bosque y pastizal. El cant\'on se ubica en los Andes tropicales del sur de Ecuador, donde el relieve monta\~noso genera transiciones ambientales pronunciadas: temperatura, precipitaci\'on, humedad, vegetaci\'on y combustibles cambian con la altitud. Balaguer-Beser et al. (2026) documentan esta heterogeneidad en tres zonas de estudio del sur de Ecuador (Malacatos, Punzara y San Lucas, entre aproximadamente 1549 y 2757 m s.\,n.\,m.), con condiciones contrastantes de comportamiento del fuego entre ellas; estos resultados corresponden espec\'ificamente a esas tres zonas y se utilizan aqu\'i para contextualizar la heterogeneidad ambiental y altitudinal del sur del Ecuador, no como una descripci\'on generalizable a la totalidad del cant\'on Loja.
+El an\'alisis de los incendios forestales en el cant\'on Loja requiere considerar su heterogeneidad territorial, clim\'atica y altitudinal. En tres zonas de estudio del sur del Ecuador ---Malacatos, Punzara y San Lucas--- se han documentado condiciones ambientales contrastantes asociadas con variaciones en el comportamiento del fuego (Balaguer-Beser et al., 2026). Estos resultados permiten contextualizar el problema, pero no describen por s\'i solos la totalidad del cant\'on.
 
-La informaci\'on necesaria para estudiar estos eventos proviene de fuentes muy distintas entre s\'i: detecciones satelitales de focos de calor (VIIRS), registros clim\'aticos de precipitaci\'on (CHIRPS) y una malla espacial de referencia del territorio. Cada fuente tiene su propio formato, resoluci\'on y frecuencia de actualizaci\'on, y hoy no existe una forma sencilla de integrarlas para responder preguntas conjuntas. Este es, en esencia, un problema de \textbf{Ingenier\'ia de Datos}: dise\~nar el recorrido completo de los datos --- captura, almacenamiento, integraci\'on y consolidaci\'on --- antes de poder analizarlos.
+La informaci\'on necesaria para estudiar espacial y temporalmente las detecciones de fuego activo procede de fuentes heterog\'eneas: detecciones satelitales VIIRS, precipitaci\'on CHIRPS y una malla espacial de referencia. Cada fuente posee formatos, resoluciones y frecuencias de actualizaci\'on diferentes, por lo que su integraci\'on requiere definir mecanismos coherentes de captura, almacenamiento, transformaci\'on y consolidaci\'on. Este es, en esencia, un problema de \textbf{Ingenier\'ia de Datos}: dise\~nar el recorrido completo de los datos --- captura, almacenamiento, integraci\'on y consolidaci\'on --- antes de poder analizarlos.
 
 El sistema involucrado es el de monitoreo y an\'alisis de riesgo de incendios forestales a nivel territorial, en el que intervienen t\'ipicamente actores como los Gobiernos Aut\'onomos Descentralizados (GAD Municipal y GAD Provincial), el Cuerpo de Bomberos y el Ministerio del Ambiente, Agua y Transici\'on Ecol\'ogica (MAATE), as\'i como las comunidades rurales asentadas cerca de zonas boscosas del cant\'on. FireForest es un ejercicio acad\'emico: no existe un convenio con estas instituciones, se mencionan como referencia del tipo de actor que se beneficiar\'ia de una soluci\'on de este tipo, y el proyecto trabaja \'unicamente con datos de ejemplo, muestras controladas o simulados. Los usuarios o beneficiarios potenciales son gestores de riesgo y personal t\'ecnico de instituciones ambientales o de emergencia, investigadores y estudiantes que analicen patrones espacio-temporales de incendios forestales, y comunidades rurales interesadas en conocer zonas de mayor recurrencia cerca de sus localidades.
 
@@ -168,7 +168,7 @@ Valores faltantes; cambios en el repositorio de origen \\
 
 \vspace{0.15cm}
 \footnotesize
-La malla espacial se reconstruye disolviendo las zonas censales del INEC por su c\'odigo de divisi\'on pol\'itico-administrativa (DPA) para obtener el l\'imite cantonal, sobre el cual se ancla una malla sistem\'atica de 500$\times$500\,m. El CRS de trabajo del proyecto es \texttt{EPSG:32717} (WGS84 / UTM 17S); las coordenadas se reproyectan a ese sistema antes de construir cada celda. La arquitectura no utiliza Google Earth Engine. Para VIIRS, el producto/colecci\'on definitivo y el campo de calidad (\texttt{fire\_mask} frente a \texttt{confidence}) todav\'ia deben confirmarse con datos reales. Para CHIRPS, asociar su p\'ixel nativo ($\sim$5\,km) a la malla de 500\,m no aumenta su resoluci\'on real: cada celda hereda por asignaci\'on espacial el valor del p\'ixel que la contiene.
+La malla espacial se ancla sobre el l\'imite geoestad\'istico de trabajo del cant\'on Loja, reconstruido mediante la disoluci\'on de zonas censales del INEC por c\'odigo DPA (divisi\'on pol\'itico-administrativa); no es un l\'imite jur\'idico descargado directamente, sino una reconstrucci\'on propia a partir de datos estad\'isticos oficiales. Sobre ese l\'imite reconstruido se ancla una malla sistem\'atica de 500$\times$500\,m. El CRS de trabajo del proyecto es \texttt{EPSG:32717} (WGS84 / UTM 17S); las coordenadas se reproyectan a ese sistema antes de construir cada celda. La arquitectura no utiliza Google Earth Engine. Para VIIRS, el producto/colecci\'on definitivo y el campo de calidad (\texttt{fire\_mask} frente a \texttt{confidence}) todav\'ia deben confirmarse con datos reales. Para CHIRPS, asociar su p\'ixel nativo ($\sim$5\,km) a la malla de 500\,m no aumenta su resoluci\'on real: cada celda hereda por asignaci\'on espacial el valor del p\'ixel que la contiene.
 \normalsize
 
 \subsection*{Celdas controladas utilizadas en el prototipo}
@@ -362,24 +362,28 @@ La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes has
 \centering
 \begin{tikzpicture}[
   box/.style={draw=myNewColorA, rounded corners, fill=myNewColorC!35,
-              align=center, text width=8.2cm, minimum height=0.75cm, font=\small, inner sep=4pt},
-  arr/.style={-{Stealth[length=2mm]}, thick, myNewColorA}
+              align=center, text width=8.6cm, minimum height=0.55cm, font=\footnotesize, inner sep=3pt},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, myNewColorA}
 ]
 \node[box] (a) {\textbf{Fuentes} -- malla espacial (INEC), VIIRS (NASA FIRMS), CHIRPS};
-\node[box, below=0.22cm of a] (b) {\textbf{Captura e ingesta} -- archivos / API (CSV, JSON, GeoTIFF, Parquet)};
-\node[box, below=0.22cm of b] (c) {\textbf{Validaci\'on} -- geometr\'ia, duplicados, valores faltantes};
-\node[box, below=0.22cm of c] (e) {\textbf{Almacenamiento} -- MongoDB y PostgreSQL/PostGIS};
-\node[box, below=0.22cm of e] (g) {\textbf{Integraci\'on y agregaci\'on} -- clave \texttt{celda\_id + anio + mes}};
-\node[box, below=0.22cm of g] (h) {\textbf{Producto anal\'itico} -- dataset celda-mes};
-\node[box, below=0.22cm of h] (i) {Estad\'istica / visualizaci\'on / ML};
+\node[box, below=0.12cm of a] (b) {\textbf{Captura e ingesta} -- archivos / API (CSV, JSON, GeoTIFF, Parquet)};
+\node[box, below=0.12cm of b] (c) {\textbf{Validaci\'on} -- geometr\'ia, duplicados, valores faltantes};
+\node[box, below=0.12cm of c] (d) {\textbf{MongoDB} -- detecciones individuales VIIRS (\texttt{celda\_id + fecha} exacta)};
+\node[box, below=0.12cm of d] (e) {\textbf{ETL} -- agrupaci\'on por \texttt{celda\_id + fecha}};
+\node[box, below=0.12cm of e] (f) {\textbf{PostgreSQL/PostGIS} -- datos diarios por celda (\texttt{fact\_incendio}, \texttt{fact\_clima}, grano celda-d\'ia)};
+\node[box, below=0.12cm of f] (g) {\textbf{Agregaci\'on} -- \texttt{GROUP BY} por \texttt{celda\_id + anio + mes}};
+\node[box, below=0.12cm of g] (h) {\textbf{Producto anal\'itico} -- dataset celda-mes};
+\node[box, below=0.12cm of h] (i) {Estad\'istica / visualizaci\'on / ML};
 \draw[arr] (a) -- (b);
 \draw[arr] (b) -- (c);
-\draw[arr] (c) -- (e);
-\draw[arr] (e) -- (g);
+\draw[arr] (c) -- (d);
+\draw[arr] (d) -- (e);
+\draw[arr] (e) -- (f);
+\draw[arr] (f) -- (g);
 \draw[arr] (g) -- (h);
 \draw[arr] (h) -- (i);
 \end{tikzpicture}
-\caption{Arquitectura preliminar de la soluci\'on FireForest.}
+\caption{Arquitectura preliminar de la soluci\'on FireForest: la integraci\'on ocurre a grano celda-d\'ia en PostgreSQL/PostGIS y solo despu\'es se agrega a celda-mes; no existe una integraci\'on directa a nivel mensual.}
 \label{fig:arquitectura}
 \end{figure}
 
