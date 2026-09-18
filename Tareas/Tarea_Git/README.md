@@ -1,6 +1,6 @@
 # Tarea Git – Control de versiones
 
-Actividad de la asignatura **Bases de Datos Estructuradas y No Estructurados** (Maestría en Estadística, ESPOCH), desarrollada dentro del repositorio del proyecto integrador **FireForest**.
+Actividad de la asignatura **Bases de Datos Estructuradas y No Estructuradas** (Maestría en Estadística, ESPOCH), desarrollada dentro del repositorio del proyecto integrador **FireForest**.
 
 ## Objetivo
 
