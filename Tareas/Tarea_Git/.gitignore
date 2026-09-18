@@ -1,0 +1,26 @@
+# Entornos virtuales de Python
+.venv/
+venv/
+env/
+
+# Caché y compilados de Python
+__pycache__/
+*.py[cod]
+
+# Variables de entorno y credenciales
+.env
+*.env
+
+# Resultados generados por el script
+resultados/
+
+# Registros
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Archivos del sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
