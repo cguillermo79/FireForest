@@ -1,4 +1,21 @@
-# Entrega reducida para el profesor
+# Entrega para el profesor
+
+## Archivo que debe enviarse
+
+Enviar `FireForest_Tarea_ETL_entrega_completa_2026-09-20.zip`. Este paquete
+incluye la geometría de la malla en GeoPackage, la malla tabular en CSV, los
+productos Clean de 2023 en CSV y Parquet, el dataset Curated, el diccionario,
+el código, la configuración y las evidencias.
+
+El ZIP se genera de forma reproducible con:
+
+```powershell
+.venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\generar_paquete_entrega.py
+```
+
+El generador valida el número de filas, la unicidad de las claves principales
+y el hash de la malla antes de crear el archivo. También añade
+`LEEME_PRIMERO.md` y `SHA256SUMS.txt` dentro del paquete.
 
 ## Qué exige la guía
 
@@ -14,7 +31,7 @@ bloques:
 6. Dataset Curated y diccionario.
 7. Evidencias consolidadas de calidad y reproducibilidad.
 
-## Comando de reproducción
+## Comando de reproducción del ETL
 
 Desde la raíz de FireForest:
 
@@ -24,6 +41,12 @@ Desde la raíz de FireForest:
 
 El comando ejecuta perfilado, calidad Raw, Clean, Curated y actualización del
 seguimiento. Los archivos originales de `02_datos/raw/` se leen sin modificarse.
+
+Los CSV Raw históricos de VIIRS y CHIRPS superan los 100 MB cada uno y no se
+duplican dentro del paquete. Por tanto, el ZIP es autocontenido para revisar y
+analizar los resultados, pero una reproducción desde Raw requiere acceso a las
+fuentes controladas registradas en el manifiesto de procedencia. La malla
+GeoPackage sí se incluye porque es pequeña y permite inspeccionar la geometría.
 
 ## Resultado esperado
 
