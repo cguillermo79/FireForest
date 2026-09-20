@@ -1,7 +1,7 @@
-"""Genera el paquete autocontenido de revision para la entrega ETL.
+"""Genera el paquete minimo de revision para la entrega ETL.
 
-El paquete incluye los productos Clean y Curated de 2023 y la copia controlada
-de la malla GeoPackage. No incluye los CSV Raw historicos de VIIRS y CHIRPS.
+Incluye solo los productos y evidencias que el docente necesita observar. No
+incluye documentos administrativos, la guia ni los CSV Raw historicos.
 """
 
 from __future__ import annotations
@@ -25,17 +25,34 @@ FECHA_ZIP = (2026, 9, 20, 0, 0, 0)
 
 
 ARCHIVOS_ETL = [
-    "README.md",
-    "ENTREGA_PROFESOR.md",
-    "Guia_Tarea_ETL_Calidad_Integracion_1_5_puntos.pdf",
-]
-
-PATRONES_ETL = [
-    "codigo/*.py",
-    "configuracion/*",
-    "clean/*",
-    "curated/*",
-    "evidencias/*",
+    # Los tres scripts son necesarios: --desde-cero importa los dos primeros.
+    "codigo/etl_fireforest.py",
+    "codigo/evaluar_calidad_raw.py",
+    "codigo/perfilar_fuentes.py",
+    # Parametros, reglas y dependencias del flujo.
+    "configuracion/perfilado.json",
+    "configuracion/reglas_calidad.json",
+    "configuracion/requirements_etl.txt",
+    "configuracion/transformaciones_clean.json",
+    # Productos Clean observables en CSV.
+    "clean/malla_500m.csv",
+    "clean/viirs_2023.csv",
+    "clean/chirps_2023.csv",
+    "clean/observaciones_viirs_sin_cobertura_2023.csv",
+    "clean/rechazos_criticos_2023.csv",
+    # Dataset analitico y diccionario.
+    "curated/fireforest_celda_mes_2023.csv",
+    "curated/diccionario_datos.csv",
+    # Evidencias exigidas por la guia y la rubrica.
+    "evidencias/perfilado_columnas.csv",
+    "evidencias/perfilado_claves_relaciones.csv",
+    "evidencias/estadisticas_atipicos.csv",
+    "evidencias/matriz_calidad.csv",
+    "evidencias/comparacion_antes_despues.csv",
+    "evidencias/controles_clean.csv",
+    "evidencias/controles_curated.csv",
+    "evidencias/bitacora_decisiones.csv",
+    "evidencias/prueba_reproducibilidad_flujo_completo.txt",
 ]
 
 
@@ -122,11 +139,6 @@ def archivos_para_paquete(malla: Path) -> list[tuple[Path, str]]:
     for relativa in ARCHIVOS_ETL:
         ruta = ETL_DIR / relativa
         seleccion[relativa] = ruta
-    for patron in PATRONES_ETL:
-        for ruta in ETL_DIR.glob(patron):
-            if ruta.is_file() and ruta.suffix.lower() != ".zip":
-                relativa = ruta.relative_to(ETL_DIR).as_posix()
-                seleccion[relativa] = ruta
 
     seleccion["raw/malla/malla_500m_loja_maestra.gpkg"] = malla
     seleccion["raw/metadatos/manifiesto_firelab_loja.json"] = (
@@ -135,42 +147,98 @@ def archivos_para_paquete(malla: Path) -> list[tuple[Path, str]]:
     return [(ruta, relativa) for relativa, ruta in sorted(seleccion.items())]
 
 
-def texto_leeme(resultados: dict[str, dict[str, int]], hash_malla: str) -> str:
-    return f"""# LEEME PRIMERO
+def texto_readme(resultados: dict[str, dict[str, int]], hash_malla: str) -> str:
+    return rf"""# Tarea ETL - FireForest
 
-Este paquete permite revisar la entrega ETL de FireForest sin depender de las
-carpetas locales del equipo.
+## Objetivo y alcance
 
-## Archivos principales
+Construir un flujo ETL reproducible que integre la malla espacial, la evidencia
+mensual de incendios VIIRS y la precipitacion CHIRPS para estudiar su relacion
+en el canton Loja durante 2023. La poblacion comprende 7.997 celdas de 500 m x
+500 m observadas durante 12 meses. La unidad final es una celda-mes y su clave
+es `cell_id + anio + mes`.
+
+El flujo conserva Raw, estandariza cada fuente en Clean y realiza una union uno
+a uno por `cell_index + anio + mes` para construir Curated.
+
+## Contenido de la entrega
 
 - `raw/malla/malla_500m_loja_maestra.gpkg`: geometria de 7.997 celdas.
-- `clean/malla_500m.csv`: atributos tabulares de la malla.
-- `clean/viirs_2023.csv`: VIIRS Clean de 2023.
-- `clean/chirps_2023.csv`: CHIRPS Clean de 2023.
-- `curated/fireforest_celda_mes_2023.csv`: dataset analitico integrado.
-- `curated/diccionario_datos.csv`: definicion de las variables.
+- `clean/`: fuentes 2023 tipadas, excepciones y rechazos.
+- `curated/fireforest_celda_mes_2023.csv`: dataset integrado de 45 variables.
+- `curated/diccionario_datos.csv`: significado, tipo, unidad y derivacion.
+- `codigo/`: scripts del perfilado, calidad y ETL completo.
+- `configuracion/`: parametros, reglas, transformaciones y dependencias.
+- `evidencias/`: diagnostico, controles, comparacion y bitacora exigidos.
 
-Los mismos productos tambien se incluyen en Parquet cuando existe esa salida.
+## Fuentes Raw y procedencia
 
-## Verificaciones realizadas antes de crear el ZIP
+La malla GeoPackage se incluye porque es pequena y permite inspeccionar la
+geometria. Los CSV Raw historicos 2019-2025 de VIIRS y CHIRPS superan los 100 MB
+cada uno y no se duplican en esta entrega. Su procedencia, ruta controlada,
+tamano y SHA-256 constan en `raw/metadatos/manifiesto_firelab_loja.json`.
+
+Los resultados Clean y Curated de 2023 incluidos permiten revisar el flujo. La
+reproduccion desde Raw requiere obtener las dos fuentes historicas registradas
+en el manifiesto y ubicarlas en las rutas indicadas por
+`configuracion/perfilado.json`.
+
+## Ejecucion
+
+Dependencias:
+
+```powershell
+python -m pip install -r configuracion/requirements_etl.txt
+```
+
+Desde la raiz del repositorio FireForest, con las fuentes Raw disponibles:
+
+```powershell
+.venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\etl_fireforest.py --desde-cero
+```
+
+`etl_fireforest.py --desde-cero` ejecuta en orden
+`perfilar_fuentes.py`, `evaluar_calidad_raw.py` y la construccion de Clean y
+Curated. Una regla critica detiene el flujo; los registros no aptos se separan
+o se conservan con una bandera explicita.
+
+## Transformaciones e integracion
+
+1. Seleccion reproducible del periodo 2023.
+2. Tipado de identificadores, numeros, fechas y booleanos.
+3. Normalizacion espacial mediante `cell_index` y `cell_id`.
+4. Banderas de cobertura y aptitud analitica.
+5. Calculo de la fraccion de dias humedos.
+6. Marcado IQR de valores atipicos sin eliminarlos.
+
+La integracion valida una cardinalidad uno a uno antes de unir VIIRS y CHIRPS.
+Se conservan las claves esperadas y los faltantes VIIRS no se convierten en
+cero.
+
+## Resultados y controles
 
 - Malla CSV: {entero_es(resultados['clean/malla_500m.csv']['filas'])} filas.
 - VIIRS Clean: {entero_es(resultados['clean/viirs_2023.csv']['filas'])} filas.
 - CHIRPS Clean: {entero_es(resultados['clean/chirps_2023.csv']['filas'])} filas.
 - Curated: {entero_es(resultados['curated/fireforest_celda_mes_2023.csv']['filas'])} filas.
-- No existen claves duplicadas en los cuatro productos anteriores.
+- 95.064 filas aptas para analisis y 900 sin observacion VIIRS.
+- 16 controles Clean y 11 controles Curated cumplidos.
+- Cero duplicados en la clave final.
 - SHA-256 de la malla GeoPackage: `{hash_malla}`.
 
-## Alcance de Raw
+La evidencia se concentra en nueve archivos: perfilado de columnas y claves,
+estadisticas de atipicos, matriz de calidad, comparacion antes y despues,
+controles Clean y Curated, bitacora de decisiones y prueba de reproducibilidad.
 
-Los CSV Raw historicos 2019-2025 de VIIRS y CHIRPS no se duplican en este ZIP.
-El paquete contiene sus productos Clean de 2023, el dataset Curated y las
-evidencias necesarias para evaluarlos. La procedencia y los hashes de los Raw
-se documentan en `raw/metadatos/manifiesto_firelab_loja.json`.
+## Conclusiones y limitaciones
 
-Por esta razon, el ZIP es autocontenido para revision y analisis de los
-resultados, pero la reproduccion desde Raw requiere acceso controlado a las
-fuentes originales descritas en el manifiesto.
+- La union conserva 95.964 observaciones celda-mes sin multiplicar registros.
+- Los valores atipicos se marcan y conservan porque pueden representar eventos
+  ambientales reales.
+- Las 900 filas sin VIIRS permanecen como nulas y no se interpretan como
+  ausencia de incendio.
+- VIIRS y CHIRPS llegan agregados por mes; no permiten reconstruir eventos
+  diarios ni establecer causalidad entre lluvia y fuego.
 """
 
 
@@ -186,32 +254,23 @@ def crear_paquete(salida: Path) -> None:
         ruta_temporal = Path(temporal.name)
 
     try:
-        sumas: list[str] = []
         with zipfile.ZipFile(
             ruta_temporal, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
         ) as paquete:
-            leeme = texto_leeme(resultados, hash_malla).encode("utf-8")
-            escribir_bytes(paquete, f"{NOMBRE_RAIZ}/LEEME_PRIMERO.md", leeme)
-            sumas.append(f"{hashlib.sha256(leeme).hexdigest()}  LEEME_PRIMERO.md")
+            readme = texto_readme(resultados, hash_malla).encode("utf-8")
+            escribir_bytes(paquete, f"{NOMBRE_RAIZ}/README.md", readme)
 
             for ruta, relativa in archivos:
                 if not ruta.exists():
                     raise FileNotFoundError(f"Falta el archivo requerido: {ruta}")
                 destino = f"{NOMBRE_RAIZ}/{relativa}"
                 escribir_archivo(paquete, destino, ruta)
-                sumas.append(f"{sha256(ruta)}  {relativa}")
-
-            escribir_bytes(
-                paquete,
-                f"{NOMBRE_RAIZ}/SHA256SUMS.txt",
-                ("\n".join(sumas) + "\n").encode("utf-8"),
-            )
         os.replace(ruta_temporal, salida)
     finally:
         ruta_temporal.unlink(missing_ok=True)
 
     print(f"Paquete creado: {salida}")
-    print(f"Archivos incluidos: {len(archivos) + 2}")
+    print(f"Archivos incluidos: {len(archivos) + 1}")
     print(f"Tamano: {salida.stat().st_size / (1024 * 1024):.2f} MB")
     print(f"SHA-256: {sha256(salida)}")
 

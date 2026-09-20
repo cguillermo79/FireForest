@@ -3,9 +3,9 @@
 ## Archivo que debe enviarse
 
 Enviar `FireForest_Tarea_ETL_entrega_completa_2026-09-20.zip`. Este paquete
-incluye la geometría de la malla en GeoPackage, la malla tabular en CSV, los
-productos Clean de 2023 en CSV y Parquet, el dataset Curated, el diccionario,
-el código, la configuración y las evidencias.
+incluye la geometría de la malla en GeoPackage, los productos Clean de 2023 en
+CSV, el dataset Curated, el diccionario, los tres scripts que ejecutan el flujo,
+la configuración y las evidencias mínimas exigidas por la guía.
 
 El ZIP se genera de forma reproducible con:
 
@@ -14,8 +14,8 @@ El ZIP se genera de forma reproducible con:
 ```
 
 El generador valida el número de filas, la unicidad de las claves principales
-y el hash de la malla antes de crear el archivo. También añade
-`LEEME_PRIMERO.md` y `SHA256SUMS.txt` dentro del paquete.
+y el hash de la malla antes de crear el archivo. El paquete contiene un solo
+documento de entrada: `README.md`.
 
 ## Qué exige la guía
 
@@ -62,6 +62,8 @@ GeoPackage sí se incluye porque es pequeña y permite inspeccionar la geometrí
 ## Archivos auxiliares
 
 La carpeta de trabajo contiene perfiles por columna, manifiestos y pruebas
-intermedias porque permiten auditar el proceso. El profesor no necesita abrir
-cada archivo. La matriz `evidencias/matriz_entregables_guia.csv` indica qué
-archivo respalda cada requisito.
+intermedias porque permiten auditar el proceso. El ZIP no incluye la guía PDF,
+el generador del paquete, listas de verificación, matrices administrativas,
+README auxiliares, manifiestos de salidas, pruebas intermedias ni archivos
+Parquet. Esos elementos permanecen en el repositorio de trabajo, pero no son
+necesarios para la revisión del profesor.
