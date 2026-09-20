@@ -1,0 +1,37 @@
+PRUEBA DE REPRODUCIBILIDAD DEL FLUJO ETL COMPLETO
+Fecha de comprobacion: 2026-09-20
+
+Comando ejecutado dos veces desde la raiz de FireForest:
+.venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\etl_fireforest.py --desde-cero
+
+Alcance de cada ejecucion:
+1. Perfilado de las fuentes Raw y verificacion de hashes.
+2. Evaluacion de calidad Raw.
+3. Construccion de Clean.
+4. Integracion uno a uno y construccion de Curated.
+5. Actualizacion de controles y seguimiento de entregables.
+
+Metodo de comparacion:
+- Se calcularon hashes SHA-256 de las 29 salidas generadas por el flujo.
+- Se compararon inventarios, perfilados, matrices, controles, CSV, Parquet,
+  diccionario y manifiestos despues de cada ejecucion.
+
+Resultado: CUMPLE.
+- Salidas comparadas: 29.
+- Salidas con diferencias: 0.
+- Filas Curated en ambas ejecuciones: 95.964.
+- Duplicados de cell_id + anio + mes: 0.
+- Registros anexados por la segunda ejecucion: 0.
+
+Hashes representativos de la segunda ejecucion:
+- curated/fireforest_celda_mes_2023.csv
+  aef3c924fecce5bd86cce4cb6ac7126e67705cbddb63de71c8260a596acdf6b5
+- curated/fireforest_celda_mes_2023.parquet
+  59ded60c1bb436e007d8a944a7d581094757c734cafb58e3f6ff3a407922051a
+- curated/diccionario_datos.csv
+  1c6eb5b42bb99a2a87599b1e099e168b22dbe1ab203376b9673a1d8dab613ac3
+- evidencias/controles_curated.csv
+  3ed5ba0b8d4f7e20b6bb36f1d9b7b91d129be085d124d5db08bf4a5e5e1c136e
+
+Los hashes completos de los productos de datos se conservan en
+manifiesto_salidas_clean.csv y manifiesto_salidas_curated.csv.

@@ -1,0 +1,12 @@
+﻿control,fuente,ambito,clave,filas_evaluadas,valores_unicos,nulos_clave,duplicados,incumplimientos,resultado,detalle
+unicidad_cell_index_malla,malla,completo,cell_index,7997,7997,0,0,0,CUMPLE,Cada cell_index debe identificar una sola celda.
+unicidad_cell_id_malla,malla,completo,cell_id,7997,7997,0,0,0,CUMPLE,Cada cell_id debe identificar una sola celda.
+unicidad_clave_viirs_completo,viirs,completo_2019_2025,cell_index + anio + mes,671748,671748,0,0,0,CUMPLE,La clave esperada debe ser única y completa.
+unicidad_clave_viirs_periodo,viirs,periodo_2023,cell_index + anio + mes,95964,95964,0,0,0,CUMPLE,La clave esperada debe ser única y completa.
+unicidad_clave_chirps_completo,chirps,completo_2019_2025,cell_index + anio + mes,671748,671748,0,0,0,CUMPLE,La clave esperada debe ser única y completa.
+unicidad_clave_chirps_periodo,chirps,periodo_2023,cell_index + anio + mes,95964,95964,0,0,0,CUMPLE,La clave esperada debe ser única y completa.
+claves_viirs_sin_chirps,viirs_chirps,periodo_2023,cell_index + anio + mes,95964,95964,0,0,0,CUMPLE,Claves presentes en VIIRS que no aparecen en CHIRPS.
+claves_chirps_sin_viirs,viirs_chirps,periodo_2023,cell_index + anio + mes,95964,95964,0,0,0,CUMPLE,Claves presentes en CHIRPS que no aparecen en VIIRS.
+celdas_viirs_fuera_malla,viirs_malla,periodo_2023,cell_index,7997,7997,0,0,0,CUMPLE,cell_index de VIIRS que no existen en la malla.
+celdas_chirps_fuera_malla,chirps_malla,periodo_2023,cell_index,7997,7997,0,0,0,CUMPLE,cell_index de CHIRPS que no existen en la malla.
+cell_id_chirps_consistente_con_malla,chirps_malla,periodo_2023,cell_index -> cell_id,7997,7997,0,0,0,CUMPLE,El cell_id de CHIRPS debe coincidir con la malla para cada cell_index.

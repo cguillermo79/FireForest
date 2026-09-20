@@ -1,0 +1,5 @@
+﻿fuente,variable,registros_evaluados,q1,q3,iqr,limite_inferior,limite_superior,registros_atipicos,porcentaje_atipicos,tratamiento
+viirs,viirs_frp_suma_observada_support_mean_mw,95064,0,0,0,0,0,747,0.785786,Marcar para revisión; no eliminar automáticamente.
+viirs,viirs_frp_maxima_support_mean_mw,95064,0,0,0,0,0,747,0.785786,Marcar para revisión; no eliminar automáticamente.
+chirps,chirps_precipitacion_acumulada_mm,95964,21.4913599198,96.7406234741,75.2492635544,-91.3825354118,209.614518806,13731,14.308491,Marcar para revisión; no eliminar automáticamente.
+chirps,chirps_precipitacion_maxima_diaria_mm,95964,9.42208665902,28.8478356621,19.4257490031,-19.7165368457,57.9864591668,9224,9.611938,Marcar para revisión; no eliminar automáticamente.
