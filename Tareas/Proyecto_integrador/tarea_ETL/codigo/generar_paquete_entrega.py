@@ -22,7 +22,7 @@ from typing import Any
 
 ETL_DIR = Path(__file__).resolve().parents[1]
 PROYECTO_DIR = ETL_DIR.parent
-NOMBRE_RAIZ = "FireForest_Tarea_ETL_entrega_completa"
+NOMBRE_RAIZ = "tarea_ETL"
 SALIDA_PREDETERMINADA = ETL_DIR / "FireForest_Tarea_ETL_entrega_completa_2026-09-20.zip"
 FECHA_ZIP = (2026, 9, 20, 0, 0, 0)
 ANIO_ESTUDIO = 2023
@@ -202,10 +202,11 @@ def crear_configuracion_paquete(directorio_temporal: Path) -> Path:
     configuracion = json.loads(
         (ETL_DIR / "configuracion/perfilado.json").read_text(encoding="utf-8")
     )
+    configuracion["fuentes"]["malla"]["ruta"] = (
+        "raw/malla/malla_500m_loja_maestra.gpkg"
+    )
     for fuente, datos in SUBCONJUNTOS_RAW.items():
-        configuracion["fuentes"][fuente]["ruta"] = (
-            "02_datos/raw/" + datos["destino_raw"]
-        )
+        configuracion["fuentes"][fuente]["ruta"] = "raw/" + datos["destino_raw"]
     destino = directorio_temporal / "perfilado.json"
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(
@@ -259,9 +260,9 @@ def crear_manifiesto_paquete(
     return destino
 
 
-def generar_perfilado_paquete(proyecto_temporal: Path) -> dict[str, Path]:
-    codigo = proyecto_temporal / "tarea_ETL/codigo"
-    evidencias = proyecto_temporal / "tarea_ETL/evidencias"
+def generar_perfilado_paquete(tarea_temporal: Path) -> dict[str, Path]:
+    codigo = tarea_temporal / "codigo"
+    evidencias = tarea_temporal / "evidencias"
     codigo.mkdir(parents=True, exist_ok=True)
     evidencias.mkdir(parents=True, exist_ok=True)
     script = codigo / "perfilar_fuentes.py"
@@ -302,19 +303,14 @@ def archivos_para_paquete(
             if relativa == "configuracion/perfilado.json"
             else perfilado_paquete.get(relativa, ETL_DIR / relativa)
         )
-        seleccion[f"Proyecto_integrador/tarea_ETL/{relativa}"] = ruta
+        seleccion[relativa] = ruta
 
-    seleccion[
-        "Proyecto_integrador/02_datos/raw/malla/malla_500m_loja_maestra.gpkg"
-    ] = malla
+    seleccion["raw/malla/malla_500m_loja_maestra.gpkg"] = malla
     for fuente in ("viirs", "chirps"):
-        seleccion[
-            "Proyecto_integrador/02_datos/raw/"
-            + subconjuntos[fuente]["destino_raw"]
-        ] = subconjuntos[fuente]["ruta"]
-    seleccion[
-        "Proyecto_integrador/05_ingesta/metadatos/manifiesto_firelab_loja.json"
-    ] = manifiesto_paquete
+        seleccion["raw/" + subconjuntos[fuente]["destino_raw"]] = subconjuntos[
+            fuente
+        ]["ruta"]
+    seleccion["raw/metadatos/manifiesto_firelab_loja.json"] = manifiesto_paquete
     return [(ruta, relativa) for relativa, ruta in sorted(seleccion.items())]
 
 
@@ -338,12 +334,12 @@ a uno por `cell_index + anio + mes` para construir Curated.
 
 ## Contenido ejecutable de la entrega
 
-- `Proyecto_integrador/02_datos/raw/`: malla y subconjuntos VIIRS/CHIRPS 2023.
-- `Proyecto_integrador/tarea_ETL/clean/`: fuentes tipadas y excepciones.
-- `Proyecto_integrador/tarea_ETL/curated/`: dataset final y diccionario.
-- `Proyecto_integrador/tarea_ETL/codigo/`: los tres scripts del flujo completo.
-- `Proyecto_integrador/tarea_ETL/configuracion/`: parametros y dependencias.
-- `Proyecto_integrador/tarea_ETL/evidencias/`: pruebas exigidas por la guia.
+- `raw/`: malla, subconjuntos VIIRS/CHIRPS 2023 y manifiesto.
+- `clean/`: fuentes tipadas y excepciones.
+- `curated/`: dataset final y diccionario.
+- `codigo/`: los tres scripts del flujo completo.
+- `configuracion/`: parametros y dependencias.
+- `evidencias/`: pruebas exigidas por la guia.
 
 ## Fuentes Raw y procedencia
 
@@ -357,18 +353,17 @@ las columnas y valores originales; solo aplican el filtro `anio == 2023`.
   `{subconjuntos['chirps']['sha256']}`.
 
 La procedencia, el hash de cada fuente historica y el hash de cada subconjunto
-se registran en
-`Proyecto_integrador/05_ingesta/metadatos/manifiesto_firelab_loja.json`.
+se registran en `raw/metadatos/manifiesto_firelab_loja.json`.
 
 ## Ejecucion
 
 Abra una terminal en la carpeta extraida y ejecute:
 
 ```powershell
-cd Proyecto_integrador
+cd tarea_ETL
 python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r tarea_ETL\configuracion\requirements_etl.txt
-.venv\Scripts\python.exe tarea_ETL\codigo\etl_fireforest.py --desde-cero
+.venv\Scripts\python.exe -m pip install -r configuracion\requirements_etl.txt
+.venv\Scripts\python.exe codigo\etl_fireforest.py --desde-cero
 ```
 
 `etl_fireforest.py --desde-cero` ejecuta en orden
@@ -431,7 +426,7 @@ def crear_paquete(salida: Path) -> None:
             prefix="paquete_raw_2023_", dir=ETL_DIR
         ) as temporal_raw:
             directorio_temporal = Path(temporal_raw)
-            proyecto_temporal = directorio_temporal / "Proyecto_integrador"
+            tarea_temporal = directorio_temporal / "tarea_ETL"
             manifiesto_original = json.loads(
                 RUTA_MANIFIESTO_CONTROLADO.read_text(encoding="utf-8")
             )
@@ -441,11 +436,7 @@ def crear_paquete(salida: Path) -> None:
             }
             subconjuntos: dict[str, dict[str, Any]] = {}
             for fuente, datos in SUBCONJUNTOS_RAW.items():
-                destino = (
-                    proyecto_temporal
-                    / "02_datos/raw"
-                    / datos["destino_raw"]
-                )
+                destino = tarea_temporal / "raw" / datos["destino_raw"]
                 subconjuntos[fuente] = crear_subconjunto_raw(
                     fuente,
                     datos["origen"],
@@ -454,21 +445,18 @@ def crear_paquete(salida: Path) -> None:
                 )
 
             malla_temporal = (
-                proyecto_temporal
-                / "02_datos/raw/malla/malla_500m_loja_maestra.gpkg"
+                tarea_temporal / "raw/malla/malla_500m_loja_maestra.gpkg"
             )
             malla_temporal.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(malla, malla_temporal)
 
             configuracion_paquete = crear_configuracion_paquete(
-                proyecto_temporal / "tarea_ETL/configuracion"
+                tarea_temporal / "configuracion"
             )
             manifiesto_paquete = crear_manifiesto_paquete(
-                proyecto_temporal / "05_ingesta/metadatos", subconjuntos
+                tarea_temporal / "raw/metadatos", subconjuntos
             )
-            perfilado_paquete = generar_perfilado_paquete(
-                proyecto_temporal
-            )
+            perfilado_paquete = generar_perfilado_paquete(tarea_temporal)
             archivos = archivos_para_paquete(
                 malla_temporal,
                 subconjuntos,
@@ -485,7 +473,7 @@ def crear_paquete(salida: Path) -> None:
                 ).encode("utf-8")
                 escribir_bytes(
                     paquete,
-                    f"{NOMBRE_RAIZ}/Proyecto_integrador/tarea_ETL/README.md",
+                    f"{NOMBRE_RAIZ}/README.md",
                     readme,
                 )
 

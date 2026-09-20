@@ -8,6 +8,10 @@ limitados a 2023, los productos Clean, el dataset Curated, el diccionario, los
 tres scripts que ejecutan el flujo, la configuración y las evidencias mínimas
 exigidas por la guía.
 
+Al descomprimirlo aparece una sola carpeta raíz: `tarea_ETL/`. No se incluye
+el resto de `Proyecto_integrador`, porque no es necesario para ejecutar ni
+revisar esta tarea.
+
 El ZIP se genera de forma reproducible con:
 
 ```powershell
@@ -34,14 +38,17 @@ bloques:
 
 ## Comando de reproducción del ETL
 
-Desde la raíz de FireForest:
+Desde la carpeta donde se extrajo el ZIP:
 
 ```powershell
-.venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\etl_fireforest.py --desde-cero
+cd tarea_ETL
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r configuracion\requirements_etl.txt
+.venv\Scripts\python.exe codigo\etl_fireforest.py --desde-cero
 ```
 
 El comando ejecuta perfilado, calidad Raw, Clean, Curated y actualización del
-seguimiento. Los archivos originales de `02_datos/raw/` se leen sin modificarse.
+seguimiento. Los archivos incluidos en `raw/` se leen sin modificarse.
 
 Los CSV Raw históricos 2019-2025 de VIIRS y CHIRPS superan los 100 MB cada uno
 y no se duplican dentro del paquete. En su lugar se incluyen subconjuntos Raw

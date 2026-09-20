@@ -1,10 +1,14 @@
 """Inventaría y perfila las fuentes Raw de la tarea ETL de FireForest.
 
-El script trabaja únicamente en modo de lectura sobre 02_datos/raw. Produce
-evidencias determinísticas en tarea_ETL/evidencias y no limpia, transforma ni
-carga registros en PostgreSQL o MongoDB.
+El script trabaja únicamente en modo de lectura sobre las fuentes Raw
+configuradas. Produce evidencias determinísticas en `evidencias/` y no limpia,
+transforma ni carga registros en PostgreSQL o MongoDB.
 
-Uso desde la raíz de FireForest:
+Uso dentro del paquete extraído:
+
+    python codigo/perfilar_fuentes.py
+
+Uso alternativo desde la raíz de FireForest:
 
     .venv/Scripts/python.exe \
         Tareas/Proyecto_integrador/tarea_ETL/codigo/perfilar_fuentes.py
@@ -28,17 +32,40 @@ RUTA_SCRIPT = Path(__file__).resolve()
 RAIZ_TAREA = RUTA_SCRIPT.parents[1]
 RAIZ_INTEGRADOR = RAIZ_TAREA.parent
 RUTA_CONFIGURACION = RAIZ_TAREA / "configuracion" / "perfilado.json"
-RUTA_MANIFIESTO = (
-    RAIZ_INTEGRADOR
-    / "05_ingesta"
-    / "metadatos"
-    / "manifiesto_firelab_loja.json"
-)
 DIRECTORIO_EVIDENCIAS = RAIZ_TAREA / "evidencias"
 
 LIMITE_DISTINTOS = 10_000
 LIMITE_CATEGORIAS = 100
 BLOQUE_HASH = 8 * 1024 * 1024
+
+
+def resolver_manifiesto() -> Path:
+    candidatos = (
+        RAIZ_TAREA / "raw/metadatos/manifiesto_firelab_loja.json",
+        RAIZ_INTEGRADOR / "05_ingesta/metadatos/manifiesto_firelab_loja.json",
+    )
+    for ruta in candidatos:
+        if ruta.is_file():
+            return ruta
+    raise FileNotFoundError(
+        "No se encontro el manifiesto. Rutas revisadas: "
+        + ", ".join(str(ruta) for ruta in candidatos)
+    )
+
+
+def resolver_ruta_fuente(ruta_configurada: str) -> tuple[Path, Path]:
+    """Devuelve la fuente y la raiz Raw para ambos formatos de entrega."""
+    candidatos = (
+        (RAIZ_TAREA / ruta_configurada, RAIZ_TAREA / "raw"),
+        (RAIZ_INTEGRADOR / ruta_configurada, RAIZ_INTEGRADOR / "02_datos/raw"),
+    )
+    for ruta, raiz_raw in candidatos:
+        if ruta.is_file():
+            return ruta, raiz_raw
+    raise FileNotFoundError(
+        "No existe la fuente configurada. Rutas revisadas: "
+        + ", ".join(str(ruta) for ruta, _ in candidatos)
+    )
 
 
 @dataclass
@@ -450,7 +477,7 @@ def resultado_control(incumplimientos: int) -> str:
 
 def main() -> int:
     configuracion = cargar_json(RUTA_CONFIGURACION)
-    manifiesto = cargar_json(RUTA_MANIFIESTO)
+    manifiesto = cargar_json(resolver_manifiesto())
     anio_estudio = int(configuracion["anio_estudio"])
     tolerancia = float(configuracion["tolerancia_fracciones"])
     tabla_malla = configuracion["tabla_malla"]
@@ -465,11 +492,9 @@ def main() -> int:
     rutas: dict[str, Path] = {}
     inventario_base: dict[str, dict[str, Any]] = {}
     for fuente, datos in fuentes_config.items():
-        ruta = RAIZ_INTEGRADOR / datos["ruta"]
-        if not ruta.is_file():
-            raise FileNotFoundError(f"No existe la fuente {fuente}: {ruta}")
+        ruta, raiz_raw = resolver_ruta_fuente(datos["ruta"])
         rutas[fuente] = ruta
-        relativo_raw = ruta.relative_to(RAIZ_INTEGRADOR / "02_datos" / "raw")
+        relativo_raw = ruta.relative_to(raiz_raw)
         clave_manifiesto = relativo_raw.as_posix()
         entrada_manifiesto = manifiesto_por_destino.get(clave_manifiesto)
         if entrada_manifiesto is None:
