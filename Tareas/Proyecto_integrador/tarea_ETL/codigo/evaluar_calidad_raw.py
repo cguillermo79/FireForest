@@ -25,6 +25,21 @@ CONFIG_PERFILADO = RAIZ_TAREA / "configuracion" / "perfilado.json"
 CONFIG_CALIDAD = RAIZ_TAREA / "configuracion" / "reglas_calidad.json"
 
 
+def resolver_ruta_fuente(ruta_configurada: str) -> Path:
+    """Resuelve fuentes tanto en el repositorio como en el paquete autonomo."""
+    candidatos = (
+        RAIZ_TAREA / ruta_configurada,
+        RAIZ_INTEGRADOR / ruta_configurada,
+    )
+    for ruta in candidatos:
+        if ruta.is_file():
+            return ruta
+    raise FileNotFoundError(
+        "No existe la fuente configurada. Rutas revisadas: "
+        + ", ".join(str(ruta) for ruta in candidatos)
+    )
+
+
 def cargar_json(ruta: Path) -> dict[str, Any]:
     with ruta.open("r", encoding="utf-8") as archivo:
         return json.load(archivo)
@@ -138,7 +153,7 @@ def main() -> int:
     control_por_id = {fila["control"]: fila for fila in controles_previos}
 
     rutas = {
-        fuente: RAIZ_INTEGRADOR / datos["ruta"]
+        fuente: resolver_ruta_fuente(datos["ruta"])
         for fuente, datos in perfil["fuentes"].items()
     }
 
@@ -536,6 +551,11 @@ def main() -> int:
     ).is_file()
     contenido_readme = (RAIZ_TAREA / "README.md").read_text(encoding="utf-8")
     conclusiones_documentadas = "## Conclusiones y limitaciones" in contenido_readme
+    evidencia_raw = (
+        "raw/; raw/metadatos/manifiesto_firelab_loja.json"
+        if (RAIZ_TAREA / "raw").is_dir()
+        else "../02_datos/raw/; ../05_ingesta/metadatos/manifiesto_firelab_loja.json"
+    )
     if clean_completo or curated_completo:
         for fila in matriz:
             fila["evidencia_posterior"] = (
@@ -547,7 +567,7 @@ def main() -> int:
     entregables = [
         ("Alcance", "Pregunta, población, periodo, unidad y claves", "README.md", "CUMPLE", "Definición formal para 2023."),
         ("Código", "Script o notebook ejecutable desde el inicio", "codigo/etl_fireforest.py --desde-cero", "CUMPLE" if curated_completo else "EN_DESARROLLO", "Un solo comando ejecuta perfilado, calidad Raw, Clean, Curated y seguimiento." if curated_completo else "El flujo todavía está en desarrollo."),
-        ("Datos", "Fuentes permitidas o instrucciones reproducibles", "raw/README.md; ../05_ingesta/metadatos/manifiesto_firelab_loja.json", "CUMPLE", "Raw conservado con hashes."),
+        ("Datos", "Fuentes permitidas o instrucciones reproducibles", evidencia_raw, "CUMPLE", "Raw conservado con hashes."),
         ("Datos", "Capa Clean", "clean/*.csv; clean/*.parquet", "CUMPLE" if clean_completo else "PENDIENTE", "Malla, VIIRS y CHIRPS tipados por separado, con excepciones y rechazos explícitos." if clean_completo else "No se ha transformado información."),
         ("Datos", "Dataset Curated", "curated/fireforest_celda_mes_2023.csv; curated/fireforest_celda_mes_2023.parquet", "CUMPLE" if curated_completo else "PENDIENTE", "Dataset maestro de 95.964 filas por cell_id + anio + mes." if curated_completo else "Se generará después de Clean."),
         ("Datos", "Diccionario de datos Curated", "curated/diccionario_datos.csv", "CUMPLE" if curated_completo else "PENDIENTE", "Documenta las 45 variables, tipos, unidades, origen, derivación y nulabilidad." if curated_completo else "Debe incluir nombre, significado, tipo, unidad y derivación."),

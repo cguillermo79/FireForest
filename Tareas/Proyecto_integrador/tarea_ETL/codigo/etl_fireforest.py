@@ -4,7 +4,11 @@ El script lee las fuentes Raw en modo de solo lectura, filtra el periodo 2023,
 tipa y estandariza cada fuente, integra VIIRS con CHIRPS mediante una union uno
 a uno y publica CSV y Parquet. No carga datos en PostgreSQL ni MongoDB.
 
-Uso desde la raiz de FireForest:
+Uso dentro del paquete extraido:
+
+    python codigo/etl_fireforest.py --desde-cero
+
+Uso alternativo desde la raiz de FireForest:
 
     .venv/Scripts/python.exe \
         Tareas/Proyecto_integrador/tarea_ETL/codigo/etl_fireforest.py
@@ -37,6 +41,21 @@ CONFIG_TRANSFORMACIONES = (
     RAIZ_TAREA / "configuracion" / "transformaciones_clean.json"
 )
 ESTADISTICAS_ATIPICOS = DIRECTORIO_EVIDENCIAS / "estadisticas_atipicos.csv"
+
+
+def resolver_ruta_fuente(ruta_configurada: str) -> Path:
+    """Resuelve fuentes tanto en el repositorio como en el paquete autonomo."""
+    candidatos = (
+        RAIZ_TAREA / ruta_configurada,
+        RAIZ_INTEGRADOR / ruta_configurada,
+    )
+    for ruta in candidatos:
+        if ruta.is_file():
+            return ruta
+    raise FileNotFoundError(
+        "No existe la fuente configurada. Rutas revisadas: "
+        + ", ".join(str(ruta) for ruta in candidatos)
+    )
 
 
 def cargar_json(ruta: Path) -> dict[str, Any]:
@@ -699,7 +718,7 @@ def main(desde_cero: bool = False) -> int:
     DIRECTORIO_CURATED.mkdir(parents=True, exist_ok=True)
     DIRECTORIO_EVIDENCIAS.mkdir(parents=True, exist_ok=True)
     rutas = {
-        fuente: RAIZ_INTEGRADOR / datos["ruta"]
+        fuente: resolver_ruta_fuente(datos["ruta"])
         for fuente, datos in perfilado["fuentes"].items()
     }
     limites = cargar_limites_atipicos()

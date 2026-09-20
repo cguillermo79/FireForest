@@ -3,9 +3,14 @@
 ## Archivo que debe enviarse
 
 Enviar `FireForest_Tarea_ETL_entrega_completa_2026-09-20.zip`. Este paquete
-incluye la geometría de la malla en GeoPackage, los productos Clean de 2023 en
-CSV, el dataset Curated, el diccionario, los tres scripts que ejecutan el flujo,
-la configuración y las evidencias mínimas exigidas por la guía.
+incluye la geometría de la malla, los subconjuntos Raw de VIIRS y CHIRPS
+limitados a 2023, los productos Clean, el dataset Curated, el diccionario, los
+tres scripts que ejecutan el flujo, la configuración y las evidencias mínimas
+exigidas por la guía.
+
+Al descomprimirlo aparece una sola carpeta raíz: `tarea_ETL/`. No se incluye
+el resto de `Proyecto_integrador`, porque no es necesario para ejecutar ni
+revisar esta tarea.
 
 El ZIP se genera de forma reproducible con:
 
@@ -33,20 +38,24 @@ bloques:
 
 ## Comando de reproducción del ETL
 
-Desde la raíz de FireForest:
+Desde la carpeta donde se extrajo el ZIP:
 
 ```powershell
-.venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\etl_fireforest.py --desde-cero
+cd tarea_ETL
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r configuracion\requirements_etl.txt
+.venv\Scripts\python.exe codigo\etl_fireforest.py --desde-cero
 ```
 
 El comando ejecuta perfilado, calidad Raw, Clean, Curated y actualización del
-seguimiento. Los archivos originales de `02_datos/raw/` se leen sin modificarse.
+seguimiento. Los archivos incluidos en `raw/` se leen sin modificarse.
 
-Los CSV Raw históricos de VIIRS y CHIRPS superan los 100 MB cada uno y no se
-duplican dentro del paquete. Por tanto, el ZIP es autocontenido para revisar y
-analizar los resultados, pero una reproducción desde Raw requiere acceso a las
-fuentes controladas registradas en el manifiesto de procedencia. La malla
-GeoPackage sí se incluye porque es pequeña y permite inspeccionar la geometría.
+Los CSV Raw históricos 2019-2025 de VIIRS y CHIRPS superan los 100 MB cada uno
+y no se duplican dentro del paquete. En su lugar se incluyen subconjuntos Raw
+de 2023 con todas las columnas y filas necesarias para reproducir el resultado
+entregado. La malla GeoPackage también se incluye. Por tanto, después de
+descomprimir e instalar las dependencias, el ETL puede ejecutarse desde cero
+sin acceso a FIRELAB_Loja.
 
 ## Resultado esperado
 
