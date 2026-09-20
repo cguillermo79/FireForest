@@ -335,11 +335,15 @@ a uno por `cell_index + anio + mes` para construir Curated.
 ## Contenido ejecutable de la entrega
 
 - `raw/`: malla, subconjuntos VIIRS/CHIRPS 2023 y manifiesto.
-- `clean/`: fuentes tipadas y excepciones.
-- `curated/`: dataset final y diccionario.
+- `clean/`: bases limpias ya generadas, fuentes tipadas y excepciones.
+- `curated/`: dataset final ya generado y diccionario.
 - `codigo/`: los tres scripts del flujo completo.
 - `configuracion/`: parametros y dependencias.
 - `evidencias/`: pruebas exigidas por la guia.
+
+`raw/` contiene las entradas sin transformar. `clean/` contiene las bases
+resultantes despues de aplicar las reglas de limpieza. Ambas capas ya vienen
+incluidas y pueden revisarse sin ejecutar ningun comando.
 
 ## Fuentes Raw y procedencia
 
@@ -355,9 +359,11 @@ las columnas y valores originales; solo aplican el filtro `anio == 2023`.
 La procedencia, el hash de cada fuente historica y el hash de cada subconjunto
 se registran en `raw/metadatos/manifiesto_firelab_loja.json`.
 
-## Ejecucion
+## Reproduccion opcional
 
-Abra una terminal en la carpeta extraida y ejecute:
+No es necesario ejecutar el ETL para revisar la entrega. Si se desea comprobar
+que los resultados pueden regenerarse, abra una terminal en la carpeta donde
+se extrajo el ZIP y ejecute:
 
 ```powershell
 cd tarea_ETL
