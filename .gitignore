@@ -12,3 +12,15 @@ __pycache__/
 # Nota: los ignorados especificos de Tareas/Proyecto_integrador (Airflow,
 # datos crudos pesados, resultados locales de Spark, etc.) viven en
 # Tareas/Proyecto_integrador/.gitignore, no aqui.
+
+@"
+
+# Residuos de compilacion LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.out
+*.toc
+"@ | Add-Content .gitignore
