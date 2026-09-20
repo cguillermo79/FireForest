@@ -1,0 +1,12 @@
+﻿control_id,dimension_calidad,fuente,regla,registros_evaluados,incumplimientos,resultado,evidencia
+CUR-01,cardinalidad,viirs_chirps,Cada fuente Clean tiene clave tecnica unica antes de la union.,191928,0,CUMPLE,clean/viirs_2023.parquet; clean/chirps_2023.parquet
+CUR-02,integridad_referencial,viirs_chirps,La union uno a uno encuentra correspondencia para todas las claves.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-03,reconciliacion,curated,Curated conserva 95964 filas celda-mes.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-04,unicidad,curated,La clave final cell_id + anio + mes es completa y unica.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-05,reconciliacion,curated,La union no multiplica ni elimina filas de las fuentes Clean.,95964,0,CUMPLE,evidencias/comparacion_antes_despues.csv
+CUR-06,completitud,curated,Las 900 filas sin VIIRS se conservan como no aptas.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-07,consistencia,curated,Las metricas VIIRS de filas sin observacion permanecen nulas.,900,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-08,completitud,curated,Las metricas CHIRPS criticas estan completas.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-09,consistencia,curated,Los conteos de evidencia de fuego se conservan despues de la union.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-10,unicidad,curated,id_celda_mes es completo y unico.,95964,0,CUMPLE,curated/fireforest_celda_mes_2023.csv
+CUR-11,documentacion,curated,El diccionario documenta todas las columnas finales una sola vez.,45,0,CUMPLE,curated/diccionario_datos.csv

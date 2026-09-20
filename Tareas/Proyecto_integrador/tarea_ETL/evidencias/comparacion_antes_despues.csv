@@ -1,0 +1,13 @@
+﻿fuente,metrica,antes_raw,despues_clean,despues_curated,diferencia,interpretacion
+malla,filas,7997,7997,,0,Se conservan todas las celdas.
+viirs,filas_2023,95964,95964,,0,No se eliminan claves celda-mes.
+viirs,filas_sin_observacion,900,900,,0,Los faltantes se conservan como nulos y se marcan.
+viirs,duplicados_clave,0,0,,0,No fue necesario deduplicar.
+viirs,filas_con_bandera_atipico_frp,0,747,,747,Se agrega trazabilidad; los valores se conservan.
+chirps,filas_2023,95964,95964,,0,No se eliminan claves celda-mes.
+chirps,duplicados_clave,0,0,,0,No fue necesario deduplicar.
+chirps,filas_con_alguna_bandera_atipico,0,14863,,14863,Se agrega trazabilidad; los valores se conservan.
+todas,rechazos_criticos,0,0,,0,Los controles criticos no detectaron rechazos.
+integracion,filas_celda_mes,95964,95964,95964,0,La union uno a uno conserva exactamente las claves esperadas.
+integracion,duplicados_clave_final,0,0,0,0,La integracion no genera duplicados.
+integracion,filas_no_aptas_analisis,900,900,900,0,Los faltantes VIIRS siguen visibles y no se eliminan del maestro.

@@ -1,0 +1,46 @@
+﻿orden,variable,descripcion,tipo_logico,tipo_parquet,unidad,origen,derivacion,permite_nulo
+1,id_celda_mes,Identificador legible de la observacion celda-mes.,texto,string,sin unidad,derivado Curated,cell_id + '_' + anio_mes,NO
+2,cell_id,Identificador espacial estable de la celda de 500 m.,texto,str,sin unidad,malla Clean,valor validado por cell_index,NO
+3,cell_index,Indice tecnico de la celda usado para integrar fuentes.,entero,Int64,sin unidad,malla Clean,valor original,NO
+4,fila,Fila de la celda en la malla regular.,entero,Int64,sin unidad,malla Clean,valor original,NO
+5,columna,Columna de la celda en la malla regular.,entero,Int64,sin unidad,malla Clean,valor original,NO
+6,anio,Anio de la observacion mensual.,entero,Int16,anio,VIIRS y CHIRPS Clean,clave de integracion,NO
+7,mes,Mes de la observacion.,entero,Int8,1-12,VIIRS y CHIRPS Clean,clave de integracion,NO
+8,periodo,Fecha representativa del mes.,fecha,datetime64[us],AAAA-MM-DD,derivado Clean,primer dia del mes,NO
+9,anio_mes,Etiqueta mensual normalizada.,texto,str,AAAA-MM,derivado Clean,anio y mes,NO
+10,area_dentro_loja_m2,Area de la celda incluida dentro del canton Loja.,decimal,float64,m2,malla Clean,valor original,NO
+11,fraccion_dentro_loja,Proporcion del area de la celda dentro de Loja.,decimal,float64,0-1,malla Clean,area dentro / area nominal,NO
+12,es_celda_completa,Indica si la celda esta completamente dentro de Loja.,booleano,boolean,verdadero/falso,malla Clean,bandera espacial,NO
+13,categoria_cobertura_territorial,Categoria de cobertura territorial de la celda.,texto,str,categoria,derivado Clean,"completa, parcial_ge_050 o parcial_lt_050",NO
+14,asset_fuente_viirs,Identificador del asset VIIRS mensual de origen.,texto,str,sin unidad,VIIRS Clean,valor original,NO
+15,detecciones_todas_media,Media espacial de detecciones VIIRS de cualquier confianza.,decimal,float64,detecciones,VIIRS Clean,valor original,SI
+16,detecciones_nominal_alta_media,Media espacial de detecciones VIIRS nominales o altas.,decimal,float64,detecciones,VIIRS Clean,valor original,SI
+17,presencia_fuego_frac,Fraccion del soporte con presencia de fuego.,decimal,float64,0-1,VIIRS Clean,valor original,SI
+18,presencia_fuego_nominal_alta_frac,Fraccion del soporte con fuego nominal o alto.,decimal,float64,0-1,VIIRS Clean,valor original,SI
+19,frp_suma_observada_media_mw,Media espacial de la suma de potencia radiativa del fuego.,decimal,float64,MW,VIIRS Clean,valor original,SI
+20,frp_maxima_media_mw,Media espacial de la potencia radiativa maxima.,decimal,float64,MW,VIIRS Clean,valor original,SI
+21,dias_validos_media,Media espacial de dias VIIRS validos.,decimal,float64,dias,VIIRS Clean,valor original,SI
+22,disponibilidad_pct,Disponibilidad observacional VIIRS.,decimal,float64,porcentaje,VIIRS Clean,valor original,SI
+23,cobertura_fuente_frac,Fraccion de cobertura de la fuente VIIRS.,decimal,float64,0-1,VIIRS Clean,valor original,SI
+24,soporte_observado_frac,Fraccion del soporte efectivamente observado por VIIRS.,decimal,float64,0-1,VIIRS Clean,valor original,SI
+25,evidencia_fuego,Indica evidencia VIIRS de fuego de cualquier confianza.,booleano,boolean,verdadero/falso,VIIRS Clean,indicador 0/1 tipado,SI
+26,evidencia_fuego_nominal_alta,Indica evidencia VIIRS nominal o alta.,booleano,boolean,verdadero/falso,VIIRS Clean,indicador 0/1 tipado,SI
+27,dias_calendario,Numero de dias del mes.,entero,Int8,dias,CHIRPS Clean,valor original,NO
+28,precipitacion_acumulada_mm,Precipitacion acumulada mensual.,decimal,float64,mm,CHIRPS Clean,valor original,NO
+29,precipitacion_media_diaria_mm,Precipitacion media diaria del mes.,decimal,float64,mm/dia,CHIRPS Clean,valor original,NO
+30,precipitacion_maxima_diaria_mm,Precipitacion diaria maxima del mes.,decimal,float64,mm,CHIRPS Clean,valor original,NO
+31,dias_humedos_ge1mm,Dias del mes con precipitacion mayor o igual a 1 mm.,decimal,float64,dias,CHIRPS Clean,valor original,NO
+32,dias_secos_lt1mm,Dias del mes con precipitacion menor a 1 mm.,decimal,float64,dias,CHIRPS Clean,valor original,NO
+33,dias_validos_pixel,Dias CHIRPS validos para la celda.,decimal,float64,dias,CHIRPS Clean,valor original,NO
+34,disponibilidad_pixel_pct,Disponibilidad temporal CHIRPS.,decimal,float64,porcentaje,CHIRPS Clean,valor original,NO
+35,fraccion_dias_humedos,Proporcion de dias validos clasificados como humedos.,decimal,float64,0-1,derivado Clean,dias_humedos_ge1mm / dias_validos_pixel,NO
+36,observacion_viirs_disponible,Indica si VIIRS tiene soporte observacional para la celda-mes.,booleano,bool,verdadero/falso,derivado Clean,soporte_observado_frac no nulo,NO
+37,observado_mes_chirps,Indica si CHIRPS observo el mes.,booleano,boolean,verdadero/falso,CHIRPS Clean,indicador 0/1 tipado,NO
+38,cobertura_chirps_valida,Indica cobertura CHIRPS valida dentro de la tolerancia.,booleano,bool,verdadero/falso,derivado Clean,abs(cobertura_valida_fuente - 1) <= tolerancia,NO
+39,apto_analisis,Indica si la fila tiene observacion valida en ambas fuentes.,booleano,boolean,verdadero/falso,derivado Curated,VIIRS disponible y CHIRPS observado con cobertura valida,NO
+40,motivo_no_apto_analisis,Explica por que una fila no es apta para analisis conjunto.,texto,str,categoria,derivado Curated,evaluacion de banderas de cobertura,NO
+41,atipico_frp_suma,Bandera IQR de la suma FRP.,booleano,boolean,verdadero/falso,derivado Clean,fuera de limites IQR documentados,SI
+42,atipico_frp_maxima,Bandera IQR de FRP maxima.,booleano,boolean,verdadero/falso,derivado Clean,fuera de limites IQR documentados,SI
+43,atipico_precipitacion_acumulada,Bandera IQR de precipitacion acumulada.,booleano,boolean,verdadero/falso,derivado Clean,fuera de limites IQR documentados,NO
+44,atipico_precipitacion_maxima_diaria,Bandera IQR de precipitacion maxima diaria.,booleano,boolean,verdadero/falso,derivado Clean,fuera de limites IQR documentados,NO
+45,alguna_bandera_atipico,Indica si alguna metrica integrada tiene bandera IQR.,booleano,boolean,verdadero/falso,derivado Curated,OR de cuatro banderas IQR,NO

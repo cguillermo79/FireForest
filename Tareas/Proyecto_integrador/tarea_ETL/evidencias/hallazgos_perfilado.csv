@@ -1,0 +1,6 @@
+﻿hallazgo,dimension_calidad,cantidad_registros,porcentaje_registros,evidencia,decision_actual
+faltantes_viirs_2023,completitud,900,0.937852,Afectan 75 celdas durante 12 meses.,Pendiente. Conservar como nulo y no convertir automáticamente en cero.
+celdas_parciales_malla,validez_espacial,828,10.353883,409 celdas tienen menos del 50 % de su área dentro de Loja.,Pendiente. Mantener durante el perfilado y definir luego la regla de aptitud analítica.
+faltantes_viirs_asociados_a_borde,consistencia,75,0.937852,Fracción dentro de Loja entre 0.000000016683 y 0.108275778463.,Pendiente. Evaluar cobertura observacional antes de excluir celdas.
+precision_decimal_chirps_valid_coverage,validez,8340,8.690759,"Con tolerancia 1e-05, 0 filas quedan fuera del valor esperado 1.",Usar tolerancia numérica; no comparar decimales mediante igualdad exacta.
+evidencia_fuego_2023,perfil_descriptivo,747,0.778417,709 celda-meses tienen evidencia nominal/alta.,Dato descriptivo. No implica todavía una regla de exclusión.

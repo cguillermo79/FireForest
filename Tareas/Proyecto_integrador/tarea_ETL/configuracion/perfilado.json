@@ -1,0 +1,25 @@
+{
+  "anio_estudio": 2023,
+  "tolerancia_fracciones": 0.00001,
+  "tabla_malla": "malla_500m_loja_maestra",
+  "fuentes": {
+    "malla": {
+      "ruta": "02_datos/raw/malla/malla_500m_loja_maestra.gpkg",
+      "formato": "GeoPackage",
+      "grano": "una fila por celda",
+      "clave": "cell_index; cell_id"
+    },
+    "viirs": {
+      "ruta": "02_datos/raw/viirs/viirs_evidencia_500m_celda_mes_2019_2025_v1_0_3.csv",
+      "formato": "CSV",
+      "grano": "una fila por cell_index, anio y mes",
+      "clave": "cell_index + anio + mes"
+    },
+    "chirps": {
+      "ruta": "02_datos/raw/chirps/chirps_500m_celda_mes_2019_2025.csv",
+      "formato": "CSV",
+      "grano": "una fila por cell_index, anio y mes",
+      "clave": "cell_index + anio + mes"
+    }
+  }
+}

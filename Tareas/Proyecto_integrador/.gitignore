@@ -1,0 +1,32 @@
+# .gitignore propio de Tareas/Proyecto_integrador (subarbol autonomo).
+# Complementa, sin reemplazar, el .gitignore de la raiz de FireForest.
+
+# Airflow (entorno local de desarrollo)
+08_airflow/.env
+08_airflow/logs/
+08_airflow/**/__pycache__/
+08_airflow/config/airflow.cfg
+
+# Python
+**/__pycache__/
+*.pyc
+
+# Jupyter
+**/.ipynb_checkpoints/
+
+# Datos crudos pesados (copias reales de GEE/VIIRS/CHIRPS que se agreguen
+# a futuro); las muestras controladas y de ejemplo ya versionadas no se
+# ven afectadas porque se agregan explicitamente con git add.
+# (se reincluyen los directorios intermedios malla/viirs/chirps para que
+# git descienda a ellos y pueda aplicar la negacion sobre .gitkeep)
+02_datos/raw/**
+!02_datos/raw/**/
+!02_datos/raw/**/.gitkeep
+
+# Resultados de Spark/PySpark generados localmente
+09_spark_pyspark/resultados/**
+!09_spark_pyspark/resultados/.gitkeep
+
+# Logs locales de resultados
+11_resultados/logs/**
+!11_resultados/logs/.gitkeep

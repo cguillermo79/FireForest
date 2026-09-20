@@ -1,0 +1,1665 @@
+\documentclass[11pt,a4paper]{article}
+
+% ============================================================
+% FireForest - Guion oral de exposicion del Avance 1 (Grupo 4)
+% Documento de apoyo interno, complementario a main.tex / main.pdf
+% y a guion_exposicion.md. No sustituye a ninguno de los dos.
+% ============================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish]{babel}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{framed}
+\usepackage{parskip}
+\usepackage{hyperref}
+
+% ------------------------------------------------------------
+% Paleta identica a main.tex
+% ------------------------------------------------------------
+\definecolor{VerdeOscuro}{RGB}{27,94,55}
+\definecolor{VerdeMedio}{RGB}{46,125,80}
+\definecolor{VerdePalido}{RGB}{213,234,217}
+\definecolor{Tierra}{RGB}{124,89,55}
+\definecolor{TierraPalido}{RGB}{237,227,213}
+\definecolor{Fuego}{RGB}{196,86,26}
+\definecolor{FuegoPalido}{RGB}{250,224,206}
+\definecolor{GrisTexto}{RGB}{51,51,51}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=VerdeOscuro,
+  urlcolor=Tierra,
+  citecolor=VerdeOscuro,
+  pdftitle={Guion de exposicion - Avance 1 - FireForest - Grupo 4},
+  pdfauthor={Malan Mullo, Marco Vinicio; Pujos Culque, Viviana Isabel; Chuncho Morocho, Carlos Guillermo},
+  pdfsubject={Guion oral de exposicion, Proyecto Integrador FireForest, Avance 1}
+}
+
+\definecolor{shadecolor}{RGB}{237,227,213}
+\setlength{\OuterFrameSep}{4pt}
+\setlength{\FrameSep}{6pt}
+
+\renewcommand{\familydefault}{\rmdefault}
+\color{GrisTexto}
+
+% ------------------------------------------------------------
+% Encabezados de seccion con la paleta del proyecto
+% ------------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\Large\bfseries\color{VerdeOscuro}\raggedright}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{Tierra}\raggedright}{\thesubsection}{0.6em}{}
+\titleformat{name=\section,numberless}{\normalfont\Large\bfseries\color{VerdeOscuro}\raggedright}{}{0em}{}
+
+% ------------------------------------------------------------
+% Comandos auxiliares para el guion por diapositiva
+% ------------------------------------------------------------
+\newcommand{\campo}[2]{\par\medskip\noindent\textbf{#1:} #2\par}
+\newcommand{\campotitulo}[1]{\par\medskip\noindent\textbf{#1:}\par}
+
+\newenvironment{guionoral}{%
+  \medskip\noindent\textbf{Gui\'on oral:}\par\smallskip
+  \begin{quote}\small
+}{%
+  \end{quote}
+}
+
+\newenvironment{cierrebloque}[1]{%
+  \begin{framed}\small\noindent\textbf{Cierre de bloque --- #1.}\par\smallskip
+}{%
+  \end{framed}\bigskip
+}
+
+\newcommand{\separadordiapositiva}{\bigskip\noindent{\color{Tierra!60}\hrulefill}\bigskip}
+
+\begin{document}
+
+% ============================================================
+% PORTADA
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{0.5cm}
+\begin{minipage}{0.45\textwidth}
+  \centering\includegraphics[height=1.6cm]{logos/logo_espoch.png}
+\end{minipage}%
+\begin{minipage}{0.45\textwidth}
+  \centering\includegraphics[height=1.6cm]{logos/logo_maestria.jpeg}
+\end{minipage}
+
+\vspace{1.0cm}
+{\footnotesize ESCUELA SUPERIOR POLIT\'ECNICA DE CHIMBORAZO (ESPOCH)\par}
+{\small Maestr\'ia en Estad\'istica con menci\'on en Ciencia de Datos e Inteligencia Artificial\par}
+
+\vspace{1.2cm}
+{\color{VerdeOscuro}\rule{0.7\textwidth}{0.8pt}\par}
+\vspace{0.5cm}
+{\Huge\bfseries\color{VerdeOscuro} Proyecto Integrador FireForest\par}
+\vspace{0.5cm}
+{\LARGE Gui\'on de exposici\'on del Avance 1\par}
+\vspace{0.5cm}
+{\color{VerdeOscuro}\rule{0.7\textwidth}{0.8pt}\par}
+
+\vspace{1.0cm}
+{\Large\bfseries\color{Tierra} Grupo 4\par}
+
+\vspace{0.8cm}
+{\large
+Malan Mullo, Marco Vinicio\\[2pt]
+Pujos Culque, Viviana Isabel\\[2pt]
+Chuncho Morocho, Carlos Guillermo\par}
+
+\vspace{1.2cm}
+{\normalsize Avance 1 \textbar\ 2026\par}
+
+\vfill
+{\small\color{GrisTexto!80!black}
+Documento de apoyo oral interno para el equipo expositor. Complementa,
+sin reemplazar, \texttt{main.tex}, \texttt{main.pdf},
+\texttt{Grupo04\_Presentacion\_AvanceProyectoIntegrador.pdf} y
+\texttt{guion\_exposicion.md}. Alineado con la versi\'on final de 21
+diapositivas y con el informe aprobado del Avance 1.\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Resumen general}
+% ============================================================
+
+\textbf{Duraci\'on prevista:} aproximadamente 30 minutos (30,0 minutos
+programados, dentro del rango de 29 a 30 minutos solicitado). La
+diapositiva 21 (referencias) no tiene tiempo de exposici\'on oral
+asignado: queda proyectada como apoyo durante la ronda de preguntas.
+
+\textbf{N\'umero total de diapositivas:} 21.
+
+\textbf{Distribuci\'on por expositor:}
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Marco Vinicio Malan Mullo} --- Bloque I. Introducci\'on
+    (incluye el \'ambito territorial) y apertura del bloque II.
+    Metodolog\'ia (diapositivas 1 a 8) --- 8,9 minutos.
+  \item \textbf{Viviana Isabel Pujos Culque} --- Resto del bloque II.
+    Metodolog\'ia (diapositivas 9 a 15) --- 11,0 minutos.
+  \item \textbf{Carlos Guillermo Chuncho Morocho} --- Bloques III.
+    Resultados preliminares, IV. Discusi\'on preliminar y V.
+    Conclusiones (diapositivas 16 a 20) --- 10,1 minutos.
+  \item Diapositiva 21 (Referencias): sin expositor asignado, queda
+    proyectada durante las preguntas.
+\end{itemize}
+
+\textbf{Prop\'osito acad\'emico del Avance 1:} este avance corresponde
+a la primera entrega de un proyecto integrador de Ingenier\'ia de
+Datos. Su objetivo es demostrar el dise\~no de una arquitectura
+h\'ibrida SQL--NoSQL reproducible para integrar y consultar datos
+heterog\'eneos de incendios forestales en el cant\'on Loja. No es un
+sistema terminado, ni un an\'alisis ambiental definitivo del
+comportamiento del fuego en el cant\'on.
+
+\begin{framed}
+\noindent\textbf{Advertencia general v\'alida para toda la
+exposici\'on:} todos los resultados ejecutados que se presentan
+(diapositivas 16 a 18) fueron obtenidos con \textbf{datos controlados}
+de un prototipo compuesto \'unicamente por dos celdas
+(\texttt{LJ\_TEST\_001} y \texttt{LJ\_TEST\_002}), identificadores de
+\textbf{prueba} verificados dentro del cant\'on Loja, parroquia El
+Cisne (diapositiva 6). Estos resultados validan el funcionamiento
+t\'ecnico del flujo, pero \textbf{no son representativos} de todo el
+cant\'on Loja ni de su diversidad ambiental. El dominio previsto del
+proyecto es el cant\'on Loja completo; la cobertura actual es
+\'unicamente esas dos celdas controladas, ambas en la misma parroquia.
+\end{framed}
+
+\newpage
+
+% ============================================================
+\section{Tabla de distribuci\'on}
+% ============================================================
+
+La columna ``Tiempo acumulado'' indica el tiempo transcurrido desde el
+inicio de la exposici\'on al terminar cada diapositiva, asumiendo que
+no hay retrasos. La suma total programada es de 30,0 minutos.
+
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}p{0.65cm}p{3.4cm}p{2.7cm}p{1.6cm}p{1.6cm}p{4.85cm}@{}}
+\toprule
+\textbf{N.\textdegree} & \textbf{T\'itulo} & \textbf{Expositor} &
+\textbf{\shortstack[l]{Tiempo\\asignado}} &
+\textbf{\shortstack[l]{Tiempo\\acumul.}} & \textbf{Prop\'osito} \\
+\midrule
+\endhead
+1 & Portada & Marco & 0,5 min & 0,5 min & Presentar al equipo y el proyecto sin adelantar resultados. \\
+2 & Ruta de la exposici\'on & Marco & 0,5 min & 1,0 min & Anticipar los cinco bloques de la exposici\'on. \\
+3 & Introducci\'on: contexto territorial y ambiental & Marco & 1,5 min & 2,5 min & Fundamentar con fuente verificable la heterogeneidad ambiental de Loja. \\
+4 & Introducci\'on: problema y brecha & Marco & 1,75 min & 4,25 min & Formular la brecha de Ingenier\'ia de Datos que aborda FireForest. \\
+5 & Pregunta, objetivo y alcance & Marco & 2,25 min & 6,5 min & Delimitar honestamente qu\'e responde este avance y qu\'e no. \\
+6 & \'Ambito territorial y localizaci\'on de las celdas & Marco & 0,75 min & 7,25 min & Mostrar con mapa y evidencia PostGIS que las celdas est\'an dentro del cant\'on. \\
+7 & Arquitectura general del sistema & Marco & 1,0 min & 8,25 min & Presentar el flujo completo de la arquitectura en seis etapas. \\
+8 & Implementaci\'on local y colaboraci\'on mediante GitHub & Marco & 0,65 min & 8,9 min & Demostrar que existe c\'odigo real, local y versionado. \\
+9 & Fuentes y variables & Viviana & 1,5 min & 10,4 min & Precisar qu\'e mide cada fuente y en qu\'e variable termina. \\
+10 & Unidad de an\'alisis y granularidad & Viviana & 1,5 min & 11,9 min & Distinguir detecci\'on individual, celda-d\'ia y celda-mes. \\
+11 & Modelo relacional & Viviana & 1,5 min & 13,4 min & Justificar el rol y la clave de cada tabla relacional. \\
+12 & Modelo documental & Viviana & 1,5 min & 14,9 min & Explicar por qu\'e las detecciones se guardan en MongoDB. \\
+13 & Estandarizaci\'on espacial & Viviana & 2,0 min & 16,9 min & Mostrar la convergencia de tres fuentes en una celda com\'un. \\
+14 & Estandarizaci\'on temporal & Viviana & 1,5 min & 18,4 min & Mostrar la convergencia temporal de VIIRS y CHIRPS en celda-mes. \\
+15 & ETL y control de calidad & Viviana & 1,5 min & 19,9 min & Explicar la carga, el control de calidad y el estado de Airflow. \\
+16 & Resultado PostGIS & Carlos & 2,0 min & 21,9 min & Presentar la primera validaci\'on espacial real ejecutada. \\
+17 & Resultado MongoDB & Carlos & 1,85 min & 23,75 min & Presentar la segunda evidencia real, con dos detecciones. \\
+18 & Resultado de integraci\'on SQL & Carlos & 2,25 min & 26,0 min & Demostrar con una prueba deliberada el comportamiento del LEFT JOIN. \\
+19 & Discusi\'on preliminar y limitaciones & Carlos & 2,0 min & 28,0 min & Interpretar los resultados y declarar las limitaciones. \\
+20 & Conclusiones preliminares y pr\'oximos pasos & Carlos & 2,0 min & 30,0 min & Cerrar delimitando logros reales y trabajo pendiente. \\
+21 & Referencias & --- & sin tiempo & 30,0 min & Dejar disponible el respaldo bibliogr\'afico durante las preguntas. \\
+\bottomrule
+\end{longtable}
+
+\newpage
+
+% ============================================================
+\section{Gui\'on detallado, diapositiva por diapositiva}
+% ============================================================
+
+Para cada diapositiva se sigue una estructura uniforme: expositor,
+duraci\'on prevista, prop\'osito, qu\'e aparece en la diapositiva, el
+gui\'on oral completo (listo para pronunciarse), c\'omo explicar los
+elementos visuales, la idea principal que debe recordar la audiencia,
+la transici\'on hacia la siguiente diapositiva y las precauciones
+(incluida la pronunciaci\'on de t\'erminos t\'ecnicos cuando aplica).
+
+\bigskip
+
+% ------------------------------------------------------------
+\section*{Diapositiva 1. Portada}
+\addcontentsline{toc}{section}{Diapositiva 1. Portada}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{0,5 minutos (tiempo acumulado: 0,5 min).}
+\campo{Prop\'osito}{Presentar al equipo, el t\'itulo del proyecto y el
+car\'acter del avance, estableciendo el tono acad\'emico sin adelantar
+resultados.}
+\campo{Qu\'e aparece en la diapositiva}{Los logos de ESPOCH y de la
+Maestr\'ia; el nombre completo de la instituci\'on y del programa; el
+t\'itulo del proyecto; los nombres de los tres integrantes; ``Grupo 4''
+y ``Avance 1 \textbar\ 2026''.}
+
+\begin{guionoral}
+Buenos d\'ias/tardes. Somos el Grupo 4 de la Maestr\'ia en Estad\'istica
+con menci\'on en Ciencia de Datos e Inteligencia Artificial de la
+ESPOCH: Marco Malan, Viviana Pujos y Carlos Chuncho. Presentamos el
+Avance 1 de nuestro Proyecto Integrador, ``Dise\~no de una arquitectura
+h\'ibrida SQL-NoSQL para la integraci\'on y consulta de datos de
+incendios forestales en el cant\'on Loja''. Es un avance de dise\~no e
+implementaci\'on inicial, no un sistema terminado ni un an\'alisis
+definitivo de los incendios de Loja.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Basta con se\~nalar
+brevemente el t\'itulo mientras se lee en voz alta la primera vez que
+aparece completo; no es necesario detenerse en los logos, que solo
+cumplen una funci\'on institucional.}
+\campo{Idea principal que debe recordar la audiencia}{Este es un
+avance de dise\~no e implementaci\'on inicial de un equipo de tres
+personas, no un sistema terminado.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Veamos la ruta que
+seguir\'a la exposici\'on.}
+\campo{Precauciones}{Ninguna afirmaci\'on de resultados en esta
+diapositiva.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 2. Ruta de la exposici\'on}
+\addcontentsline{toc}{section}{Diapositiva 2. Ruta de la exposici\'on}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{0,5 minutos (tiempo acumulado: 1,0 min).}
+\campo{Prop\'osito}{Anticipar la estructura en cinco bloques para que
+la audiencia pueda ubicarse durante toda la exposici\'on.}
+\campo{Qu\'e aparece en la diapositiva}{Cinco cajas numeradas
+verticalmente: Introducci\'on, Metodolog\'ia, Resultados preliminares,
+Discusi\'on preliminar, Conclusiones y pr\'oximos pasos.}
+
+\begin{guionoral}
+La presentaci\'on tiene cinco bloques: Introducci\'on, que incluye el
+contexto ambiental, el problema y la brecha de datos, la pregunta, el
+objetivo, el alcance y la arquitectura del sistema; Metodolog\'ia, el
+bloque m\'as extenso, donde explicamos el dise\~no completo;
+Resultados preliminares, con evidencia real del prototipo; Discusi\'on
+preliminar; y Conclusiones y pr\'oximos pasos.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Recorrer los cinco
+n\'umeros de arriba hacia abajo con la mirada o el puntero, en el mismo
+orden en que aparecen, sin detenerse en ninguno en particular.}
+\campo{Idea principal que debe recordar la audiencia}{La exposici\'on
+sigue una secuencia l\'ogica de cinco bloques, similar a la de un
+art\'iculo cient\'ifico.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Empecemos por el
+bloque de introducci\'on.}
+\campo{Precauciones}{Ninguna; es una diapositiva puramente
+organizativa.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 3. Introducci\'on: contexto territorial y ambiental}
+\addcontentsline{toc}{section}{Diapositiva 3. Introducci\'on: contexto territorial y ambiental}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 2,5 min).}
+\campo{Prop\'osito}{Fundamentar, con una fuente bibliogr\'afica
+verificable, la heterogeneidad ambiental que motiva el proyecto,
+distingui\'endola claramente del prototipo controlado.}
+\campo{Qu\'e aparece en la diapositiva}{Cinco vi\~netas sobre el
+cant\'on Loja y su gradiente altitudinal; un diagrama con las tres
+zonas del estudio (San Lucas, Punzara, Malacatos) convergiendo en
+``Cant\'on Loja''; la captura real del art\'iculo en Springer Nature
+Link, con t\'itulo, fecha de publicaci\'on, volumen y n\'umero de
+art\'iculo, autores e indicaci\'on de acceso abierto; y la cita con el
+DOI enlazado.}
+
+\begin{guionoral}
+El cant\'on Loja est\'a en los Andes tropicales del sur de Ecuador, con
+un relieve monta\~noso que genera transiciones ambientales marcadas en
+distancias cortas: temperatura, precipitaci\'on, humedad, vegetaci\'on
+y combustibles cambian con la altitud. Esto se apoya en el estudio de
+Balaguer-Beser y colegas, publicado en 2026 en la revista Fire
+Ecology, que examin\'o el comportamiento del fuego en tres zonas
+contrastantes de Loja --- Malacatos, Punzara y San Lucas --- a lo
+largo de un gradiente altitudinal de aproximadamente 1549 a 2757
+metros sobre el nivel del mar. El esquema que ven a la derecha es una
+elaboraci\'on propia para ilustrar esas tres zonas; no es la figura
+original del art\'iculo. Abajo les muestro la captura real de la
+publicaci\'on en Springer Nature Link: el art\'iculo ``Altitudinal
+variation in fire behavior in Andean ecosystems in southern
+Ecuador'', en la revista Fire Ecology, volumen 22, art\'iculo 46,
+publicado el 23 de marzo de 2026 en acceso abierto, firmado por
+Balaguer-Beser y colegas. El DOI que ven es un enlace real:
+10.1186/s42408-026-00470-y. Esta captura respalda visualmente que el
+contexto territorial que acabo de describir proviene de una fuente
+verificable, no de una afirmaci\'on sin sustento. Una precisi\'on
+importante: este art\'iculo aporta el contexto ambiental y
+altitudinal del cant\'on; no determina ni describe la ubicaci\'on de
+las dos celdas controladas de nuestro prototipo, que ver\'an m\'as
+adelante.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Presentar primero las
+vi\~netas y el diagrama de zonas, que son elaboraci\'on propia, y solo
+despu\'es se\~nalar la captura del art\'iculo como evidencia de que
+esa informaci\'on proviene de una publicaci\'on real; seguir con el
+puntero el t\'itulo del art\'iculo en la captura mientras se lee en
+voz alta, y terminar se\~nalando el DOI subrayado.}
+\campo{Idea principal que debe recordar la audiencia}{La variabilidad
+altitudinal de Loja reorganiza las condiciones ambientales que
+controlan el fuego, y ese contexto proviene de un art\'iculo publicado
+y verificable.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Esta heterogeneidad
+ambiental es exactamente el punto de partida de nuestro problema.}
+\campo{Precauciones}{Estos hallazgos corresponden a tres zonas de
+estudio espec\'ificas; no deben generalizarse a todo el territorio del
+cant\'on Loja. No sugerir en ning\'un momento que las dos celdas
+controladas del prototipo corresponden a Malacatos, Punzara o San
+Lucas: el art\'iculo aporta contexto, no ubicaci\'on. Pronunciaci\'on:
+``s.\,n.\,m.'' se lee ``sobre el nivel del mar''; el DOI puede leerse
+d\'igito por d\'igito o como ``DOI uno uno ocho seis, ese cuatro dos
+cuatro cero ocho, cero dos seis, cero cero cuatro siete cero, gui\'on
+Y''.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 4. Introducci\'on: problema y brecha}
+\addcontentsline{toc}{section}{Diapositiva 4. Introducci\'on: problema y brecha}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{1,75 minutos (tiempo acumulado: 4,25 min).}
+\campo{Prop\'osito}{Formular la brecha de Ingenier\'ia de Datos que el
+proyecto aborda, distingui\'endola con claridad del problema ambiental
+de la literatura.}
+\campo{Qu\'e aparece en la diapositiva}{Un recuadro verde con el
+p\'arrafo del problema; debajo, una cadena de cuatro cajas conectadas
+por flechas: Heterogeneidad ambiental $\rightarrow$ Datos
+heterog\'eneos $\rightarrow$ Dificultad de integraci\'on $\rightarrow$
+Brecha reproducible.}
+
+\begin{guionoral}
+L\'eanlo conmigo: la heterogeneidad territorial y ambiental de Loja
+condiciona el an\'alisis del comportamiento del fuego. Para
+estudiarla deben integrarse observaciones espaciales, clim\'aticas y
+satelitales que difieren en formato, resoluci\'on y granularidad. La
+carencia de un flujo integrado, trazable y reproducible constituye la
+brecha de Ingenier\'ia de Datos que aborda FireForest. El diagrama de
+abajo resume esa cadena: heterogeneidad ambiental lleva a datos
+heterog\'eneos, que generan dificultad de integraci\'on, que se
+traduce en una brecha reproducible. El contexto ambiental est\'a
+respaldado por Balaguer-Beser et al.; la formulaci\'on de la brecha de
+datos es elaboraci\'on propia de este equipo.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Leer el recuadro
+superior completo y despacio, est\'a dise\~nado para leerse casi
+literalmente; despu\'es recorrer la cadena de cuatro cajas de izquierda
+a derecha, nombrando cada eslab\'on en el mismo orden en que aparece.}
+\campo{Idea principal que debe recordar la audiencia}{El problema
+ambiental (de la literatura) y el problema de Ingenier\'ia de Datos
+(de este equipo) son distintos, y esta diapositiva los conecta en una
+sola secuencia argumental.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Frente a esta
+brecha, formulamos una pregunta, un objetivo y un alcance concretos
+para este primer avance.}
+\campo{Precauciones}{No atribuir al art\'iculo de Fire Ecology el
+dise\~no SQL-NoSQL de FireForest; ese dise\~no es elaboraci\'on propia
+del equipo. El pie de la diapositiva cita \'unicamente a
+Balaguer-Beser et al.\ (2026) y la elaboraci\'on propia del equipo; no
+se menciona ning\'un inventario interno como respaldo cient\'ifico.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 5. Pregunta, objetivo y alcance}
+\addcontentsline{toc}{section}{Diapositiva 5. Pregunta, objetivo y alcance}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{2,25 minutos (tiempo acumulado: 6,5 min).}
+\campo{Prop\'osito}{Delimitar honestamente qu\'e responde este avance y
+qu\'e queda pendiente, incluyendo la delimitaci\'on territorial que se
+repetir\'a de forma breve en los resultados.}
+\campo{Qu\'e aparece en la diapositiva}{Un recuadro verde con la
+pregunta principal; un recuadro color tierra con el objetivo general;
+un texto secundario con la pregunta anal\'itica futura; dos columnas
+(``Incluye este Avance 1'' / ``Todav\'ia no incluye''); y un recuadro
+naranja final con la delimitaci\'on de dominio previsto y cobertura
+actual.}
+
+\begin{guionoral}
+Formulamos dos preguntas de naturaleza distinta. La principal, que s\'i
+respondemos en este Avance 1, es de arquitectura: \textquestiondown
+c\'omo dise\~nar una arquitectura h\'ibrida SQL-NoSQL que permita
+integrar, almacenar y consultar de forma reproducible datos
+heterog\'eneos de incendios forestales en Loja? Nuestro objetivo
+general es dise\~nar esa arquitectura h\'ibrida para integrar VIIRS,
+CHIRPS y una malla espacial de Loja, construyendo un dataset
+anal\'itico reproducible por celda y mes. La pregunta derivada, que
+solo podremos responder con datos reales en etapas posteriores, es:
+\textquestiondown existe relaci\'on entre la precipitaci\'on mensual y
+la ocurrencia de detecciones de incendio por celda? Decimos
+``detecciones'', no ``incendios'': VIIRS identifica detecciones de
+calor, no un conteo directo de incendios independientes. El alcance:
+este avance s\'i incluye la arquitectura h\'ibrida, los modelos SQL y
+NoSQL, datos controlados y validaciones preliminares; todav\'ia no
+incluye un sistema operativo, alerta temprana, datos reales completos,
+modelo predictivo ni relaci\'on causal. Y quiero subrayar una
+delimitaci\'on que van a ver repetida de forma breve en los
+resultados: el dominio previsto de este proyecto es el cant\'on Loja
+completo, pero la cobertura actual del prototipo son \'unicamente dos
+celdas controladas, usadas solo para validar el flujo de datos; no
+representan el territorio cantonal.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Leer la pregunta
+principal y el objetivo en ese orden, marcando visualmente la
+diferencia de color entre ambos recuadros; mencionar la pregunta
+futura sin detenerse demasiado; recorrer las dos columnas con dos
+frases cortas cada una; cerrar se\~nalando el recuadro naranja como la
+idea que se repetir\'a en los resultados.}
+\campo{Idea principal que debe recordar la audiencia}{Hay una pregunta
+de arquitectura, que s\'i se responde en este avance, y una pregunta
+anal\'itica futura que todav\'ia no; el dominio previsto es el cant\'on
+Loja, pero la cobertura actual son dos celdas controladas.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Antes de entrar al
+detalle metodol\'ogico, veamos exactamente d\'onde se ubican esas dos
+celdas dentro del cant\'on.}
+\campo{Precauciones}{Ninguna adicional; esta diapositiva es
+precisamente la que previene interpretaciones excesivas en el resto de
+la charla. Pronunciaci\'on: ``VIIRS'' se pronuncia /virs/, como en la
+comunidad cient\'ifica.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 6. \'Ambito territorial y localizaci\'on de las celdas del prototipo}
+\addcontentsline{toc}{section}{Diapositiva 6. \'Ambito territorial y localizaci\'on de las celdas del prototipo}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{0,75 minutos (tiempo acumulado: 7,25 min).}
+\campo{Prop\'osito}{Mostrar, con un mapa reproducible y evidencia
+PostGIS real, que las dos celdas controladas del prototipo est\'an
+verificadas dentro del cant\'on Loja, antes de entrar al detalle
+metodol\'ogico.}
+\campo{Qu\'e aparece en la diapositiva}{Un mapa (no una captura de
+terceros ni una imagen decorativa) con el l\'imite del cant\'on Loja,
+los l\'imites de sus 14 parroquias, el cant\'on Catamayo como
+contexto, la ubicaci\'on de \texttt{LJ\_TEST\_001} y
+\texttt{LJ\_TEST\_002}, un recuadro ampliado con los dos pol\'igonos
+de 500$\times$500 m, norte, escala, leyenda, EPSG y la fuente
+institucional; a la derecha, la Tabla 1 con longitud, latitud,
+parroquia y distancia al l\'imite de cada celda.}
+
+\begin{guionoral}
+El dominio territorial previsto para FireForest es el cant\'on Loja
+completo. Para validar el prototipo usamos dos celdas controladas de
+500 por 500 metros, y antes de mostrarles cualquier resultado
+quisimos verificar d\'onde caen exactamente. Este mapa se gener\'o de
+forma reproducible a partir de la capa oficial del INEC, el Marco
+Geoestad\'istico Nacional, y de las mismas geometr\'ias que usa
+nuestra base de datos: no es una captura de Google Maps ni una imagen
+decorativa. El pol\'igono verde es el l\'imite del cant\'on Loja,
+reconstruido a partir de esa capa oficial; las l\'ineas finas son sus
+catorce parroquias; el contorno punteado a la izquierda es el cant\'on
+vecino, Catamayo, que dejamos como referencia de contexto. Las dos
+celdas, \texttt{LJ\_TEST\_001} y \texttt{LJ\_TEST\_002}, est\'an
+marcadas cerca del borde noroccidental del cant\'on; el recuadro de la
+derecha las ampl\'ia para que se distingan sus dos pol\'igonos de 500
+por 500 metros. Ambas celdas caen dentro de la parroquia El Cisne, con
+un margen de m\'as de un kil\'ometro respecto al l\'imite cantonal
+--eso es lo que muestra la Tabla 1--. No las elegimos a simple vista:
+se seleccionaron de una malla sistem\'atica de 500 metros, ancladas a
+coordenadas exactas, ordenando las celdas candidatas por su coordenada
+este y luego por la norte, y tomando las dos primeras que cumpl\'ian
+estar completamente dentro del cant\'on con ese margen de seguridad.
+Por eso puedo afirmar que no son ``cualquier celda'': tienen
+coordenadas y geometr\'ia determinadas y verificadas. Dicho esto,
+siguen siendo solo dos ubicaciones dentro de una sola parroquia: no
+fueron elegidas para representar la diversidad ambiental, altitudinal
+o clim\'atica del cant\'on, y sus resultados --que ver\'a Carlos m\'as
+adelante-- validan el funcionamiento t\'ecnico del prototipo, no el
+comportamiento ambiental de Loja.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar primero el
+contorno verde completo del cant\'on, despu\'es las l\'ineas
+parroquiales, despu\'es el contorno punteado de Catamayo como
+contexto; se\~nalar la ubicaci\'on aproximada de las celdas en el mapa
+general y de inmediato dirigir la atenci\'on al recuadro ampliado,
+donde s\'i se distinguen los dos pol\'igonos; cerrar se\~nalando la
+fila de la Tabla 1 con la distancia al l\'imite.}
+\campo{Idea principal que debe recordar la audiencia}{El dominio del
+proyecto es el cant\'on Loja; las dos celdas de prueba est\'an
+verificadas espacialmente dentro de su l\'imite oficial, en la
+parroquia El Cisne, y no representan la diversidad del cant\'on.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con el \'ambito
+territorial verificado, entremos ya al detalle metodol\'ogico: primero,
+la arquitectura general del sistema.}
+\campo{Precauciones}{No mencionar en esta diapositiva que existieron
+celdas anteriores fuera del cant\'on; esa es informaci\'on de control
+de calidad interno, no material de exposici\'on, y solo se menciona si
+el jurado pregunta directamente (ver secci\'on de preguntas
+probables). No describir el cant\'on Catamayo con detalle: se muestra
+\'unicamente como referencia visual de contexto. No afirmar que estas
+dos celdas permiten conclusiones ambientales sobre el cant\'on.
+Pronunciaci\'on: ``INEC'' se pronuncia como una palabra, tal como se
+dice habitualmente en Ecuador.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 7. Arquitectura general del sistema}
+\addcontentsline{toc}{section}{Diapositiva 7. Arquitectura general del sistema}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{1,0 minuto (tiempo acumulado: 8,25 min).}
+\campo{Prop\'osito}{Presentar, como apertura expl\'icita del bloque de
+Metodolog\'ia, el flujo completo de la arquitectura en seis etapas
+numeradas.}
+\campo{Qu\'e aparece en la diapositiva}{Seis cajas verticales numeradas
+de 1 a 6 (Fuentes originales, Adquisici\'on e ingesta, Validaci\'on y
+transformaci\'on, MongoDB / PostgreSQL-PostGIS en paralelo,
+Integraci\'on, Dataset celda-mes), conectadas por flechas de arriba
+hacia abajo, con una bifurcaci\'on diagonal en la etapa 3 hacia la 4 y
+una convergencia diagonal de la etapa 4 hacia la 5; debajo, la nota
+sobre el m\'etodo previsto de adquisici\'on.}
+
+\begin{guionoral}
+Con esta diapositiva iniciamos el bloque de Metodolog\'ia. El diagrama
+resume la arquitectura completa, de arriba hacia abajo, en seis
+etapas numeradas junto a cada bloque. Uno, partimos de las fuentes
+originales: NASA FIRMS para VIIRS, el Climate Hazards Center para
+CHIRPS, y el l\'imite institucional del INEC que acaban de ver en el
+mapa territorial, usado hasta ahora para verificaci\'on, con la malla
+completa de producci\'on para todo el cant\'on todav\'ia pendiente.
+Dos, la adquisici\'on e ingesta. Tres, la validaci\'on
+y transformaci\'on. Ah\'i el flujo se separa visiblemente en dos
+flechas diagonales, sin ninguna l\'inea horizontal entre ellas: una
+hacia MongoDB, que guarda detecciones individuales y metadatos; otra
+hacia PostgreSQL con PostGIS, que organiza celdas, calendario, clima y
+agregados diarios --- esa es la etapa cuatro, almacenamiento. Ambas
+ramas convergen, tambi\'en mediante dos flechas diagonales
+independientes que llegan a puntos distintos del bloque, en la etapa
+cinco, la integraci\'on por \texttt{celda\_id} y fecha. Y la etapa seis
+es el producto: el dataset anal\'itico celda-mes. Debajo del diagrama
+aclaramos el m\'etodo previsto de adquisici\'on: API o descarga
+directa de NASA FIRMS y del repositorio CHIRPS. Quiero ser preciso: no
+decimos que esa adquisici\'on ya se ejecut\'o, porque no existe esa
+evidencia en FireForest; el prototipo actual utiliza datos controlados
+cargados desde archivos locales. Y no mencionamos Google Earth Engine
+porque su uso pertenece a otro proyecto y no est\'a documentado en
+este repositorio.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Seguir estrictamente el
+orden num\'erico 1 a 6 con el puntero, deteni\'endose un instante en la
+bifurcaci\'on (etapa 3 a 4) para se\~nalar las dos flechas diagonales y
+aclarar verbalmente que no hay una l\'inea horizontal entre MongoDB y
+PostgreSQL; repetir el gesto en la convergencia (etapa 4 a 5).}
+\campo{Idea principal que debe recordar la audiencia}{Un \'unico flujo,
+de arriba hacia abajo y en seis etapas, conecta las fuentes originales
+con el producto anal\'itico final, mostrando d\'onde se separan y
+d\'onde vuelven a unirse MongoDB y PostgreSQL/PostGIS.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con esta
+arquitectura general clara, les muestro brevemente c\'omo luce
+implementada en nuestro entorno de desarrollo.}
+\campo{Precauciones}{No afirmar que la adquisici\'on por API ya fue
+ejecutada; es el m\'etodo previsto, todav\'ia no realizado. No
+mencionar Google Earth Engine, porque no existe evidencia de su uso en
+este repositorio. No afirmar que la malla completa del cant\'on ya
+est\'a generada: el INEC se us\'o para verificar dos celdas, no para
+producir la malla operativa completa.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 8. Implementaci\'on local y colaboraci\'on mediante GitHub}
+\addcontentsline{toc}{section}{Diapositiva 8. Implementaci\'on local y colaboraci\'on mediante GitHub}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Marco Vinicio Malan Mullo.}
+\campo{Duraci\'on prevista}{0,65 minutos (tiempo acumulado: 8,9 min).}
+\campo{Prop\'osito}{Demostrar, con evidencia visual real, que el
+prototipo tiene c\'odigo real, organizado localmente y versionado en un
+repositorio remoto.}
+\campo{Qu\'e aparece en la diapositiva}{Dos columnas con capturas de
+pantalla reales: a la izquierda, el \'arbol de carpetas de VS Code
+junto a un fragmento de \texttt{cargar\_postgres.py}; a la derecha, el
+repositorio FireForest en GitHub con su estructura de carpetas.}
+
+\begin{guionoral}
+FireForest se desarrolla localmente en VS Code mediante una estructura
+modular que separa las diferentes etapas del proyecto. A la izquierda
+ven el \'arbol completo del repositorio
+\texttt{Proyecto\-\_integrador} --- documentaci\'on inicial, datos,
+PostgreSQL/PostGIS, MongoDB,
+ingesta, calidad de datos, ETL e integraci\'on, Airflow, Spark,
+an\'alisis, resultados y entrega final --- junto con un fragmento
+legible de \texttt{cargar\_postgres.py}, el script que conecta con
+PostgreSQL y ejecuta el esquema y la carga de los datos controlados. A
+la derecha, el repositorio remoto FireForest en GitHub, con la misma
+ruta \texttt{Tareas/Proyecto\_integrador}. El repositorio remoto
+centraliza el c\'odigo y la documentaci\'on, facilita el intercambio de
+avances entre los integrantes y mantiene el historial de versiones;
+GitHub almacena y versiona el c\'odigo, la ejecuci\'on ocurre en el
+entorno local. Ambas capturas son evidencia de implementaci\'on y
+organizaci\'on del proyecto; no sustituyen al diagrama de arquitectura
+que acaban de ver.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar primero la
+columna izquierda y recorrer brevemente el \'arbol de carpetas de
+arriba hacia abajo antes de mencionar el fragmento de c\'odigo;
+despu\'es se\~nalar la columna derecha y mencionar que es el mismo
+repositorio visto desde GitHub, sin releer el \'arbol de carpetas por
+segunda vez.}
+\campo{Idea principal que debe recordar la audiencia}{El prototipo no
+es solo un diagrama: existe c\'odigo real, desarrollado localmente y
+versionado en un repositorio remoto que permite la colaboraci\'on del
+equipo.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con la
+arquitectura, su implementaci\'on y su control de versiones mostrados,
+le cedo la palabra a Viviana, quien detallar\'a cada componente de la
+metodolog\'ia, empezando por las fuentes y variables.}
+\campo{Precauciones}{No presentar estas capturas como si fueran la
+arquitectura l\'ogica; son evidencia complementaria de c\'odigo,
+organizaci\'on del repositorio y control de versiones. La captura de
+GitHub demuestra la existencia del repositorio remoto y su capacidad
+de sincronizar el trabajo del equipo; no se afirma que los tres
+integrantes est\'en enlazados o hayan contribuido con commits propios,
+porque esa evidencia espec\'ifica no fue verificada. No decir que
+GitHub ejecuta el proyecto: GitHub almacena y versiona el c\'odigo, la
+ejecuci\'on ocurre en el entorno local o en los servicios que se
+configuren.}
+
+\separadordiapositiva
+
+\begin{cierrebloque}{Marco Vinicio Malan Mullo, fin del bloque I. Introducci\'on y apertura de II. Metodolog\'ia}
+\textbf{Tiempo acumulado:} 8,9 minutos.
+
+\textbf{Margen disponible:} ninguno adicional; el bloque de
+introducci\'on est\'a ajustado al tiempo programado.
+
+\textbf{Si la exposici\'on se atrasa}, puede resumirse la lectura de las
+dos columnas de la diapositiva 5 (``Incluye'' / ``Todav\'ia no
+incluye'') a una sola frase por columna; en la diapositiva 6 puede
+omitirse la lectura de la Tabla 1 fila por fila si el mapa ya muestra
+las etiquetas de las celdas con claridad; y en la diapositiva 8 puede
+omitirse la enumeraci\'on completa de las carpetas del \'arbol de
+VS Code, mencionando solo que est\'a organizado por etapas y se\~nalando
+directamente el fragmento de c\'odigo.
+\end{cierrebloque}
+
+% ------------------------------------------------------------
+\section*{Diapositiva 9. Fuentes y variables}
+\addcontentsline{toc}{section}{Diapositiva 9. Fuentes y variables}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 10,4 min).}
+\campo{Prop\'osito}{Establecer con precisi\'on, antes de entrar en
+detalle metodol\'ogico, qu\'e mide cada fuente y en qu\'e variable
+final del esquema termina.}
+\campo{Qu\'e aparece en la diapositiva}{La Tabla 2, ``Fuentes,
+variables y transformaciones del proyecto'' (fuente, variable
+original, significado/unidad, resoluci\'on, transformaci\'on, variable
+final), y una lista de aclaraciones sobre m\'etodo de acceso, malla y
+calidad pendiente.}
+
+\begin{guionoral}
+Gracias, Marco. Antes de la tabla, una precisi\'on sobre el origen de
+los datos: VIIRS lo distribuye NASA FIRMS, accesible mediante su API o
+descarga directa por \'area y periodo; CHIRPS se descarga directamente
+del repositorio del Climate Hazards Center. Ninguna de las dos pasa
+por Google Earth Engine en esta arquitectura. Ahora s\'i, la Tabla 2,
+``Fuentes, variables y transformaciones del proyecto'', muestra
+exactamente qu\'e medimos, con qu\'e unidad, con qu\'e resoluci\'on y
+c\'omo se transforma cada variable, usando los nombres reales de
+nuestro esquema. VIIRS aporta \texttt{frp\_mw} por detecci\'on, que
+agregamos diaria y mensualmente hacia \texttt{frp\_suma\_mw} y
+\texttt{frp\_maxima\_mw}; sus coordenadas se asignan espacialmente a un
+\texttt{celda\_id}. CHIRPS aporta precipitaci\'on diaria en p\'ixeles de
+unos 5 kil\'ometros, que agregamos mensualmente. La malla parte de
+longitud y latitud en grados y se transforma, mediante
+\texttt{ST\_SetSRID}, \texttt{ST\_Transform} y \texttt{ST\_MakeEnvelope},
+en la geometr\'ia \texttt{geom} en metros. El calendario deriva a\~no y
+mes de cada fecha. Tres aclaraciones adicionales: la malla actual son
+dos celdas controladas, ya verificadas con la capa del INEC como
+vimos en la diapositiva anterior, aunque la malla completa de
+producci\'on todav\'ia est\'a pendiente; el producto VIIRS exacto
+tambi\'en est\'a pendiente; y CHIRPS, al asignarse a la malla de 500
+metros, no mejora su resoluci\'on real.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{No leer la tabla fila
+por fila; describir primero, de forma oral, el origen y el m\'etodo de
+acceso de VIIRS y CHIRPS, y luego se\~nalar solo las columnas
+``Transformaci\'on'' y ``Variable final'' como el resultado que
+realmente importa retener.}
+\campo{Idea principal que debe recordar la audiencia}{Cada fuente
+aporta una variable con una unidad, resoluci\'on y transformaci\'on
+espec\'ificas hacia una variable final concreta del esquema.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con las fuentes
+claras, veamos por qu\'e la unidad de an\'alisis final --- celda-mes
+--- no es lo mismo que una detecci\'on individual.}
+\campo{Precauciones}{No mencionar Google Earth Engine. Pronunciaci\'on:
+``FRP'' se lee letra por letra, efe-erre-pe.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 10. Unidad de an\'alisis y granularidad}
+\addcontentsline{toc}{section}{Diapositiva 10. Unidad de an\'alisis y granularidad}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 11,9 min).}
+\campo{Prop\'osito}{Distinguir los tres niveles de granularidad de los
+datos para que la audiencia entienda por qu\'e ``celda-mes'' no es lo
+mismo que una detecci\'on individual.}
+\campo{Qu\'e aparece en la diapositiva}{Tres cajas conectadas por
+flechas (Detecci\'on individual $\rightarrow$ Celda-d\'ia $\rightarrow$
+Celda-mes) y tres vi\~netas que explican por qu\'e no son
+equivalentes.}
+
+\begin{guionoral}
+El primer nivel es la detecci\'on individual, que MongoDB conserva con
+celda y fecha exactas, incluida la hora. El segundo es la celda-d\'ia:
+\texttt{fact\_incendio} y \texttt{fact\_clima}, en PostgreSQL, agregan
+esas detecciones a un registro diario por celda, con la restricci\'on
+\texttt{UNIQUE(celda\_id, fecha\_id)}. El tercero es la celda-mes, el
+dataset anal\'itico, obtenido agregando esos registros diarios con
+\texttt{GROUP BY} a\~no y mes. No son equivalentes: al agregar por d\'ia
+se pierde el detalle de cu\'antas detecciones hubo y a qu\'e hora
+exacta; nunca existe en las tablas base una fila pre-agregada por mes;
+y el agregado mensual puede ocultar variaci\'on diaria real.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Recorrer las tres cajas
+de izquierda a derecha en el mismo orden en que se leen las vi\~netas
+debajo, evitando volver atr\'as una vez avanzada la explicaci\'on.}
+\campo{Idea principal que debe recordar la audiencia}{Existen tres
+niveles de granularidad y no son equivalentes entre s\'i; se pierde
+informaci\'on real en cada paso de agregaci\'on.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con esta
+distinci\'on clara, veamos c\'omo se organiza el lado relacional del
+sistema.}
+\campo{Precauciones}{Ninguna adicional.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 11. Modelo relacional}
+\addcontentsline{toc}{section}{Diapositiva 11. Modelo relacional}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 13,4 min).}
+\campo{Prop\'osito}{Presentar la Tabla 3 justificando el rol y la clave
+de cada tabla del modelo relacional.}
+\campo{Qu\'e aparece en la diapositiva}{La Tabla 3, ``Estructura del
+modelo relacional'', con cuatro filas (\texttt{dim\_celda},
+\texttt{dim\_fecha}, \texttt{fact\_incendio}, \texttt{fact\_clima}) y
+una nota final sobre la ausencia de FK directa entre las dos tablas de
+hechos.}
+
+\begin{guionoral}
+La Tabla 3, ``Estructura del modelo relacional'', resume las cuatro
+tablas. \texttt{dim\_celda} es el cat\'alogo espacial: cada fila es una
+celda controlada de 500 por 500 metros, con \texttt{celda\_id} como
+clave primaria. \texttt{dim\_fecha} es el calendario: cada fila es un
+d\'ia. \texttt{fact\_incendio} almacena las detecciones diarias
+agregadas: cada fila es una celda en un d\'ia, con clave \'unica
+\texttt{celda\_id} m\'as \texttt{fecha\_id}, y claves for\'aneas hacia
+ambas dimensiones. \texttt{fact\_clima} tiene la misma estructura para
+la precipitaci\'on diaria. Un punto importante: \texttt{fact\_incendio}
+y \texttt{fact\_clima} no tienen clave for\'anea entre s\'i; se cruzan
+mediante \texttt{JOIN} cuando se necesita comparar detecciones y clima.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar primero las
+dos dimensiones (arriba de la tabla) y despu\'es las dos tablas de
+hechos (abajo); terminar se\~nalando la nota inferior para aclarar que
+el cruce entre incendio y clima se hace por \texttt{JOIN}, no por una
+relaci\'on f\'isica.}
+\campo{Idea principal que debe recordar la audiencia}{Cuatro tablas
+relacionales, cada una con una funci\'on y una clave bien definidas;
+las dos tablas de hechos se cruzan por consulta, no por dise\~no
+f\'isico.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Ese es el lado
+relacional. Veamos ahora c\'omo se estructura el lado documental, en
+MongoDB.}
+\campo{Precauciones}{Ninguna adicional.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 12. Modelo documental}
+\addcontentsline{toc}{section}{Diapositiva 12. Modelo documental}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 14,9 min).}
+\campo{Prop\'osito}{Explicar por qu\'e las detecciones individuales se
+almacenan en MongoDB y corregir con precisi\'on qu\'e campo de calidad
+usa realmente la consulta.}
+\campo{Qu\'e aparece en la diapositiva}{Un documento JSON real de la
+colecci\'on \texttt{detecciones\_viirs} a la izquierda; tres vi\~netas a
+la derecha sobre los objetos anidados, el v\'inculo l\'ogico con
+\texttt{celda\_id} y el campo de calidad realmente utilizado.}
+
+\begin{guionoral}
+Este es un documento real de nuestra colecci\'on
+\texttt{detecciones\_viirs}: tiene un identificador de detecci\'on, la
+celda, la fecha, la potencia radiativa \texttt{frp\_mw}, el campo
+\texttt{fire\_mask}, y dos objetos anidados: \texttt{coordenadas}, con
+longitud y latitud, y \texttt{calidad}, con el indicador
+\texttt{valida}. Estos objetos anidados pueden ganar o perder campos
+entre versiones del producto VIIRS sin romper el esquema, que es
+justamente la ventaja de un modelo documental. El v\'inculo con
+\texttt{celda\_id} es l\'ogico, no una clave for\'anea f\'isica: MongoDB
+no referencia tablas de PostgreSQL; la integraci\'on entre ambos
+motores se realiza mediante procesos de ETL o ELT que cruzan por
+\texttt{celda\_id} y fecha, no mediante una relaci\'on autom\'atica de
+base de datos. Sobre el campo de calidad, quiero ser preciso: el
+prototipo filtra los documentos mediante \texttt{calidad.valida=true},
+tal como lo hace \texttt{consultas\_mongodb.js}; el campo
+\texttt{fire\_mask} se conserva en el documento como atributo de la
+detecci\'on, pero la consulta actual no filtra directamente por \'el.
+El producto VIIRS definitivo y el criterio definitivo de calidad
+deber\'an confirmarse antes de utilizar datos reales.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar el documento
+JSON completo primero, deteni\'endose brevemente en los objetos
+anidados \texttt{coordenadas} y \texttt{calidad}; despu\'es pasar a las
+tres vi\~netas de la derecha en orden, dando \'enfasis especial a la
+tercera, que es la correcci\'on precisa sobre el campo de calidad.}
+\campo{Idea principal que debe recordar la audiencia}{MongoDB conserva
+la detecci\'on VIIRS con su estructura anidada original, vinculada
+l\'ogicamente --- no f\'isicamente --- a la malla; la consulta filtra
+por \texttt{calidad.valida}, no por \texttt{fire\_mask}.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con ambos modelos
+definidos, veamos c\'omo estandarizamos el espacio para que convivan.}
+\campo{Precauciones}{No decir ``el campo de calidad usado hoy es
+\texttt{fire\_mask}''; esa afirmaci\'on no coincide con la consulta
+real. El campo que efectivamente filtra es \texttt{calidad.valida}.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 13. Estandarizaci\'on espacial}
+\addcontentsline{toc}{section}{Diapositiva 13. Estandarizaci\'on espacial}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{2,0 minutos (tiempo acumulado: 16,9 min).}
+\campo{Prop\'osito}{Mostrar que tres fuentes con formatos y
+resoluciones distintas convergen en una sola referencia espacial
+com\'un: la celda.}
+\campo{Qu\'e aparece en la diapositiva}{Tres ecuaciones a la izquierda
+y sus definiciones a la derecha; debajo, tres l\'ineas paralelas
+(VIIRS, Malla, CHIRPS) de cuatro cajas cada una; al final, la idea
+central en verde.}
+
+\begin{center}
+\small
+$(x_i, y_i) = T_{4326\to32717}(\lambda_i, \varphi_i)$\\[2pt]
+$C_i = [x_i{-}250,\, x_i{+}250]\times[y_i{-}250,\, y_i{+}250]$\\[2pt]
+$A(C_i) = 500\,\text{m}\times500\,\text{m} = 250\,000\,\text{m}^2$
+\end{center}
+
+\begin{guionoral}
+Para construir cada celda partimos de longitud y latitud en grados, en
+el sistema EPSG 4326, y las transformamos al sistema EPSG 32717, en
+metros, apropiado para Ecuador continental. Sobre ese punto ya en
+metros construimos un cuadrado de 500 por 500 metros centrado en \'el,
+cuya \'area es exactamente 250 mil metros cuadrados, es decir, 0,25
+kil\'ometros cuadrados. En c\'odigo, esto son tres funciones
+encadenadas: \texttt{ST\_SetSRID} fija el sistema de referencia
+original, \texttt{ST\_Transform} reproyecta, y \texttt{ST\_MakeEnvelope}
+construye el rect\'angulo final. Debajo, tres l\'ineas paralelas
+muestran el mismo proceso por fuente: VIIRS pasa de un punto en EPSG
+4326 a una reproyecci\'on, una asignaci\'on espacial y finalmente un
+\texttt{celda\_id}; la malla pasa de su centro o l\'imite a EPSG 32717,
+a la construcci\'on del pol\'igono de 500 por 500 metros, y a
+\texttt{dim\_celda.geom}; CHIRPS pasa de un p\'ixel de unos 0,05
+grados a una superposici\'on espacial, una asignaci\'on a celdas, y a
+la precipitaci\'on por celda. La idea central: la estandarizaci\'on
+espacial lleva detecciones, celdas y precipitaci\'on a una referencia
+com\'un basada en \texttt{celda\_id}. Una aclaraci\'on importante: la
+asignaci\'on de CHIRPS a celdas de 500 metros no aumenta su
+resoluci\'on espacial real; varias celdas vecinas terminan compartiendo
+el mismo valor de precipitaci\'on.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Leer las tres ecuaciones
+se\~nal\'andolas de arriba hacia abajo sin detenerse en el formalismo
+matem\'atico; luego recorrer las tres l\'ineas paralelas de izquierda a
+derecha, una fila a la vez, se\~nalando que las tres terminan en un
+resultado relacionado con \texttt{celda\_id}.}
+\campo{Idea principal que debe recordar la audiencia}{Tres fuentes con
+formatos y resoluciones distintas --- VIIRS, la malla y CHIRPS ---
+convergen en una sola referencia espacial com\'un: la celda.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Resuelto el
+espacio, veamos c\'omo estandarizamos el tiempo.}
+\campo{Precauciones}{Pronunciaci\'on: ``EPSG'' se lee letra por letra,
+e-pe-ese-je.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 14. Estandarizaci\'on temporal}
+\addcontentsline{toc}{section}{Diapositiva 14. Estandarizaci\'on temporal}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 18,4 min).}
+\campo{Prop\'osito}{Mostrar que VIIRS y CHIRPS convergen en una
+granularidad diaria com\'un antes de agregarse por celda y mes, usando
+dos flujos horizontales que no se cruzan.}
+\campo{Qu\'e aparece en la diapositiva}{Cuatro ecuaciones arriba a la
+izquierda y sus definiciones arriba a la derecha; dos filas
+horizontales paralelas (VIIRS, CHIRPS) de cinco cajas cada una; a la
+derecha, un \'unico bloque ``Dataset anal\'itico celda-mes'' que recibe
+dos flechas independientes; abajo, la idea central y la advertencia
+sobre cero y NULL.}
+
+\begin{center}
+\small
+$N_{i,m} = \displaystyle\sum_{d \in m} N_{i,d}$ \qquad
+$\mathrm{FRP}^{\mathrm{suma}}_{i,m} = \displaystyle\sum_{d \in m} \mathrm{FRP}_{i,d}$\\[4pt]
+$\mathrm{FRP}^{\max}_{i,m} = \displaystyle\max_{d \in m}\bigl(\mathrm{FRP}^{\max}_{i,d}\bigr)$ \qquad
+$P_{i,m} = \displaystyle\sum_{d \in m} P_{i,d}$
+\end{center}
+
+\textbf{Definiciones:} $i$: celda espacial. $d$: d\'ia. $m$: mes.
+$N_{i,d}$: n\'umero de detecciones en la celda $i$ durante el d\'ia
+$d$. $\mathrm{FRP}_{i,d}$: potencia radiativa acumulada en la celda y
+d\'ia. $\mathrm{FRP}^{\max}_{i,d}$: m\'axima potencia radiativa diaria.
+$P_{i,d}$: precipitaci\'on diaria asignada a la celda.
+
+\begin{guionoral}
+Arriba a la izquierda est\'an las cuatro f\'ormulas: N de i,m es la
+suma, para todos los d\'ias d del mes m, del n\'umero de detecciones N
+de i,d en la celda i. FRP suma de i,m es la suma de la potencia
+radiativa FRP de i,d de cada d\'ia. FRP m\'axima de i,m es el m\'aximo
+de los m\'aximos diarios FRP m\'aximo de i,d. Y P de i,m es la suma de
+la precipitaci\'on diaria P de i,d. Arriba a la derecha, la
+definici\'on de cada s\'imbolo: i es la celda espacial, d es el d\'ia y
+m es el mes; N de i,d es el n\'umero de detecciones en la celda i
+durante el d\'ia d; FRP de i,d es la potencia radiativa acumulada en la
+celda y d\'ia; FRP m\'aximo de i,d es la m\'axima potencia radiativa
+diaria; y P de i,d es la precipitaci\'on diaria asignada a la celda.
+Abajo, dos filas horizontales paralelas muestran el mismo proceso por
+fuente, sin que ninguna flecha cruce a la otra fila. La fila VIIRS pasa
+de la detecci\'on individual, con fecha y hora, a una agrupaci\'on por
+celda y d\'ia, a \texttt{fact\_incendio} celda-d\'ia, a una
+agregaci\'on mensual, y finalmente a ``Detecciones y FRP''. La fila
+CHIRPS pasa de la precipitaci\'on p\'ixel-d\'ia, a una asignaci\'on por
+celda, a \texttt{fact\_clima} celda-d\'ia, a una suma mensual, y
+finalmente a ``Precipitaci\'on acumulada''. A la derecha, un \'unico
+bloque naranja, ``Dataset anal\'itico celda-mes'', recibe dos flechas
+independientes: una que sale de ``Detecciones y FRP'' y llega a la
+parte superior del borde izquierdo del bloque, y otra que sale de
+``Precipitaci\'on acumulada'' y llega a la parte inferior de ese mismo
+borde; ninguna de las dos se cruza con la otra. En una frase: VIIRS y
+CHIRPS se transforman a una granularidad com\'un celda-d\'ia y
+posteriormente se agregan por celda y mes. La advertencia final,
+breve: un valor cero representa ausencia de detecciones \'unicamente
+cuando se verific\'o la cobertura VIIRS; NULL identifica informaci\'on
+faltante o no procesada. El detalle de por qu\'e el LEFT JOIN por s\'i
+solo no demuestra esa cobertura lo retomo en la diapositiva del
+resultado de integraci\'on SQL.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Leer primero las
+ecuaciones y las definiciones (zona superior); despu\'es recorrer la
+fila VIIRS de izquierda a derecha, luego la fila CHIRPS, y finalmente
+se\~nalar las dos flechas que llegan al bloque naranja de la derecha,
+aclarando verbalmente que una entra arriba y otra abajo, sin cruzarse.}
+\campo{Idea principal que debe recordar la audiencia}{VIIRS y CHIRPS se
+transforman a una granularidad com\'un celda-d\'ia y posteriormente se
+agregan por celda y mes, en dos flujos paralelos que convergen sin
+cruzarse.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con el espacio y el
+tiempo estandarizados, veamos el proceso completo de integraci\'on y
+control de calidad.}
+\campo{Precauciones}{No usar la expresi\'on ``ausencia de incendio'';
+usar siempre ``ausencia de detecciones''. Pronunciaci\'on: ``LEFT
+JOIN'' se pronuncia en ingl\'es, ``left yoin''.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 15. ETL y control de calidad}
+\addcontentsline{toc}{section}{Diapositiva 15. ETL y control de calidad}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Viviana Isabel Pujos Culque.}
+\campo{Duraci\'on prevista}{1,5 minutos (tiempo acumulado: 19,9 min).}
+\campo{Prop\'osito}{Explicar el flujo completo de carga, control de
+calidad e integraci\'on, y declarar con precisi\'on el estado real de
+Airflow.}
+\campo{Qu\'e aparece en la diapositiva}{Dos cajas de entrada, dos
+scripts de carga, dos motores de almacenamiento, una franja compartida
+de controles de calidad, dos consultas de transformaci\'on, dos cajas
+de salida, y una franja discontinua inferior para Airflow.}
+
+\begin{guionoral}
+Primero ingresan los archivos: el JSON de detecciones VIIRS y el SQL
+de esquema y datos controlados. Despu\'es, los scripts cargan los
+datos: \texttt{cargar\_mongodb.py} hacia MongoDB,
+\texttt{cargar\_postgres.py} hacia PostgreSQL con PostGIS. A
+continuaci\'on se aplican los controles de calidad, una sola franja
+compartida por ambos motores: estructura JSON, identificadores,
+duplicados, fechas, CRS, geometr\'ias, valores faltantes y calidad de
+las detecciones. Finalmente, las consultas --- \texttt{consultas\_mongodb.js}
+del lado documental y la consulta uno del lado relacional, con sus CTE
+de incendio y clima, LEFT JOIN y COALESCE condicionado --- agregan e
+integran la informaci\'on para producir \texttt{fact\_incendio} y
+\texttt{fact\_clima} por celda-d\'ia, y de ah\'i el dataset celda-mes.
+Abajo, en franja aparte con borde discontinuo, se\~nalamos Airflow: la
+orquestaci\'on de estas cuatro etapas est\'a prevista, pero permanece
+en fase de validaci\'on; no la presentamos como una etapa ya ejecutada.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Seguir el flujo de
+arriba hacia abajo en dos columnas paralelas hasta la franja de
+controles de calidad, se\~nalar que ambas columnas convergen ah\'i, y
+continuar hacia abajo hasta las cajas de salida; terminar se\~nalando
+la franja discontinua de Airflow como un elemento aparte, no como una
+etapa m\'as del flujo ejecutado.}
+\campo{Idea principal que debe recordar la audiencia}{Cada componente
+de carga y consulta tiene un rol concreto, ning\'un dato llega a la
+integraci\'on sin pasar por el control de calidad compartido, y
+declaramos abiertamente que Airflow todav\'ia no est\'a en ejecuci\'on
+completa.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con la metodolog\'ia
+completa, le cedo la palabra a Carlos, quien presentar\'a los
+resultados reales que obtuvimos.}
+\campo{Precauciones}{No convertir Airflow en una etapa ya ejecutada; la
+franja discontinua existe precisamente para distinguirla visualmente
+del flujo s\'i ejecutado.}
+
+\separadordiapositiva
+
+\begin{cierrebloque}{Viviana Isabel Pujos Culque, fin del bloque II. Metodolog\'ia}
+\textbf{Tiempo acumulado:} 19,9 minutos.
+
+\textbf{Margen disponible:} pr\'acticamente nulo respecto del reparto
+de 30 minutos totales; quedan 10,1 minutos para todo el bloque de
+Carlos.
+
+\textbf{Si el bloque de Metodolog\'ia se atras\'o}, puede resumirse la
+lectura de las tres aclaraciones finales de la diapositiva 9 a una
+sola frase, y presentar las tres l\'ineas paralelas de la diapositiva
+13 sin leer las cuatro etapas de cada una, mencionando solo el punto de
+partida y el resultado final de cada fuente.
+\end{cierrebloque}
+
+% ------------------------------------------------------------
+\section*{Diapositiva 16. Resultado PostGIS}
+\addcontentsline{toc}{section}{Diapositiva 16. Resultado PostGIS}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Carlos Guillermo Chuncho Morocho.}
+\campo{Duraci\'on prevista}{2,0 minutos (tiempo acumulado: 21,9 min).}
+\campo{Prop\'osito}{Presentar la primera evidencia real ejecutada
+contra la base de datos, interpretando su significado sin
+sobre-generalizar.}
+\campo{Qu\'e aparece en la diapositiva}{Un flujo breve de cuatro pasos
+(Consulta PostGIS $\rightarrow$ Validaci\'on de SRID, geometr\'ia y
+\'area $\rightarrow$ Tabla de resultados $\rightarrow$
+Interpretaci\'on); la consulta SQL abreviada; la Tabla 4, ``Validaci\'on
+espacial de las celdas controladas'', con dos filas; una
+interpretaci\'on breve; y la etiqueta naranja de representatividad.}
+
+\begin{guionoral}
+Gracias, Viviana. Antes de la tabla, un flujo breve: partimos de la
+consulta PostGIS, pasamos por la validaci\'on de SRID, geometr\'ia y
+\'area, llegamos a la tabla de resultados, y de ah\'i a la
+interpretaci\'on. La Tabla 4, ``Validaci\'on espacial de las celdas
+controladas'', no es una proyecci\'on te\'orica: es la salida real de
+la consulta que ven arriba, ejecutada sobre la base
+\texttt{fireforest}, seleccionando el sistema de referencia, la
+validez y el \'area de la geometr\'ia de cada celda. Ambas celdas,
+\texttt{LJ\_TEST\_001} y \texttt{LJ\_TEST\_002}, tienen sistema de
+referencia EPSG 32717, geometr\'ia v\'alida, y un \'area exacta de 250
+mil metros cuadrados, coherente con 500 por 500 metros. Son los mismos
+identificadores que vieron en el mapa de la diapositiva 6: est\'an
+verificados dentro del cant\'on Loja, parroquia El Cisne, e insisto en
+que son identificadores internos de \textbf{prueba}, no c\'odigos
+administrativos ni sectores oficiales de Loja. Como ya explicamos en la
+diapositiva de alcance, estos son datos controlados del prototipo, sin
+representatividad cantonal.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar el flujo breve
+primero, despu\'es la consulta, despu\'es la tabla fila por fila (solo
+dos filas, se puede leer completa en voz alta) y cerrar se\~nalando la
+etiqueta naranja.}
+\campo{Idea principal que debe recordar la audiencia}{Las dos celdas
+controladas pasaron una validaci\'on espacial real: SRID 32717,
+geometr\'ia v\'alida, \'area de 250\,000 m\textsuperscript{2}; pero
+esos identificadores no son sectores oficiales de Loja.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Del lado
+relacional, pasemos al lado documental: los resultados de MongoDB.}
+\campo{Precauciones}{No presentar \texttt{LJ\_TEST\_001} y
+\texttt{LJ\_TEST\_002} como c\'odigos administrativos o parroquiales;
+son identificadores internos de prueba del prototipo.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 17. Resultado MongoDB}
+\addcontentsline{toc}{section}{Diapositiva 17. Resultado MongoDB}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Carlos Guillermo Chuncho Morocho.}
+\campo{Duraci\'on prevista}{1,85 minutos (tiempo acumulado: 23,75 min).}
+\campo{Prop\'osito}{Mostrar la segunda evidencia real ejecutada, dejando
+expl\'icito que 14,05 MW es un promedio de solo dos documentos
+controlados.}
+\campo{Qu\'e aparece en la diapositiva}{La etiqueta naranja de
+representatividad arriba; la Tabla 5, ``Detecciones controladas
+almacenadas en MongoDB'', con la consulta real y una tabla de dos
+documentos; el texto con la FRP m\'axima y media.}
+
+\begin{guionoral}
+La Tabla 5, ``Detecciones controladas almacenadas en MongoDB'', resume
+esta consulta real, ajustada a la estructura exacta de nuestra
+colecci\'on, que filtra por \texttt{calidad.valida} verdadero y
+proyecta identificador, celda y FRP. La detecci\'on en la celda
+\texttt{LJ\_TEST\_001} tiene 18,4 megavatios, la de
+\texttt{LJ\_TEST\_002} tiene 9,7. Con las
+mismas agregaciones de \texttt{consultas\_mongodb.js} obtuvimos una FRP
+m\'axima de 18,4 megavatios y una FRP media de 14,05, calculada por
+MongoDB mismo, no a mano. Insisto: 14,05 megavatios es la media de dos
+detecciones controladas, no la FRP media de los incendios del cant\'on,
+ni un resultado ambiental generalizable. De nuevo, datos controlados
+del prototipo, sin representatividad cantonal.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar la consulta
+primero, despu\'es la tabla de dos documentos, y terminar se\~nalando el
+texto en color Fuego donde se aclara que 14,05 MW no es un resultado
+ambiental generalizable.}
+\campo{Idea principal que debe recordar la audiencia}{Las cifras de FRP
+provienen de solo dos detecciones controladas; 14,05 MW es un
+promedio de dos documentos, no una cifra ambiental del cant\'on.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con ambos lados
+verificados por separado, veamos el resultado de integrarlos mediante
+la consulta SQL corregida.}
+\campo{Precauciones}{No decir ``la FRP media de los incendios del
+cant\'on''; decir siempre ``la FRP media de las dos detecciones
+controladas''. Pronunciaci\'on: ``MW'' se lee ``megavatios''.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 18. Resultado de integraci\'on SQL}
+\addcontentsline{toc}{section}{Diapositiva 18. Resultado de integraci\'on SQL}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Carlos Guillermo Chuncho Morocho.}
+\campo{Duraci\'on prevista}{2,25 minutos (tiempo acumulado: 26,0 min).}
+\campo{Prop\'osito}{Cerrar el bloque de resultados demostrando, con una
+prueba deliberada dentro de una transacci\'on revertida, que el LEFT
+JOIN preserva los meses clim\'aticos sin detecciones.}
+\campo{Qu\'e aparece en la diapositiva}{El fragmento central del LEFT
+JOIN; la Tabla 6, ``Resultado de la integraci\'on mensual en
+PostgreSQL'', con tres filas, la \'ultima resaltada en un tono naranja
+tenue; la nota que identifica esa fila como temporal (ROLLBACK); y la
+etiqueta de representatividad.}
+
+\begin{guionoral}
+Este es el fragmento central: se parte del clima como base y se une la
+detecci\'on mediante LEFT JOIN por celda, a\~no y mes. La Tabla 6,
+``Resultado de la integraci\'on mensual en PostgreSQL'', muestra las
+dos celda-mes disponibles, ambas de agosto de 2023, con una detecci\'on,
+la FRP correspondiente y la precipitaci\'on acumulada de cada celda; la
+fila resaltada con fondo tenue es la fila temporal de la prueba, no un
+resultado persistente. Ahora bien, estas dos filas por s\'i solas no
+demuestran el comportamiento que motiv\'o la correcci\'on, porque en
+ambas coincide que hay detecci\'on y clima el mismo mes. Por eso
+hicimos algo m\'as: dentro de una transacci\'on con ROLLBACK,
+insertamos una fila sint\'etica de clima para septiembre de 2023 sobre
+la celda \texttt{LJ\_TEST\_001}, sin ninguna detecci\'on asociada, y
+volvimos a ejecutar la misma l\'ogica. El resultado fue: detecciones en
+cero, FRP total y m\'axima en cero, y la precipitaci\'on real de 15,2
+mil\'imetros conservada. Quiero ser muy preciso con lo que esto
+demuestra y lo que no: en esta prueba sint\'etica, LEFT JOIN conserv\'o
+la fila clim\'atica y COALESCE represent\'o con cero la ausencia de una
+fila coincidente de incendio. En datos reales, ese cero solo podr\'a
+interpretarse como ausencia de detecciones cuando la cobertura e
+ingesta VIIRS hayan sido verificadas independientemente. NULL
+representa informaci\'on faltante, no procesada o no evaluada.
+Inmediatamente revertimos la transacci\'on; verificamos que no qued\'o
+ninguna fila persistida en la base. Y, como en las diapositivas
+anteriores: datos controlados del prototipo, sin representatividad
+cantonal.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Se\~nalar primero el
+fragmento de c\'odigo, despu\'es las dos primeras filas de la tabla
+(resultado real), y solo al final la fila resaltada, explicando
+verbalmente que fue insertada y revertida deliberadamente dentro de
+una transacci\'on.}
+\campo{Idea principal que debe recordar la audiencia}{Ejecutamos la
+consulta corregida en vivo, y adem\'as probamos --- y confirmamos ---
+mediante una transacci\'on revertida el caso que motiv\'o la
+correcci\'on: el LEFT JOIN preserva el mes clim\'atico aunque no haya
+detecciones.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Con esta evidencia
+t\'ecnica completa, pasemos a una discusi\'on honesta de lo que esto
+significa y de sus l\'imites.}
+\campo{Precauciones}{No presentar la fila de septiembre como si fuera
+un dato real y persistente del prototipo; es una prueba deliberadamente
+insertada y revertida dentro de una transacci\'on. Pronunciaci\'on:
+``ROLLBACK'' se pronuncia en ingl\'es, ``rol-bak''; ``COALESCE'' se
+pronuncia ``co-a-les''.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 19. Discusi\'on preliminar y limitaciones}
+\addcontentsline{toc}{section}{Diapositiva 19. Discusi\'on preliminar y limitaciones}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Carlos Guillermo Chuncho Morocho.}
+\campo{Duraci\'on prevista}{2,0 minutos (tiempo acumulado: 28,0 min).}
+\campo{Prop\'osito}{Interpretar, no solo enumerar, lo que las pruebas
+ejecutadas realmente demuestran, y declarar abiertamente las
+limitaciones del prototipo.}
+\campo{Qu\'e aparece en la diapositiva}{Cuatro vi\~netas con hallazgos
+interpretados; una consideraci\'on metodol\'ogica sobre la
+resoluci\'on de CHIRPS; un recuadro naranja con la frase de
+coherencia funcional b\'asica; y una lista final de limitaciones.}
+
+\begin{guionoral}
+De los resultados que acaban de ver se desprenden cuatro hallazgos
+interpretados. Primero, MongoDB conserva el detalle de cada detecci\'on
+mientras PostgreSQL almacena agregados diarios con restricciones
+relacionales; cada motor cumple el rol para el que fue elegido.
+Segundo, la reproyecci\'on que aplicamos permiti\'o construir
+geometr\'ias m\'etricas coherentes en el prototipo. Tercero, el LEFT
+JOIN conserv\'o los registros clim\'aticos aun cuando no hab\'ia una
+fila coincidente de detecciones, que es exactamente el comportamiento
+que busc\'abamos verificar. Cuarto, las pruebas muestran coherencia
+l\'ogica del dise\~no, pero todav\'ia no demuestran escalabilidad,
+rendimiento ni representatividad territorial con solo dos celdas y dos
+detecciones. Una consideraci\'on metodol\'ogica adicional: la
+resoluci\'on nativa de CHIRPS limita la variabilidad clim\'atica que
+realmente puede distinguirse entre celdas vecinas de 500 metros; esto
+es una limitaci\'on del dato de origen, no de nuestra implementaci\'on.
+Sobre el alcance de estos resultados quiero ser preciso, con una frase
+deliberadamente prudente: el prototipo demuestra coherencia funcional
+b\'asica entre almacenamiento documental, modelo relacional e
+integraci\'on SQL; su viabilidad operativa deber\'a evaluarse con
+datos reales, mayor volumen y automatizaci\'on. No decimos
+``arquitectura viable'' en sentido operacional con solo dos documentos.
+En cuanto a limitaciones: dos celdas y dos detecciones controladas,
+ambas en una sola parroquia, sin datos reales completos, malla
+completa de producci\'on para todo el cant\'on todav\'ia pendiente
+--aunque la fuente de verificaci\'on, el INEC, ya est\'a identificada--,
+producto VIIRS y campo de calidad pendientes, cobertura temporal de
+VIIRS a\'un no implementada, la orquestaci\'on completa mediante
+Airflow permanece en fase de validaci\'on, la carga PostgreSQL
+requiere mejorar su idempotencia para admitir ejecuciones repetidas, y
+ning\'un an\'alisis inferencial ni predictivo todav\'ia.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Recorrer las cuatro
+vi\~netas en orden; hacer una pausa breve en la consideraci\'on
+metodol\'ogica; leer el recuadro naranja completo y despacio, porque
+contiene la frase clave del avance; cerrar mencionando las
+limitaciones sin necesidad de leerlas todas de forma literal.}
+\campo{Idea principal que debe recordar la audiencia}{El prototipo
+demuestra coherencia funcional b\'asica, no viabilidad operativa
+plena; interpretamos los resultados, no solo los listamos.}
+\campo{Transici\'on hacia la siguiente diapositiva}{A partir de este
+diagn\'ostico honesto, cerremos con las conclusiones y los pr\'oximos
+pasos hacia el Avance 2.}
+\campo{Precauciones}{No decir ``arquitectura viable'' sin calificarla;
+usar siempre la frase completa sobre coherencia funcional b\'asica y
+viabilidad operativa pendiente de evaluar.}
+
+\separadordiapositiva
+
+% ------------------------------------------------------------
+\section*{Diapositiva 20. Conclusiones preliminares y pr\'oximos pasos}
+\addcontentsline{toc}{section}{Diapositiva 20. Conclusiones preliminares y pr\'oximos pasos}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Carlos Guillermo Chuncho Morocho.}
+\campo{Duraci\'on prevista}{2,0 minutos (tiempo acumulado: 30,0 min).}
+\campo{Prop\'osito}{Cerrar la exposici\'on delimitando los logros
+reales del Avance 1 y anticipando el trabajo pendiente para el Avance
+2.}
+\campo{Qu\'e aparece en la diapositiva}{Dos columnas: cinco
+conclusiones numeradas a la izquierda, ocho pr\'oximos pasos numerados
+a la derecha.}
+
+\begin{guionoral}
+Cinco conclusiones. Primero, el dise\~no integra de forma coherente, en
+un escenario controlado, datos documentales, relacionales y espaciales.
+Segundo, PostgreSQL con PostGIS y MongoDB cumplen funciones
+complementarias, no redundantes. Tercero, la integraci\'on diaria
+permite construir la unidad celda-mes. Cuarto, su aplicaci\'on al
+cant\'on Loja completo todav\'ia requiere extender la verificaci\'on
+que ya hicimos con el INEC a una malla completa, adquirir los datos
+reales, comprobar la cobertura y evaluar el flujo con mayor volumen.
+Quinto, la cobertura de VIIRS debe verificarse expl\'icitamente para
+diferenciar ausencia real de dato faltante. Los pr\'oximos pasos hacia
+el Avance 2 son: extender la verificaci\'on territorial del INEC a la
+malla completa del cant\'on, generar esa malla territorial completa,
+confirmar el producto VIIRS y su campo de calidad, incorporar datos
+reales de VIIRS y CHIRPS, construir la variable
+\texttt{viirs\_disponible}, construir el panel completo celda por mes,
+automatizar el flujo con Airflow, y finalmente realizar el an\'alisis
+estad\'istico. Muchas gracias.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{Leer las cinco
+conclusiones de la izquierda en orden, y luego mencionar los pr\'oximos
+pasos de la derecha agrup\'andolos por tema --- malla y datos reales;
+calidad VIIRS; automatizaci\'on; an\'alisis --- en vez de leer los ocho
+puntos uno por uno.}
+\campo{Idea principal que debe recordar la audiencia}{El dise\~no
+arquitect\'onico es coherente en un escenario controlado, y el equipo
+sabe exactamente qu\'e falta para el Avance 2.}
+\campo{Transici\'on hacia la siguiente diapositiva}{Dejamos proyectadas
+las referencias consultadas y quedamos abiertos a sus preguntas.}
+\campo{Precauciones}{No cerrar sugiriendo hallazgos ambientales sobre
+el cant\'on Loja; el cierre es sobre la arquitectura y el plan de
+trabajo, no sobre el fen\'omeno de los incendios. La conclusi\'on 1 ya
+delimita el alcance del prototipo a un escenario controlado; no es
+necesario a\~nadir una frase adicional sobre conclusiones ambientales.
+Pronunciaci\'on: \texttt{viirs\_disponible} se lee como una sola
+palabra t\'ecnica, ``viirs gui\'on bajo disponible''.}
+
+\separadordiapositiva
+
+\begin{cierrebloque}{Carlos Guillermo Chuncho Morocho, fin de los bloques III, IV y V}
+\textbf{Tiempo acumulado:} 30,0 minutos.
+
+\textbf{Margen disponible:} sin margen adicional; la diapositiva 21 no
+tiene tiempo asignado y se deja proyectada durante las preguntas.
+
+\textbf{Si el bloque de Resultados y Discusi\'on se atras\'o}, puede
+agruparse la lectura de las limitaciones de la diapositiva 19 en una
+sola frase general, y leer los pr\'oximos pasos de la diapositiva 20
+por categor\'ias --- malla y datos reales; calidad VIIRS;
+automatizaci\'on; an\'alisis --- en lugar de los ocho puntos completos.
+\end{cierrebloque}
+
+% ------------------------------------------------------------
+\section*{Diapositiva 21. Referencias}
+\addcontentsline{toc}{section}{Diapositiva 21. Referencias}
+% ------------------------------------------------------------
+
+\campo{Expositor}{Ninguno asignado; sin tiempo de exposici\'on oral.}
+\campo{Duraci\'on prevista}{Sin tiempo asignado (tiempo acumulado se
+mantiene en 30,0 min).}
+\campo{Prop\'osito}{Dejar disponible, durante la ronda de preguntas, el
+respaldo bibliogr\'afico completo de todo lo afirmado en la
+exposici\'on.}
+\campo{Qu\'e aparece en la diapositiva}{Las seis referencias citadas
+en la presentaci\'on: Balaguer-Beser et al.\ (2026), NASA EOSDIS
+FIRMS, Climate Hazards Center (CHIRPS v2.0), y la documentaci\'on
+oficial de PostgreSQL, PostGIS y MongoDB.}
+
+\begin{guionoral}
+Esta diapositiva no se expone oralmente. Se deja proyectada durante la
+ronda de preguntas como apoyo visual. Cualquiera de los tres
+integrantes puede remitirse directamente a ella si el jurado pregunta
+por una fuente espec\'ifica.
+\end{guionoral}
+
+\campo{C\'omo explicar los elementos visuales}{No se explica de forma
+activa; si el jurado pregunta por una referencia, se\~nalar directamente
+la entrada correspondiente en la lista.}
+\campo{Idea principal que debe recordar la audiencia}{Cada afirmaci\'on
+de la exposici\'on tiene un respaldo bibliogr\'afico o de c\'odigo
+verificable, y estas son exactamente las seis fuentes citadas, ninguna
+inventada.}
+\campo{Transici\'on hacia la siguiente diapositiva}{No aplica; es la
+\'ultima diapositiva. Se abre la ronda de preguntas.}
+\campo{Precauciones}{No inventar autores, DOI, productos satelitales,
+instituciones o resultados adicionales durante las preguntas; toda
+comparaci\'on con conocimiento externo debe estar respaldada
+\'unicamente por estas seis referencias o por el c\'odigo real del
+repositorio.}
+
+\newpage
+
+% ============================================================
+\section{Posibles preguntas del docente y respuestas t\'ecnicamente correctas}
+% ============================================================
+
+\begin{enumerate}[leftmargin=1.2cm, itemsep=8pt, label=\textbf{P\arabic*.}]
+
+\item \textbf{\textquestiondown Por qu\'e combinar SQL y NoSQL en lugar
+de usar una sola tecnolog\'ia?}\\
+\textbf{R:} Porque los datos del proyecto tienen naturalezas distintas:
+las detecciones VIIRS son documentos con estructura variable entre
+versiones del producto, mientras que las celdas, fechas y agregados
+diarios tienen una estructura fija y relaciones claras. MongoDB
+absorbe la variabilidad documental; PostgreSQL/PostGIS impone
+integridad relacional y capacidad espacial. Ninguna tecnolog\'ia por
+s\'i sola cubre ambas necesidades de forma natural.
+
+\item \textbf{\textquestiondown Por qu\'e PostgreSQL con PostGIS
+espec\'ificamente?}\\
+\textbf{R:} Porque PostGIS a\~nade tipos y funciones espaciales
+est\'andar (\texttt{ST\_SetSRID}, \texttt{ST\_Transform},
+\texttt{ST\_MakeEnvelope}, \texttt{ST\_Area}) sobre un motor relacional
+maduro, lo que permite construir y validar la geometr\'ia de las celdas
+dentro de la misma base de datos donde viven las claves for\'aneas y
+las restricciones de integridad.
+
+\item \textbf{\textquestiondown Por qu\'e MongoDB para las detecciones
+VIIRS?}\\
+\textbf{R:} Porque el documento de cada detecci\'on tiene campos
+anidados (\texttt{coordenadas}, \texttt{calidad}) que pueden cambiar
+entre versiones del producto VIIRS sin romper el esquema. Un modelo
+documental tolera esa variabilidad mejor que una tabla relacional
+r\'igida, sin perder la capacidad de vincularse l\'ogicamente a
+\texttt{celda\_id}.
+
+\item \textbf{\textquestiondown Qu\'e representa exactamente una celda
+en este proyecto?}\\
+\textbf{R:} Un pol\'igono cuadrado de 500 por 500 metros (250\,000
+m\textsuperscript{2}), construido en EPSG:32717 a partir de un punto
+reproyectado desde EPSG:4326, y almacenado en
+\texttt{dim\_celda.geom}. Cada celda tiene un identificador \'unico,
+\texttt{celda\_id}, que sirve como referencia com\'un para integrar
+detecciones y precipitaci\'on.
+
+\item \textbf{\textquestiondown Qu\'e significa FRP?}\\
+\textbf{R:} \textit{Fire Radiative Power}, o potencia radiativa del
+fuego, medida en megavatios. Es el valor que reporta cada detecci\'on
+VIIRS; en el prototipo se agrega por suma (FRP total) y por m\'aximo
+(FRP m\'axima) a nivel de celda-d\'ia y celda-mes.
+
+\item \textbf{\textquestiondown Por qu\'e se usa EPSG:32717 en vez de
+mantener EPSG:4326?}\\
+\textbf{R:} EPSG:4326 expresa coordenadas en grados, que no son
+unidades de longitud constantes; EPSG:32717 es una proyecci\'on UTM
+(zona 17 sur) apropiada para Ecuador continental, expresada en metros.
+Sin esa reproyecci\'on no se pueden calcular \'areas ni construir un
+cuadrado de 500 por 500 metros de forma consistente.
+
+\item \textbf{\textquestiondown C\'omo se integran VIIRS y CHIRPS si
+vienen de fuentes distintas?}\\
+\textbf{R:} Ambas se llevan primero a una granularidad diaria por
+celda (\texttt{fact\-\_incendio} y \texttt{fact\-\_clima},
+respectivamente), y desde ah\'i se agregan por celda, a\~no y mes. La
+integraci\'on final
+se realiza mediante una consulta SQL con LEFT JOIN desde el clima hacia
+el incendio, usando \texttt{celda\_id}, a\~no y mes como claves de
+cruce.
+
+\item \textbf{\textquestiondown Cu\'al es la diferencia entre un dato
+faltante (NULL) y ausencia de detecciones (cero)?}\\
+\textbf{R:} Un cero significa que hubo cobertura e ingesta VIIRS
+verificadas para esa celda y ese periodo, y que efectivamente no se
+registr\'o ninguna detecci\'on. NULL significa que el dato no fue
+procesado, no fue evaluado o falta por otra raz\'on; no implica que se
+haya comprobado la ausencia del fen\'omeno. El LEFT JOIN por s\'i solo
+no demuestra que hubo cobertura VIIRS.
+
+\item \textbf{\textquestiondown Por qu\'e los resultados no representan
+a todo el cant\'on Loja?}\\
+\textbf{R:} Porque el prototipo trabaja \'unicamente con dos celdas
+controladas, \texttt{LJ\_TEST\_001} y \texttt{LJ\_TEST\_002}, ambas en
+la parroquia El Cisne, verificadas dentro del cant\'on pero usadas
+solo para validar el flujo t\'ecnico, no una malla que cubra el
+cant\'on completo. El dominio previsto del proyecto es el cant\'on
+Loja completo, pero esa malla completa de producci\'on todav\'ia est\'a
+pendiente, aunque la fuente institucional para verificarla, el INEC,
+ya est\'a identificada y en uso.
+
+\item \textbf{\textquestiondown Qu\'e falta para completar el proyecto
+en el Avance 2?}\\
+\textbf{R:} Extender la verificaci\'on territorial ya realizada con el
+INEC a la malla espacial completa del cant\'on, confirmar el producto
+VIIRS definitivo y su campo de calidad, incorporar datos reales de
+VIIRS y CHIRPS, construir la variable \texttt{viirs\_disponible},
+generar el panel completo celda por mes, automatizar el flujo con
+Airflow, y realizar el an\'alisis estad\'istico correspondiente.
+
+\item \textbf{\textquestiondown Cu\'al es el papel de Airflow en esta
+arquitectura?}\\
+\textbf{R:} Airflow est\'a previsto para orquestar cuatro etapas ---
+ingesta, validaci\'on, carga e integraci\'on --- de forma autom\'atica
+y programada. Actualmente esa orquestaci\'on completa se encuentra en
+fase de validaci\'on; no se presenta como una etapa ya ejecutada de
+principio a fin.
+
+\item \textbf{\textquestiondown Cu\'al es la diferencia entre un
+prototipo funcional y un sistema validado operativamente?}\\
+\textbf{R:} El prototipo demuestra coherencia funcional b\'asica: los
+componentes se comunican, las transformaciones producen los resultados
+esperados y la integraci\'on funciona con datos controlados. Un sistema
+validado operativamente requerir\'ia, adem\'as, datos reales completos,
+mayor volumen, pruebas de rendimiento y escalabilidad, y automatizaci\'on
+comprobada; ninguna de esas condiciones se eval\'ua todav\'ia en este
+avance.
+
+\item \textbf{\textquestiondown Por qu\'e no se us\'o Google Earth
+Engine, si es com\'un en proyectos de teledetecci\'on?}\\
+\textbf{R:} Porque no existe evidencia de su uso en este repositorio ni
+en el dise\~no documentado del proyecto. El m\'etodo de acceso previsto
+es la API o descarga directa de NASA FIRMS para VIIRS, y la descarga
+directa del repositorio del Climate Hazards Center para CHIRPS.
+
+\item \textbf{\textquestiondown Qu\'e significan los identificadores
+LJ\_TEST\_001 y LJ\_TEST\_002?}\\
+\textbf{R:} Son identificadores internos de \textbf{prueba} asignados
+por el prototipo a sus dos celdas controladas (el sufijo \texttt{TEST}
+es literal); no son c\'odigos administrativos oficiales. A diferencia
+de una asignaci\'on arbitraria, su pertenencia al cant\'on Loja y a la
+parroquia El Cisne s\'i fue validada contra la capa oficial del INEC,
+mediante \texttt{ST\_Within} y \texttt{ST\_Distance} ejecutados en
+PostGIS.
+
+\item \textbf{\textquestiondown C\'omo verificaron que las celdas
+est\'an realmente dentro del cant\'on Loja?}\\
+\textbf{R:} Reconstruimos el l\'imite del cant\'on Loja disolviendo,
+por c\'odigo DPA, las zonas censales de la capa oficial del INEC (Marco
+Geoestad\'istico Nacional), reproyectada a EPSG:32717. Sobre ese
+l\'imite generamos una malla sistem\'atica de celdas de 500 metros,
+conservamos solo las que quedan completamente dentro del cant\'on con
+un margen de al menos un kil\'ometro al l\'imite, y elegimos las dos
+primeras de esa lista ordenando por coordenada este y luego norte, sin
+intervenci\'on visual. El resultado se verific\'o en PostgreSQL/PostGIS
+real, dentro de una transacci\'on de prueba.
+
+\item \textbf{\textquestiondown Qu\'e evidencia respalda el contexto
+ambiental citado del cant\'on Loja?}\\
+\textbf{R:} El art\'iculo de Balaguer-Beser y colegas (2026),
+``Altitudinal variation in fire behavior in Andean ecosystems in
+southern Ecuador'', publicado en \textit{Fire Ecology}, volumen 22,
+art\'iculo 46, en acceso abierto, DOI
+\href{https://doi.org/10.1186/s42408-026-00470-y}{10.1186/s42408-026-00470-y}.
+Ese estudio describe tres zonas --- Malacatos, Punzara y San Lucas ---;
+no describe ni determina la ubicaci\'on de las dos celdas controladas
+del prototipo.
+
+\end{enumerate}
+
+\newpage
+
+% ============================================================
+\section{Lista final de comprobaci\'on antes de exponer}
+% ============================================================
+
+\begin{enumerate}[itemsep=6pt]
+  \item {\raggedright Confirmar que \texttt{main.pdf} y
+    \texttt{Grupo04\_Presentacion\_AvanceProyectoIntegrador.pdf} son
+    id\'enticos (mismo hash SHA-256) y corresponden a la versi\'on que
+    se proyectar\'a.\par}
+  \item Verificar que el orden de las 21 diapositivas en el equipo de
+    proyecci\'on coincide exactamente con este gui\'on, incluida la
+    nueva diapositiva 6 (\'Ambito territorial).
+  \item Repasar en voz alta, al menos una vez, la pronunciaci\'on de los
+    t\'erminos t\'ecnicos: VIIRS, EPSG, LEFT JOIN, ROLLBACK, COALESCE,
+    FRP, INEC.
+  \item Confirmar que cada expositor conoce su tiempo asignado y el
+    tiempo acumulado al final de su bloque (8,9 / 19,9 / 30,0 minutos).
+  \item Ensayar en voz alta las tres transiciones que cambian de
+    diapositiva de forma menos obvia (5$\to$6, 8$\to$9 y 15$\to$16), no
+    solo leerlas en silencio.
+  \item Verificar que el proyector y el cable o adaptador funcionan
+    antes de iniciar, y tener una copia del PDF en un segundo
+    dispositivo o USB.
+  \item Revisar que ninguna diapositiva muestre rutas personales u otra
+    informaci\'on sensible en las capturas de pantalla, incluido el
+    mapa de la diapositiva 6.
+  \item Tener a la mano las cifras clave por si el jurado pide
+    repetirlas: \texttt{LJ\_TEST\_001}, \texttt{LJ\_TEST\_002}, parroquia
+    El Cisne, distancias 1085,00 m / 1066,01 m al l\'imite cantonal,
+    18,4 MW, 14,05 MW, 250\,000 m\textsuperscript{2}, EPSG:32717,
+    EPSG:31992 (capa nativa del INEC).
+  \item Repasar las respuestas de la secci\'on de preguntas probables,
+    especialmente las relacionadas con la verificaci\'on territorial,
+    la representatividad y el estado real de Airflow.
+  \item Acordar expl\'icitamente que ning\'un integrante improvisar\'a
+    afirmaciones sobre el comportamiento ambiental de los incendios en
+    el cant\'on Loja, ni mencionar\'a de forma proactiva las celdas
+    descartadas (\texttt{LJ\_04521}/\texttt{LJ\_04522}) salvo que el
+    jurado pregunte directamente por el proceso de verificaci\'on (ver
+    nota interna al final de \texttt{guion\_exposicion.md}); el cierre
+    debe limitarse a la arquitectura y al plan de trabajo.
+  \item Verificar que la diapositiva 21 (referencias) queda proyectada
+    al finalizar la diapositiva 20, lista para la ronda de preguntas.
+  \item Practicar la exposici\'on completa al menos una vez,
+    cronometrada, para confirmar que la suma real se aproxima a 30
+    minutos, prestando atenci\'on especial a que la nueva diapositiva 6
+    no se extienda m\'as de 45 segundos.
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,4 @@
+﻿services:
+  airflow-worker:
+    volumes:
+      - ../04_mongodb/cargas:/opt/airflow/fireforest/nosql:ro

@@ -1,0 +1,464 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==========================================================
+% Configuración general
+% ==========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\emergencystretch=2em
+
+% Paleta de color (misma que la presentación en beamer)
+\definecolor{myNewColorA}{RGB}{27,94,55}
+\definecolor{myNewColorB}{RGB}{46,125,80}
+\definecolor{myNewColorC}{RGB}{184,218,191}
+
+\titleformat{\section}{\Large\bfseries\color{myNewColorA}\raggedright}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{myNewColorB}\raggedright}{\thesubsection}{0.5em}{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=myNewColorA,
+    urlcolor=myNewColorA,
+    citecolor=myNewColorA,
+    pdftitle={Avance 1 - Proyecto Integrador FireForest},
+    pdfauthor={Malan Mullo, Marco Vinicio; Pujos Culque, Viviana Isabel; Chuncho Morocho, Carlos Guillermo}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small Proyecto Integrador -- Avance 1}
+\fancyhead[R]{\small FireForest -- Grupo 4}
+\fancyfoot[C]{\small\thepage}
+
+\setlist[itemize]{itemsep=1pt, topsep=1pt}
+\setlist[enumerate]{itemsep=1pt, topsep=1pt}
+
+% Columnas de párrafo con salto de línea controlado (para tablas)
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ==========================================================
+% PORTADA
+% ==========================================================
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\large ESCUELA SUPERIOR POLIT\'ECNICA DE CHIMBORAZO (ESPOCH)\par}
+\vspace{0.3cm}
+{\large Maestr\'ia en Estad\'istica con menci\'on en Ciencia de Datos e Inteligencia Artificial\par}
+
+\vspace{2.5cm}
+{\Huge\bfseries\color{myNewColorA} Avance del Proyecto Integrador\par}
+\vspace{0.5cm}
+{\large Problema, fuentes, arquitectura preliminar y plan de implementaci\'on\par}
+
+\vspace{1.5cm}
+\begin{minipage}{0.85\textwidth}
+\centering
+{\Large\bfseries T\'itulo del proyecto\par}
+\vspace{0.3cm}
+{\large Dise\~no de una arquitectura h\'ibrida SQL--NoSQL para la integraci\'on y consulta de datos de incendios forestales en el cant\'on Loja\par}
+\end{minipage}
+
+\vspace{2cm}
+{\large\bfseries Integrantes\par}
+\vspace{0.3cm}
+{\large
+Malan Mullo, Marco Vinicio \\
+Pujos Culque, Viviana Isabel \\
+Chuncho Morocho, Carlos Guillermo \par}
+
+\vspace{2cm}
+{\large\bfseries Grupo 4}\par
+
+\vspace{1.5cm}
+{\large Avance 1 \par}
+{\large 2026 \par}
+
+\vfill
+\end{titlepage}
+
+% ==========================================================
+% 1. DEFINICIÓN Y JUSTIFICACIÓN DEL PROBLEMA
+% ==========================================================
+\section{Definici\'on y justificaci\'on del problema}
+
+El an\'alisis de los incendios forestales en el cant\'on Loja requiere considerar su heterogeneidad territorial, clim\'atica y altitudinal. En tres zonas de estudio del sur del Ecuador ---Malacatos, Punzara y San Lucas--- se han documentado condiciones ambientales contrastantes asociadas con variaciones en el comportamiento del fuego (Balaguer-Beser et al., 2026). Estos resultados permiten contextualizar el problema, pero no describen por s\'i solos la totalidad del cant\'on.
+
+La informaci\'on necesaria para estudiar espacial y temporalmente las detecciones de fuego activo procede de fuentes heterog\'eneas: detecciones satelitales VIIRS, precipitaci\'on CHIRPS y una malla espacial de referencia. Cada fuente posee formatos, resoluciones y frecuencias de actualizaci\'on diferentes, por lo que su integraci\'on requiere definir mecanismos coherentes de captura, almacenamiento, transformaci\'on y consolidaci\'on. Este es, en esencia, un problema de \textbf{Ingenier\'ia de Datos}: dise\~nar el recorrido completo de los datos --- captura, almacenamiento, integraci\'on y consolidaci\'on --- antes de poder analizarlos.
+
+El sistema involucrado es el de monitoreo y an\'alisis de riesgo de incendios forestales a nivel territorial, en el que intervienen t\'ipicamente actores como los Gobiernos Aut\'onomos Descentralizados (GAD Municipal y GAD Provincial), el Cuerpo de Bomberos y el Ministerio del Ambiente, Agua y Transici\'on Ecol\'ogica (MAATE), as\'i como las comunidades rurales asentadas cerca de zonas boscosas del cant\'on. FireForest es un ejercicio acad\'emico: no existe un convenio con estas instituciones, se mencionan como referencia del tipo de actor que se beneficiar\'ia de una soluci\'on de este tipo, y el proyecto trabaja \'unicamente con datos de ejemplo, muestras controladas o simulados. Los usuarios o beneficiarios potenciales son gestores de riesgo y personal t\'ecnico de instituciones ambientales o de emergencia, investigadores y estudiantes que analicen patrones espacio-temporales de incendios forestales, y comunidades rurales interesadas en conocer zonas de mayor recurrencia cerca de sus localidades.
+
+\textbf{Objetivo general:} dise\~nar una arquitectura h\'ibrida SQL--NoSQL para integrar datos de detecciones VIIRS, precipitaci\'on CHIRPS y una malla espacial del cant\'on Loja, con el prop\'osito de construir un dataset anal\'itico reproducible por celda y mes.
+
+\textbf{Pregunta principal:} \textquestiondown c\'omo dise\~nar una arquitectura h\'ibrida SQL--NoSQL que permita integrar, almacenar y consultar de forma reproducible datos heterog\'eneos de incendios forestales en el cant\'on Loja?
+
+\textbf{Preguntas anal\'iticas futuras}, que podr\'ian responderse una vez integrados los datos (no se responden en este avance):
+\begin{itemize}
+    \item \textquestiondown qu\'e asociaci\'on existe entre la precipitaci\'on acumulada mensual y la presencia o frecuencia de detecciones VIIRS por celda espacial?
+    \item \textquestiondown qu\'e celdas espaciales presentan mayor n\'umero o intensidad (FRP) de detecciones en el periodo analizado?
+    \item \textquestiondown en qu\'e meses del a\~no se concentra la mayor cantidad de detecciones en el cant\'on Loja?
+\end{itemize}
+
+% ==========================================================
+% 2. INVENTARIO DE FUENTES
+% ==========================================================
+\section{Inventario de fuentes}
+
+Se identificaron tres fuentes principales, que combinan datos geoespaciales, observacionales y clim\'aticos.
+
+\begin{center}
+\tiny
+\setlength{\tabcolsep}{2.2pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}L{1.7cm}L{1.9cm}L{1.5cm}L{1.5cm}L{1.4cm}L{2.7cm}L{2.0cm}L{2.6cm}@{}}
+\toprule
+\textbf{Fuente} & \textbf{Origen} & \textbf{Tipo} & \textbf{Captura} & \textbf{Formato} & \textbf{Metadatos} & \textbf{Almacena\-miento} & \textbf{Riesgos} \\
+\midrule
+L\'imite y malla espacial &
+INEC, Marco Geoestad\'istico Nacional &
+Geoespacial estructurado &
+\'Unica vez; disoluci\'on de zonas por c\'odigo DPA &
+GeoPackage / GeoJSON &
+Capa \texttt{zon\_a}; CRS EPSG:31992$\to$32717; malla 500$\times$500\,m &
+PostgreSQL / PostGIS (\texttt{dim\_celda}) &
+Geometr\'ia inv\'alida o CRS incorrecto; se valida antes de cargar \\[3pt]
+VIIRS (detecciones de incendio) &
+NASA FIRMS &
+Observacional espacio-temporal &
+Autom\'atica (API o descarga por \'area y periodo) &
+CSV / JSON &
+Sensor, fecha/hora, FRP (MW), indicador de calidad &
+MongoDB (detalle) y PostgreSQL (agregado diario) &
+Duplicados, falsos positivos, cambios de API/cuota; producto y campo de calidad definitivos a\'un por confirmar \\[3pt]
+CHIRPS (precipitaci\'on) &
+Climate Hazards Center, UC Santa B\'arbara &
+Clim\'atico espacio-temporal &
+Autom\'atica (descarga directa) &
+CSV / GeoTIFF / Parquet &
+Producto CHIRPS v2.0; resoluci\'on $\sim$0,05\textdegree; unidad mm &
+PostgreSQL (\texttt{fact\_clima}) y Parquet (respaldo) &
+Valores faltantes; cambios en el repositorio de origen \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.15cm}
+\footnotesize
+La malla espacial se ancla sobre el l\'imite geoestad\'istico de trabajo del cant\'on Loja, reconstruido mediante la disoluci\'on de zonas censales del INEC por c\'odigo DPA (divisi\'on pol\'itico-administrativa); no es un l\'imite jur\'idico descargado directamente, sino una reconstrucci\'on propia a partir de datos estad\'isticos oficiales. Sobre ese l\'imite reconstruido se ancla una malla sistem\'atica de 500$\times$500\,m. El CRS de trabajo del proyecto es \texttt{EPSG:32717} (WGS84 / UTM 17S); las coordenadas se reproyectan a ese sistema antes de construir cada celda. La arquitectura no utiliza Google Earth Engine. Para VIIRS, el producto/colecci\'on definitivo y el campo de calidad (\texttt{fire\_mask} frente a \texttt{confidence}) todav\'ia deben confirmarse con datos reales. Para CHIRPS, asociar su p\'ixel nativo ($\sim$5\,km) a la malla de 500\,m no aumenta su resoluci\'on real: cada celda hereda por asignaci\'on espacial el valor del p\'ixel que la contiene.
+\normalsize
+
+\subsection*{Celdas controladas utilizadas en el prototipo}
+\footnotesize
+Para demostrar la carga y la consulta del modelo se utilizan dos celdas controladas, verificadas espacialmente contra la capa oficial del INEC:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lccc c@{}}
+\toprule
+\textbf{Celda} & \textbf{Longitud} & \textbf{Latitud} & \textbf{Parroquia} & \textbf{Distancia al l\'imite} \\
+\midrule
+LJ\_TEST\_001 & $-$79,520851 & $-$3,805328 & El Cisne & 1085,00 m \\
+LJ\_TEST\_002 & $-$79,516342 & $-$3,809842 & El Cisne & 1066,01 m \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.1cm}
+Las dos celdas est\'an completamente contenidas dentro del cant\'on Loja y de la parroquia El Cisne. Fueron seleccionadas determin\'isticamente para validar el prototipo y no constituyen una muestra representativa del territorio cantonal.
+\normalsize
+
+% ==========================================================
+% 3. DISEÑO COMPARATIVO SQL vs NoSQL
+% ==========================================================
+\section{Dise\~no comparativo SQL vs. NoSQL}
+
+\subsection{Entidades}
+\textbf{Lado SQL (PostgreSQL/PostGIS):} \texttt{dim\_celda}, \texttt{dim\_fecha}, \texttt{fact\_incendio}, \texttt{fact\_clima}.\\
+\textbf{Lado NoSQL (MongoDB):} colecci\'on \texttt{detecciones\_viirs}, con el detalle individual de cada detecci\'on (fecha y hora exactas).
+
+\subsection{Relaciones}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Tabla con FK} & \textbf{Columnas} & \textbf{Referencia} \\
+\midrule
+\texttt{fact\_incendio} & \texttt{celda\_id}, \texttt{fecha\_id} & \texttt{dim\_celda}, \texttt{dim\_fecha} \\
+\texttt{fact\_clima} & \texttt{celda\_id}, \texttt{fecha\_id} & \texttt{dim\_celda}, \texttt{dim\_fecha} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+    \item Ambas tablas de hechos tienen \texttt{UNIQUE(celda\_id, fecha\_id)}: una fila por celda y d\'ia.
+    \item \texttt{fact\_incendio} y \texttt{fact\_clima} no tienen FK entre s\'i: se cruzan mediante \texttt{JOIN} por \texttt{celda\_id} y \texttt{fecha\_id}.
+    \item La relaci\'on entre MongoDB y PostgreSQL es \textbf{l\'ogica}, no una clave for\'anea f\'isica: se resuelve mediante un proceso ETL/ELT que agrupa las detecciones de \texttt{detecciones\_viirs} por \texttt{celda\_id} y \texttt{fecha} para poblar \texttt{fact\_incendio} a grano diario; no existe FK entre ambas bases.
+\end{itemize}
+
+\subsection{Datos estables y relacionales (SQL) vs. datos flexibles o anidados (NoSQL)}
+\begin{tabular}{@{}lL{13.6cm}@{}}
+\toprule
+\textbf{SQL} & Malla espacial (geometr\'ia fija), calendario, y registros diarios de incendio/clima por celda: estructura homog\'enea, con integridad referencial (PK/FK) y consultas espaciales de PostGIS. \\
+\midrule
+\textbf{NoSQL} & Detecciones individuales VIIRS: documentos con coordenadas y calidad anidadas, cuyos campos pueden variar seg\'un la versi\'on del producto satelital sin romper un esquema fijo. \\
+\bottomrule
+\end{tabular}
+
+\subsection{Justificaci\'on del uso de cada tecnolog\'ia}
+\textbf{\textquestiondown Por qu\'e PostgreSQL/PostGIS?} Porque la malla espacial y los hechos diarios de incendio/clima tienen estructura estable y relaciones claras entre celda, fecha y hecho, lo que se beneficia de PK/FK, restricciones y de las capacidades geoespaciales de PostGIS. PostgreSQL resuelve las consultas de agregaci\'on por celda-mes (\texttt{JOIN} + \texttt{GROUP BY}).
+
+\textbf{\textquestiondown Por qu\'e MongoDB?} Porque las detecciones satelitales individuales llegan en JSON semiestructurado y anidado, y su forma puede variar entre versiones del producto sin obligar a migrar un esquema relacional. MongoDB resuelve consultas de agregaci\'on documental sobre el detalle crudo de cada detecci\'on (conteo, FRP promedio o m\'aximo por celda).
+
+\subsection{Consultas que se espera resolver}
+\footnotesize
+\textbf{En SQL:} n\'umero de detecciones, FRP total y m\'axima por celda-mes; precipitaci\'on acumulada, media y m\'axima por celda-mes, conservando los meses con clima aunque no haya incendio. El procedimiento agrega primero incendio y clima por separado en dos CTE (\texttt{incendio\_mes}, \texttt{clima\_mes}) y luego los combina con un \texttt{LEFT JOIN} desde clima hacia incendio por \texttt{celda\_id + anio + mes}:
+
+\begin{scriptsize}
+\begin{verbatim}
+WITH incendio_mes AS (            -- agrega detecciones por celda-mes
+  SELECT anio, mes, celda_id, SUM(numero_detecciones) AS detecciones,
+         SUM(frp_suma_mw) AS frp_total_mw, MAX(frp_maxima_mw) AS frp_maxima_mw
+  FROM fact_incendio JOIN dim_fecha USING (fecha_id) GROUP BY anio, mes, celda_id
+),
+clima_mes AS (                    -- agrega precipitacion por celda-mes
+  SELECT anio, mes, celda_id, SUM(precipitacion_diaria_mm) AS precip_acumulada_mm
+  FROM fact_clima JOIN dim_fecha USING (fecha_id) GROUP BY anio, mes, celda_id
+)
+SELECT c.anio, c.mes, c.celda_id,
+       COALESCE(i.detecciones, 0) AS detecciones,   -- valido solo si se
+       COALESCE(i.frp_total_mw, 0) AS frp_total_mw, -- verifico cobertura VIIRS
+       c.precip_acumulada_mm
+FROM clima_mes AS c LEFT JOIN incendio_mes AS i USING (anio, mes, celda_id);
+\end{verbatim}
+\end{scriptsize}
+
+\textbf{En MongoDB:} conteo y FRP promedio/m\'aximo de detecciones por \texttt{celda\_id}, filtrando por el indicador de calidad validada de cada documento (\texttt{calidad.valida}), mediante una canalizaci\'on de agregaci\'on con \texttt{\$match} y \texttt{\$group}.
+\normalsize
+
+% ==========================================================
+% 4. MODELO PRELIMINAR DE DATOS
+% ==========================================================
+\section{Modelo preliminar de datos}
+
+\subsection{Tablas principales, claves y granularidad}
+\small
+\begin{center}
+\begin{tabular}{@{}L{2.6cm}L{6.4cm}C{2.1cm}C{3.0cm}@{}}
+\toprule
+\textbf{Tabla} & \textbf{Descripci\'on} & \textbf{PK} & \textbf{FK} \\
+\midrule
+\texttt{dim\_celda} & Malla espacial de referencia (una fila por celda) & \texttt{celda\_id} & --- \\
+\texttt{dim\_fecha} & Calendario diario del periodo analizado & \texttt{fecha\_id} & --- \\
+\texttt{fact\_incendio} & Registro diario de incendio por celda & \texttt{incendio\_id} & \texttt{celda\_id}, \texttt{fecha\_id} \\
+\texttt{fact\_clima} & Registro diario de precipitaci\'on por celda & \texttt{clima\_id} & \texttt{celda\_id}, \texttt{fecha\_id} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\normalsize
+
+\noindent\footnotesize\textbf{Granularidad:} las tablas de hechos son siempre diarias (\texttt{UNIQUE(celda\_id, fecha\_id)}); la unidad de an\'alisis final, celda-mes, se obtiene agregando esos registros diarios por \texttt{celda\_id + anio + mes} mediante consultas SQL; no existe como filas pre-agregadas en las tablas base.\normalsize
+
+\subsection{Esquema relacional}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  ent/.style={draw=myNewColorA, thick, rounded corners, fill=myNewColorC!30,
+              align=center, minimum width=2.5cm, minimum height=1.05cm, font=\tiny, inner sep=2pt},
+  rel/.style={-{Stealth[length=2mm]}, thick, myNewColorB},
+  card/.style={font=\scriptsize, myNewColorA}
+]
+\node[ent] (celda) {\textbf{dim\_celda}\\ PK: \texttt{celda\_id}};
+\node[ent, right=1.3cm of celda] (incendio) {\textbf{fact\_incendio}\\ PK: \texttt{incendio\_id}\\ FK: \texttt{celda\_id}, \texttt{fecha\_id}};
+\node[ent, right=1.3cm of incendio] (clima) {\textbf{fact\_clima}\\ PK: \texttt{clima\_id}\\ FK: \texttt{celda\_id}, \texttt{fecha\_id}};
+\node[ent, right=1.3cm of clima] (fecha) {\textbf{dim\_fecha}\\ PK: \texttt{fecha\_id}};
+
+\draw[rel] (celda) -- (incendio) node[midway, above, card] {1:N};
+\draw[rel] (fecha) -- (clima) node[midway, above, card] {1:N};
+\draw[rel] (celda.north) to[bend left=30] node[midway, above, card] {1:N} (clima.north);
+\draw[rel] (fecha.south) to[bend left=30] node[midway, below, card] {1:N} (incendio.south);
+\end{tikzpicture}
+\caption{Modelo relacional preliminar: \texttt{dim\_celda} y \texttt{dim\_fecha} se relacionan con \texttt{fact\_incendio} y \texttt{fact\_clima} mediante claves for\'aneas; estas dos \'ultimas se cruzan por \texttt{celda\_id + fecha\_id} sin FK directa entre ellas.}
+\end{figure}
+
+\subsection{Ejemplo de documento JSON (NoSQL)}
+\footnotesize
+La colecci\'on \texttt{detecciones\_viirs} conserva el detalle individual de cada detecci\'on, con fecha y hora exactas; estas detecciones se agregan por \texttt{celda\_id + fecha} para poblar \texttt{fact\_incendio} a grano diario.
+\normalsize
+
+\begin{footnotesize}
+\begin{verbatim}
+{
+  "deteccion_id": "V_2023_TEST_001",
+  "celda_id": "LJ_TEST_001",
+  "fecha": "2023-08-15",
+  "hora_utc": "18:42",
+  "fuente": "VIIRS",
+  "sensor": "VIIRS_SNPP_375m",
+  "frp_mw": 18.4,
+  "fire_mask": 7,
+  "coordenadas": {
+    "longitud": -79.520851,
+    "latitud": -3.805328
+  },
+  "calidad": {
+    "valida": true
+  }
+}
+\end{verbatim}
+\end{footnotesize}
+
+\subsection{Validaci\'on controlada del prototipo}
+\footnotesize
+La carga y consulta descritas se verificaron con las dos celdas controladas de la secci\'on~2:
+
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Celda} & \textbf{Detecciones} & \textbf{FRP total / m\'axima} & \textbf{Precipitaci\'on} \\
+\midrule
+LJ\_TEST\_001 & 1 & 18,4 / 18,4 MW & 12,5 mm \\
+LJ\_TEST\_002 & 1 & 9,7 / 9,7 MW & 8,7 mm \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.1cm}
+Se trata de datos controlados: comprueban el funcionamiento del flujo de carga e integraci\'on, no son resultados ambientales representativos y no permiten inferencia alguna para el cant\'on.
+\normalsize
+
+% ==========================================================
+% 5. ARQUITECTURA PRELIMINAR
+% ==========================================================
+\section{Arquitectura preliminar}
+
+La figura~\ref{fig:arquitectura} muestra el flujo de datos desde las fuentes hasta el producto anal\'itico.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw=myNewColorA, rounded corners, fill=myNewColorC!35,
+              align=center, text width=8.6cm, minimum height=0.55cm, font=\footnotesize, inner sep=3pt},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, myNewColorA}
+]
+\node[box] (a) {\textbf{Fuentes} -- malla espacial (INEC), VIIRS (NASA FIRMS), CHIRPS};
+\node[box, below=0.12cm of a] (b) {\textbf{Captura e ingesta} -- archivos / API (CSV, JSON, GeoTIFF, Parquet)};
+\node[box, below=0.12cm of b] (c) {\textbf{Validaci\'on} -- geometr\'ia, duplicados, valores faltantes};
+\node[box, below=0.12cm of c] (d) {\textbf{MongoDB} -- detecciones individuales VIIRS (\texttt{celda\_id + fecha} exacta)};
+\node[box, below=0.12cm of d] (e) {\textbf{ETL} -- agrupaci\'on por \texttt{celda\_id + fecha}};
+\node[box, below=0.12cm of e] (f) {\textbf{PostgreSQL/PostGIS} -- datos diarios por celda (\texttt{fact\_incendio}, \texttt{fact\_clima}, grano celda-d\'ia)};
+\node[box, below=0.12cm of f] (g) {\textbf{Agregaci\'on} -- \texttt{GROUP BY} por \texttt{celda\_id + anio + mes}};
+\node[box, below=0.12cm of g] (h) {\textbf{Producto anal\'itico} -- dataset celda-mes};
+\node[box, below=0.12cm of h] (i) {Estad\'istica / visualizaci\'on / ML};
+\draw[arr] (a) -- (b);
+\draw[arr] (b) -- (c);
+\draw[arr] (c) -- (d);
+\draw[arr] (d) -- (e);
+\draw[arr] (e) -- (f);
+\draw[arr] (f) -- (g);
+\draw[arr] (g) -- (h);
+\draw[arr] (h) -- (i);
+\end{tikzpicture}
+\caption{Arquitectura preliminar de la soluci\'on FireForest: la integraci\'on ocurre a grano celda-d\'ia en PostgreSQL/PostGIS y solo despu\'es se agrega a celda-mes; no existe una integraci\'on directa a nivel mensual.}
+\label{fig:arquitectura}
+\end{figure}
+
+\noindent\footnotesize La orquestaci\'on de la ingesta, validaci\'on, carga e integraci\'on se prev\'e mediante Airflow; actualmente se encuentra en fase de validaci\'on, no operativa por completo.\normalsize
+
+% ==========================================================
+% 6. PREGUNTA ANALÍTICA, UNIDAD DE ANÁLISIS Y DATASET ESPERADO
+% ==========================================================
+\section{Pregunta anal\'itica, unidad de an\'alisis y dataset esperado}
+
+\textbf{Pregunta anal\'itica:} \textquestiondown qu\'e asociaci\'on existe entre la precipitaci\'on acumulada mensual y la presencia o frecuencia de detecciones VIIRS por celda espacial? Esta pregunta no se responde en este avance; requiere el dataset celda-mes consolidado (secci\'on~7).
+
+\textbf{Unidad de an\'alisis:} celda espacial de 500$\times$500\,m observada durante un mes, con clave \texttt{celda\_id + anio + mes}. Las tablas de hechos permanecen a grano diario; la unidad celda-mes se construye por agregaci\'on.
+
+\textbf{Dataset final esperado:} una tabla con una fila por celda-mes, que combine identificador de celda y coordenadas, n\'umero de detecciones e intensidad de incendio (FRP), y precipitaci\'on acumulada/media/m\'axima del mes.
+
+\vspace{0.15cm}
+\noindent\footnotesize\textbf{Cero frente a dato faltante:} un valor \texttt{0} en detecciones o FRP no equivale autom\'aticamente a cobertura VIIRS comprobada; solo puede leerse como ausencia real de detecciones si se verific\'o de forma independiente que la cobertura e ingesta VIIRS de ese mes fueron correctas. \texttt{NULL} representa informaci\'on faltante o no procesada. La prueba de \texttt{LEFT JOIN} con \texttt{COALESCE} descrita en la secci\'on~3.5 valida el comportamiento de la consulta, no constituye evidencia de cobertura satelital real.\normalsize
+
+% ==========================================================
+% 7. PLAN PRELIMINAR DE IMPLEMENTACIÓN
+% ==========================================================
+\section{Plan preliminar de implementaci\'on}
+
+\begin{center}
+\scriptsize
+\begin{tabular}{@{}C{0.6cm}L{5.0cm}L{5.3cm}C{2.3cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Actividad} & \textbf{Resultado esperado} & \textbf{Estado} \\
+\midrule
+1 & Identificaci\'on de fuentes y validaci\'on territorial de las dos celdas controladas & Fuentes documentadas; celdas verificadas dentro del cant\'on Loja & Completada \\
+2 & Dise\~no relacional (SQL) & Esquema con PK/FK & Completado \\
+3 & Dise\~no NoSQL & Colecci\'on y documento de ejemplo & Completado \\
+4 & Carga controlada & Datos cargados en PostgreSQL/PostGIS y MongoDB & Completada \\
+5 & Migraci\'on territorial de las celdas controladas & Identificadores y coordenadas actualizados en ambas bases & Completada \\
+6 & Adquisici\'on de series reales (VIIRS, CHIRPS) & Datos reales incorporados & Pendiente \\
+7 & Malla completa de producci\'on & Malla de 500\,m para todo el cant\'on & Pendiente \\
+8 & Cobertura VIIRS & Bandera de cobertura verificada por celda-mes & Pendiente \\
+9 & Panel completo celda-mes & Dataset consolidado & Pendiente \\
+10 & Automatizaci\'on & Orquestaci\'on de ingesta e integraci\'on (Airflow) & En validaci\'on \\
+11 & An\'alisis y producto final & Indicadores, modelo o reporte & Pendiente \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ==========================================================
+% 8. ALCANCE Y LIMITACIONES
+% ==========================================================
+\section{Alcance y limitaciones}
+\label{sec:alcance}
+
+\begin{itemize}
+    \item \textbf{Dominio previsto:} cant\'on Loja.
+    \item \textbf{Cobertura actual:} dos celdas controladas verificadas dentro de la parroquia El Cisne, utilizadas exclusivamente para validaci\'on t\'ecnica del prototipo (almacenamiento, reproyecci\'on, agregaci\'on temporal, consultas de integraci\'on SQL/NoSQL).
+    \item Este avance corresponde a un \textbf{prototipo acad\'emico}, no a un sistema operativo de alerta temprana de incendios.
+    \item Dos celdas dentro de una sola parroquia \textbf{no constituyen una muestra representativa} de la variabilidad ambiental, altitudinal o clim\'atica del cant\'on; los resultados presentados no describen el comportamiento de los incendios del cant\'on Loja.
+    \item Las consultas mostradas son ilustrativas: no permiten a\'un an\'alisis inferencial ni predictivo, ni establecer relaci\'on causal entre precipitaci\'on e incendios.
+    \item Queda pendiente incorporar series reales completas de VIIRS y CHIRPS, la malla completa de producci\'on y la bandera de cobertura VIIRS.
+\end{itemize}
+
+% ==========================================================
+% 9. REFERENCIAS
+% ==========================================================
+\section{Referencias}
+
+\footnotesize
+\begin{itemize}
+    \item Balaguer-Beser, A., Gonz\'alez, F., Chuncho, C. G., Carri\'on-Paladines, V., \& Juela-Sivisaca, O. (2026). Altitudinal variation in fire behavior in Andean ecosystems in southern Ecuador. \textit{Fire Ecology}, 22, Article 46. \url{https://doi.org/10.1186/s42408-026-00470-y}
+    \item Instituto Nacional de Estad\'istica y Censos (INEC). \textit{Marco Geoestad\'istico Nacional}. \url{https://www.ecuadorencifras.gob.ec/documentos/web-inec/Geografia_Estadistica/Micrositio_geoportal/descargas.html}
+    \item NASA EOSDIS FIRMS. \textit{VIIRS 375 m Active Fire and Thermal Anomalies (VNP14IMG/VJ114IMG)}. \url{https://firms.modaps.eosdis.nasa.gov}
+    \item Funk, C., Peterson, P., Landsfeld, M., Pedreros, D., Verdin, J., Shukla, S., Husak, G., Rowland, J., Harrison, L., Hoell, A., \& Michaelsen, J. (2015). The climate hazards infrared precipitation with stations -- a new environmental record for monitoring extremes. \textit{Scientific Data}, 2, 150066. \url{https://www.chc.ucsb.edu/data/chirps}
+    \item PostgreSQL Global Development Group. \textit{PostgreSQL Documentation}. \url{https://www.postgresql.org/docs/}
+    \item PostGIS Project Steering Committee. \textit{PostGIS Documentation}. \url{https://postgis.net/documentation/}
+    \item MongoDB, Inc. \textit{MongoDB Manual}. \url{https://www.mongodb.com/docs/}
+\end{itemize}
+\normalsize
+
+\end{document}

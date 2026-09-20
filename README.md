@@ -45,3 +45,25 @@ CSV / JSON
     Consultas SQL y NoSQL
             ↓
     Comparación e integración
+```
+
+## Ubicación del proyecto y de las tareas académicas
+
+El **Proyecto Integrador** completo (documentación, datos, código SQL y
+NoSQL, Airflow, y demás componentes técnicos) vive en
+[`Tareas/Proyecto_integrador/`](Tareas/Proyecto_integrador/README.md),
+que es autónomo y contiene su propio `README.md` con propósito,
+arquitectura, estructura, requisitos, orden de ejecución, reproducción,
+estado y pendientes.
+
+Además, este repositorio contiene dos actividades académicas
+**independientes** del Proyecto Integrador, con sus propias bases de
+datos y sin dependencias cruzadas:
+
+- [`Tareas/Taller_NoSQL/`](Tareas/Taller_NoSQL/README.md) — Laboratorio
+  NoSQL MongoDB (M1721), base `taller_nosql_fireforest`.
+- [`Tareas/Taller_SQL_Relacional/`](Tareas/Taller_SQL_Relacional/README.md)
+  — Taller SQL Relacional, base `taller_sql_fireforest`.
+
+Ninguno de los tres componentes modifica ni depende de archivos del
+proyecto externo FIRELAB_Loja (ver `AGENTS.md` y `CLAUDE.md`).

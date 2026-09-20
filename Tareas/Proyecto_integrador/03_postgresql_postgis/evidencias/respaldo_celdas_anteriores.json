@@ -1,0 +1,64 @@
+{
+  "generado": "2026-09-14T23:37:16.686310",
+  "nota": "Respaldo de las filas de LJ_04521/LJ_04522 tomado justo antes de aplicar la migracion permanente (COMMIT). No contiene credenciales ni cadenas de conexion.",
+  "dim_celda": [
+    {
+      "celda_id": "LJ_04521",
+      "longitud": -79.241,
+      "latitud": -4.082,
+      "area_km2": "0.2500",
+      "epsg": 32717,
+      "geom_ewkt": "SRID=32717;POLYGON((695020.005990827 9548345.273888167,695020.005990827 9548845.273888167,695520.005990827 9548845.273888167,695520.005990827 9548345.273888167,695020.005990827 9548345.273888167))",
+      "srid": 32717,
+      "area_m2": 250000.0
+    },
+    {
+      "celda_id": "LJ_04522",
+      "longitud": -79.236,
+      "latitud": -4.079,
+      "area_km2": "0.2500",
+      "epsg": 32717,
+      "geom_ewkt": "SRID=32717;POLYGON((695575.9673333963 9548675.822055854,695575.9673333963 9549175.822055854,696075.9673333963 9549175.822055854,696075.9673333963 9548675.822055854,695575.9673333963 9548675.822055854))",
+      "srid": 32717,
+      "area_m2": 250000.0
+    }
+  ],
+  "fact_incendio": [
+    {
+      "incendio_id": "V_2023_0001",
+      "celda_id": "LJ_04521",
+      "fecha_id": 20230815,
+      "fuente": "VIIRS",
+      "numero_detecciones": 1,
+      "frp_suma_mw": "18.400",
+      "frp_maxima_mw": "18.400",
+      "fire_mask_maximo": 7,
+      "incendio_observado": true
+    },
+    {
+      "incendio_id": "V_2023_0002",
+      "celda_id": "LJ_04522",
+      "fecha_id": 20230820,
+      "fuente": "VIIRS",
+      "numero_detecciones": 1,
+      "frp_suma_mw": "9.700",
+      "frp_maxima_mw": "9.700",
+      "fire_mask_maximo": 8,
+      "incendio_observado": true
+    }
+  ],
+  "fact_clima": [
+    {
+      "clima_id": 1,
+      "celda_id": "LJ_04521",
+      "fecha_id": 20230815,
+      "precipitacion_diaria_mm": "12.500"
+    },
+    {
+      "clima_id": 2,
+      "celda_id": "LJ_04522",
+      "fecha_id": 20230820,
+      "precipitacion_diaria_mm": "8.700"
+    }
+  ]
+}

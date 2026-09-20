@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "fecha": "2026-09-20",
+  "anio_estudio": 2023,
+  "tolerancia_fracciones": 0.00001,
+  "tolerancia_reconciliacion_precipitacion_mm": 0.0001,
+  "tolerancia_area_m2": 0.001,
+  "politicas": {
+    "raw_inmutable": true,
+    "duplicados_clave": "detener el flujo; no deduplicar silenciosamente",
+    "faltantes_viirs": "conservar como nulos, marcar observacion_viirs_disponible=false y separar del subconjunto analitico",
+    "ceros_viirs": "interpretar como ausencia de evidencia solo cuando la cobertura observacional esta confirmada",
+    "celdas_parciales": "conservar y marcar; no excluir solo por fraccion territorial sin una regla analitica aprobada",
+    "valores_atipicos": "marcar para revision; no eliminar automaticamente",
+    "integracion": "exigir cardinalidad uno a uno por cell_index + anio + mes"
+  }
+}

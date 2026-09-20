@@ -1,0 +1,104 @@
+﻿fuente,ambito,variable,tipo_fuente,tipo_inferido,filas,no_nulos,nulos,porcentaje_nulos,valores_distintos,minimo,maximo,valores_frecuentes
+chirps,completo_2019_2025,anio,texto CSV,entero,671748,671748,0,0.000000,7,2019,2025,2019:95964 | 2020:95964 | 2021:95964 | 2022:95964 | 2023:95964 | 2024:95964 | 2025:95964
+chirps,completo_2019_2025,anio_mes,texto CSV,texto,671748,671748,0,0.000000,84,,,2019-01:7997 | 2019-02:7997 | 2019-03:7997 | 2019-04:7997 | 2019-05:7997 | 2019-06:7997 | 2019-07:7997 | 2019-08:7997 | 2019-09:7997 | 2019-10:7997
+chirps,completo_2019_2025,area_dentro_loja_m2,texto CSV,decimal,671748,671748,0,0.000000,829,0.00417084537265737,250000,alta cardinalidad
+chirps,completo_2019_2025,cell_id,texto CSV,texto,671748,671748,0,0.000000,7997,,,alta cardinalidad
+chirps,completo_2019_2025,cell_index,texto CSV,entero,671748,671748,0,0.000000,7997,0,7996,alta cardinalidad
+chirps,completo_2019_2025,chirps_dias_humedos_ge1mm,texto CSV,decimal,671748,671748,0,0.000000,>10000,0,20,alta cardinalidad
+chirps,completo_2019_2025,chirps_dias_secos_lt1mm,texto CSV,decimal,671748,671748,0,0.000000,>10000,11,31,alta cardinalidad
+chirps,completo_2019_2025,chirps_dias_validos_pixel,texto CSV,decimal,671748,671748,0,0.000000,20,28,31,31.0:343588 | 30.0:186088 | 28.0:29495 | 30.999999999999996:24941 | 31.000000000000004:23030 | 30.000000000000004:18900 | 29.999999999999996:18760 | 29.0:14092 | 27.999999999999996:5250 | 28.000000000000004:5225
+chirps,completo_2019_2025,chirps_disponibilidad_pixel_pct,texto CSV,decimal,671748,671748,0,0.000000,5,100,100,100.0:599088 | 100.00000000000001:36708 | 99.99999999999999:35784 | 100.00000000000003:84 | 99.99999999999997:84
+chirps,completo_2019_2025,chirps_grid_coverage,texto CSV,decimal,671748,671748,0,0.000000,1352,0.999999470976802,1.00000122989447,alta cardinalidad
+chirps,completo_2019_2025,chirps_n_pixels_intersectados,texto CSV,entero,671748,671748,0,0.000000,4,1,4,1:558180 | 2:108360 | 4:5124 | 3:84
+chirps,completo_2019_2025,chirps_observado_mes,texto CSV,decimal,671748,671748,0,0.000000,1,1,1,1.0:671748
+chirps,completo_2019_2025,chirps_precipitacion_acumulada_mm,texto CSV,decimal,671748,671748,0,0.000000,>10000,0,783.094299316406,alta cardinalidad
+chirps,completo_2019_2025,chirps_precipitacion_maxima_diaria_mm,texto CSV,decimal,671748,671748,0,0.000000,>10000,0,206.765747070313,alta cardinalidad
+chirps,completo_2019_2025,chirps_precipitacion_media_diaria_mm,texto CSV,decimal,671748,671748,0,0.000000,>10000,0,26.1031436920166,alta cardinalidad
+chirps,completo_2019_2025,chirps_valid_coverage,texto CSV,decimal,671748,671748,0,0.000000,1352,0.999999470976802,1.00000122989447,alta cardinalidad
+chirps,completo_2019_2025,columna,texto CSV,entero,671748,671748,0,0.000000,100,0,99,73:15288 | 72:15204 | 74:15036 | 75:15036 | 76:14952 | 71:14700 | 77:14700 | 78:14364 | 70:14028 | 79:14028
+chirps,completo_2019_2025,dias_calendario,texto CSV,entero,671748,671748,0,0.000000,4,28,31,31:391853 | 30:223916 | 28:39985 | 29:15994
+chirps,completo_2019_2025,fila,texto CSV,entero,671748,671748,0,0.000000,186,0,185,alta cardinalidad
+chirps,completo_2019_2025,fraccion_dentro_loja,texto CSV,decimal,671748,671748,0,0.000000,829,1.66833814906295e-08,1,alta cardinalidad
+chirps,completo_2019_2025,mes,texto CSV,entero,671748,671748,0,0.000000,12,1,12,1:55979 | 10:55979 | 11:55979 | 12:55979 | 2:55979 | 3:55979 | 4:55979 | 5:55979 | 6:55979 | 7:55979
+chirps,periodo_2023,anio,texto CSV,entero,95964,95964,0,0.000000,1,2023,2023,2023:95964
+chirps,periodo_2023,anio_mes,texto CSV,texto,95964,95964,0,0.000000,12,,,2023-01:7997 | 2023-02:7997 | 2023-03:7997 | 2023-04:7997 | 2023-05:7997 | 2023-06:7997 | 2023-07:7997 | 2023-08:7997 | 2023-09:7997 | 2023-10:7997
+chirps,periodo_2023,area_dentro_loja_m2,texto CSV,decimal,95964,95964,0,0.000000,829,0.00417084537265737,250000,alta cardinalidad
+chirps,periodo_2023,cell_id,texto CSV,texto,95964,95964,0,0.000000,7997,,,alta cardinalidad
+chirps,periodo_2023,cell_index,texto CSV,entero,95964,95964,0,0.000000,7997,0,7996,alta cardinalidad
+chirps,periodo_2023,chirps_dias_humedos_ge1mm,texto CSV,decimal,95964,95964,0,0.000000,8121,0,15,alta cardinalidad
+chirps,periodo_2023,chirps_dias_secos_lt1mm,texto CSV,decimal,95964,95964,0,0.000000,8181,15,31,alta cardinalidad
+chirps,periodo_2023,chirps_dias_validos_pixel,texto CSV,decimal,95964,95964,0,0.000000,15,28,31,31.0:49084 | 30.0:26584 | 28.0:5899 | 30.999999999999996:3563 | 31.000000000000004:3290 | 30.000000000000004:2700 | 29.999999999999996:2680 | 27.999999999999996:1050 | 28.000000000000004:1045 | 31.000000000000007:28
+chirps,periodo_2023,chirps_disponibilidad_pixel_pct,texto CSV,decimal,95964,95964,0,0.000000,5,100,100,100.0:85584 | 100.00000000000001:5244 | 99.99999999999999:5112 | 100.00000000000003:12 | 99.99999999999997:12
+chirps,periodo_2023,chirps_grid_coverage,texto CSV,decimal,95964,95964,0,0.000000,1352,0.999999470976802,1.00000122989447,alta cardinalidad
+chirps,periodo_2023,chirps_n_pixels_intersectados,texto CSV,entero,95964,95964,0,0.000000,4,1,4,1:79740 | 2:15480 | 4:732 | 3:12
+chirps,periodo_2023,chirps_observado_mes,texto CSV,decimal,95964,95964,0,0.000000,1,1,1,1.0:95964
+chirps,periodo_2023,chirps_precipitacion_acumulada_mm,texto CSV,decimal,95964,95964,0,0.000000,>10000,0,783.094299316406,alta cardinalidad
+chirps,periodo_2023,chirps_precipitacion_maxima_diaria_mm,texto CSV,decimal,95964,95964,0,0.000000,>10000,0,150.385650634766,alta cardinalidad
+chirps,periodo_2023,chirps_precipitacion_media_diaria_mm,texto CSV,decimal,95964,95964,0,0.000000,>10000,0,26.1031436920166,alta cardinalidad
+chirps,periodo_2023,chirps_valid_coverage,texto CSV,decimal,95964,95964,0,0.000000,1352,0.999999470976802,1.00000122989447,alta cardinalidad
+chirps,periodo_2023,columna,texto CSV,entero,95964,95964,0,0.000000,100,0,99,73:2184 | 72:2172 | 74:2148 | 75:2148 | 76:2136 | 71:2100 | 77:2100 | 78:2052 | 70:2004 | 79:2004
+chirps,periodo_2023,dias_calendario,texto CSV,entero,95964,95964,0,0.000000,3,28,31,31:55979 | 30:31988 | 28:7997
+chirps,periodo_2023,fila,texto CSV,entero,95964,95964,0,0.000000,186,0,185,alta cardinalidad
+chirps,periodo_2023,fraccion_dentro_loja,texto CSV,decimal,95964,95964,0,0.000000,829,1.66833814906295e-08,1,alta cardinalidad
+chirps,periodo_2023,mes,texto CSV,entero,95964,95964,0,0.000000,12,1,12,1:7997 | 10:7997 | 11:7997 | 12:7997 | 2:7997 | 3:7997 | 4:7997 | 5:7997 | 6:7997 | 7:7997
+malla,completo,area_dentro_loja_ha,REAL,decimal,7997,7997,0,0.000000,829,4.17084537265737e-07,25,alta cardinalidad
+malla,completo,area_dentro_loja_m2,REAL,decimal,7997,7997,0,0.000000,829,0.00417084537265737,250000,alta cardinalidad
+malla,completo,area_nominal_ha,REAL,decimal,7997,7997,0,0.000000,1,25,25,25.0:7997
+malla,completo,area_nominal_m2,REAL,decimal,7997,7997,0,0.000000,1,250000,250000,250000.0:7997
+malla,completo,cell_id,TEXT,texto,7997,7997,0,0.000000,7997,,,alta cardinalidad
+malla,completo,cell_index,INTEGER,entero,7997,7997,0,0.000000,7997,0,7996,alta cardinalidad
+malla,completo,centro_x_m,REAL,decimal,7997,7997,0,0.000000,100,661250,710750,697750.0:182 | 697250.0:181 | 698250.0:179 | 698750.0:179 | 699250.0:178 | 696750.0:175 | 699750.0:175 | 700250.0:171 | 696250.0:167 | 700750.0:167
+malla,completo,centro_y_m,REAL,decimal,7997,7997,0,0.000000,186,9501250,9593750,alta cardinalidad
+malla,completo,columna,INTEGER,entero,7997,7997,0,0.000000,100,0,99,73:182 | 72:181 | 74:179 | 75:179 | 76:178 | 71:175 | 77:175 | 78:171 | 70:167 | 79:167
+malla,completo,es_celda_completa,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,1:7169 | 0:828
+malla,completo,fid,INTEGER,entero,7997,7997,0,0.000000,7997,1,7997,alta cardinalidad
+malla,completo,fila,INTEGER,entero,7997,7997,0,0.000000,186,0,185,alta cardinalidad
+malla,completo,fraccion_dentro_loja,REAL,decimal,7997,7997,0,0.000000,829,1.66833814906295e-08,1,alta cardinalidad
+malla,completo,fraccion_lt_001,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,0:7942 | 1:55
+malla,completo,fraccion_lt_005,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,0:7873 | 1:124
+malla,completo,fraccion_lt_010,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,0:7826 | 1:171
+malla,completo,fraccion_lt_025,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,0:7721 | 1:276
+malla,completo,fraccion_lt_050,BOOLEAN,entero,7997,7997,0,0.000000,2,0,1,0:7588 | 1:409
+malla,completo,geom,POLYGON,texto,7997,7997,0,0.000000,0,,,
+malla,completo,xmax_m,REAL,decimal,7997,7997,0,0.000000,100,661500,711000,698000.0:182 | 697500.0:181 | 698500.0:179 | 699000.0:179 | 699500.0:178 | 697000.0:175 | 700000.0:175 | 700500.0:171 | 696500.0:167 | 701000.0:167
+malla,completo,xmin_m,REAL,decimal,7997,7997,0,0.000000,100,661000,710500,697500.0:182 | 697000.0:181 | 698000.0:179 | 698500.0:179 | 699000.0:178 | 696500.0:175 | 699500.0:175 | 700000.0:171 | 696000.0:167 | 700500.0:167
+malla,completo,ymax_m,REAL,decimal,7997,7997,0,0.000000,186,9501500,9594000,alta cardinalidad
+malla,completo,ymin_m,REAL,decimal,7997,7997,0,0.000000,186,9501000,9593500,alta cardinalidad
+viirs,completo_2019_2025,anio,texto CSV,entero,671748,671748,0,0.000000,7,2019,2025,2019:95964 | 2020:95964 | 2021:95964 | 2022:95964 | 2023:95964 | 2024:95964 | 2025:95964
+viirs,completo_2019_2025,anio_mes,texto CSV,texto,671748,671748,0,0.000000,84,,,2019-01:7997 | 2019-02:7997 | 2019-03:7997 | 2019-04:7997 | 2019-05:7997 | 2019-06:7997 | 2019-07:7997 | 2019-08:7997 | 2019-09:7997 | 2019-10:7997
+viirs,completo_2019_2025,asset_fuente,texto CSV,texto,671748,671748,0,0.000000,84,,,users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_01:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_02:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_03:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_04:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_05:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_06:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_07:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_08:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_09:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2019_10:7997
+viirs,completo_2019_2025,cell_index,texto CSV,entero,671748,671748,0,0.000000,7997,0,7996,alta cardinalidad
+viirs,completo_2019_2025,mes,texto CSV,entero,671748,671748,0,0.000000,12,1,12,1:55979 | 10:55979 | 11:55979 | 12:55979 | 2:55979 | 3:55979 | 4:55979 | 5:55979 | 6:55979 | 7:55979
+viirs,completo_2019_2025,viirs_detecciones_nominal_alta_support_mean,texto CSV,decimal,671748,665448,6300,0.937852,657,0,3,alta cardinalidad
+viirs,completo_2019_2025,viirs_detecciones_todas_support_mean,texto CSV,decimal,671748,665448,6300,0.937852,685,0,4,alta cardinalidad
+viirs,completo_2019_2025,viirs_dias_validos_support_mean,texto CSV,decimal,671748,665448,6300,0.937852,7,21,31,31.0:332724 | 30.0:213894 | 28.0:39610 | 29.0:39610 | 21.0:15844 | 27.0:15844 | 26.0:7922
+viirs,completo_2019_2025,viirs_disponibilidad_support_pct,texto CSV,decimal,671748,665448,6300,0.937852,7,67.7419357299805,100,100.0:586228 | 67.74193572998047:15844 | 90.0:15844 | 93.54838562011719:15844 | 96.7741928100586:15844 | 83.87096405029297:7922 | 96.66666412353516:7922
+viirs,completo_2019_2025,viirs_evidencia_fuego_any,texto CSV,entero,671748,665448,6300,0.937852,2,0,1,0:662360 | 1:3088
+viirs,completo_2019_2025,viirs_evidencia_fuego_nominal_alta_any,texto CSV,entero,671748,665448,6300,0.937852,2,0,1,0:662484 | 1:2964
+viirs,completo_2019_2025,viirs_frp_maxima_support_mean_mw,texto CSV,decimal,671748,665448,6300,0.937852,2647,0,616.400024414062,alta cardinalidad
+viirs,completo_2019_2025,viirs_frp_suma_observada_support_mean_mw,texto CSV,decimal,671748,665448,6300,0.937852,2682,0,616.400024414062,alta cardinalidad
+viirs,completo_2019_2025,viirs_observado_support_mean,texto CSV,decimal,671748,665448,6300,0.937852,1,1,1,1.0:665448
+viirs,completo_2019_2025,viirs_observed_support_frac,texto CSV,decimal,671748,665448,6300,0.937852,1,1,1,1.0:665448
+viirs,completo_2019_2025,viirs_presencia_fuego_nominal_alta_support_frac,texto CSV,decimal,671748,665448,6300,0.937852,550,0,1,alta cardinalidad
+viirs,completo_2019_2025,viirs_presencia_fuego_support_frac,texto CSV,decimal,671748,665448,6300,0.937852,559,0,1,alta cardinalidad
+viirs,completo_2019_2025,viirs_soporte_nativo_m,texto CSV,decimal,671748,671748,0,0.000000,1,926.625433055833,926.625433055833,926.625433055833:671748
+viirs,completo_2019_2025,viirs_source_coverage_frac,texto CSV,decimal,671748,665448,6300,0.937852,1,1,1,1.0:665448
+viirs,periodo_2023,anio,texto CSV,entero,95964,95964,0,0.000000,1,2023,2023,2023:95964
+viirs,periodo_2023,anio_mes,texto CSV,texto,95964,95964,0,0.000000,12,,,2023-01:7997 | 2023-02:7997 | 2023-03:7997 | 2023-04:7997 | 2023-05:7997 | 2023-06:7997 | 2023-07:7997 | 2023-08:7997 | 2023-09:7997 | 2023-10:7997
+viirs,periodo_2023,asset_fuente,texto CSV,texto,95964,95964,0,0.000000,12,,,users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_01:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_02:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_03:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_04:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_05:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_06:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_07:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_08:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_09:7997 | users/cguillermo2/fire_risk_loja/viirs_preprocesado_mensual/VIIRS_PREP_2023_10:7997
+viirs,periodo_2023,cell_index,texto CSV,entero,95964,95964,0,0.000000,7997,0,7996,alta cardinalidad
+viirs,periodo_2023,mes,texto CSV,entero,95964,95964,0,0.000000,12,1,12,1:7997 | 10:7997 | 11:7997 | 12:7997 | 2:7997 | 3:7997 | 4:7997 | 5:7997 | 6:7997 | 7:7997
+viirs,periodo_2023,viirs_detecciones_nominal_alta_support_mean,texto CSV,decimal,95964,95064,900,0.937852,280,0,2.95652173913044,alta cardinalidad
+viirs,periodo_2023,viirs_detecciones_todas_support_mean,texto CSV,decimal,95964,95064,900,0.937852,286,0,2.95652173913044,alta cardinalidad
+viirs,periodo_2023,viirs_dias_validos_support_mean,texto CSV,decimal,95964,95064,900,0.937852,4,28,31,31.0:47532 | 30.0:31688 | 28.0:7922 | 29.0:7922
+viirs,periodo_2023,viirs_disponibilidad_support_pct,texto CSV,decimal,95964,95064,900,0.937852,2,93.5483856201172,100,100.0:87142 | 93.54838562011719:7922
+viirs,periodo_2023,viirs_evidencia_fuego_any,texto CSV,entero,95964,95064,900,0.937852,2,0,1,0:94317 | 1:747
+viirs,periodo_2023,viirs_evidencia_fuego_nominal_alta_any,texto CSV,entero,95964,95064,900,0.937852,2,0,1,0:94355 | 1:709
+viirs,periodo_2023,viirs_frp_maxima_support_mean_mw,texto CSV,decimal,95964,95064,900,0.937852,688,0,229.399993896484,alta cardinalidad
+viirs,periodo_2023,viirs_frp_suma_observada_support_mean_mw,texto CSV,decimal,95964,95064,900,0.937852,699,0,327.899993896484,alta cardinalidad
+viirs,periodo_2023,viirs_observado_support_mean,texto CSV,decimal,95964,95064,900,0.937852,1,1,1,1.0:95064
+viirs,periodo_2023,viirs_observed_support_frac,texto CSV,decimal,95964,95064,900,0.937852,1,1,1,1.0:95064
+viirs,periodo_2023,viirs_presencia_fuego_nominal_alta_support_frac,texto CSV,decimal,95964,95064,900,0.937852,241,0,1,alta cardinalidad
+viirs,periodo_2023,viirs_presencia_fuego_support_frac,texto CSV,decimal,95964,95064,900,0.937852,247,0,1,alta cardinalidad
+viirs,periodo_2023,viirs_soporte_nativo_m,texto CSV,decimal,95964,95964,0,0.000000,1,926.625433055833,926.625433055833,926.625433055833:95964
+viirs,periodo_2023,viirs_source_coverage_frac,texto CSV,decimal,95964,95064,900,0.937852,1,1,1,1.0:95064

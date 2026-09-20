@@ -1,0 +1,83 @@
+==================================================================
+REEJECUCION DE CIERRE (solo lectura) tras la migracion permanente
+Fecha: 2026-09-15T04:39:30Z UTC
+No sobrescribe salida_validacion_postgis_celdas.txt ni
+salida_aplicacion_postgis_celdas.txt ni salida_consultas_mongodb_LJ_TEST.txt
+==================================================================
+
+--- PostgreSQL: validacion espacial de dim_celda (todas las filas) ---
+El paginador no se usará.
+  celda_id   | srid  | valido | area_m2 
+-------------+-------+--------+---------
+ LJ_TEST_001 | 32717 | t      |  250000
+ LJ_TEST_002 | 32717 | t      |  250000
+(2 filas)
+
+
+=== Consulta de integracion celda-mes (re-ejecucion de cierre) ===
+ anio | mes |  celda_id   |  longitud  |  latitud  | detecciones_totales | frp_total_mw | frp_maxima_mw | numero_dias_con_incendio | precipitacion_acumulada_mensual_mm | precipitacion_media_diaria_mm | precipitacion_maxima_diaria_mm 
+------+-----+-------------+------------+-----------+---------------------+--------------+---------------+--------------------------+------------------------------------+-------------------------------+--------------------------------
+ 2023 |   8 | LJ_TEST_001 | -79.520851 | -3.805328 |                   1 |       18.400 |        18.400 |                        1 |                             12.500 |           12.5000000000000000 |                         12.500
+ 2023 |   8 | LJ_TEST_002 | -79.516342 | -3.809842 |                   1 |        9.700 |         9.700 |                        1 |                              8.700 |            8.7000000000000000 |                          8.700
+(2 filas)
+
+
+=== Verificacion de identificadores actuales en dim_celda/fact_incendio/fact_clima ===
+  celda_id   
+-------------
+ LJ_TEST_001
+ LJ_TEST_002
+(2 filas)
+
+   incendio_id   |  celda_id   
+-----------------+-------------
+ V_2023_TEST_001 | LJ_TEST_001
+ V_2023_TEST_002 | LJ_TEST_002
+(2 filas)
+
+  celda_id   | fecha_id 
+-------------+----------
+ LJ_TEST_001 | 20230815
+ LJ_TEST_002 | 20230820
+(2 filas)
+
+
+--- MongoDB: consultas_mongodb.js + verificacion de identificadores ---
+
+1. DETECCIONES VALIDAS
+{
+  deteccion_id: 'V_2023_TEST_001',
+  celda_id: 'LJ_TEST_001',
+  fecha: '2023-08-15',
+  frp_mw: 18.4
+}
+{
+  deteccion_id: 'V_2023_TEST_002',
+  celda_id: 'LJ_TEST_002',
+  fecha: '2023-08-20',
+  frp_mw: 9.7
+}
+
+2. RESUMEN DE FRP
+{
+  _id: null,
+  frp_maxima: 18.4,
+  frp_promedio: 14.049999999999999,
+  numero_detecciones: 2
+}
+
+3. DETECCIONES POR CELDA
+{
+  _id: 'LJ_TEST_002',
+  numero_detecciones: 1,
+  frp_promedio: 9.7,
+  frp_maxima: 9.7
+}
+{
+  _id: 'LJ_TEST_001',
+  numero_detecciones: 1,
+  frp_promedio: 18.4,
+  frp_maxima: 18.4
+}
+Documentos con IDs antiguos (esperado 0): 0
+Documentos con IDs nuevos (esperado 2): 2

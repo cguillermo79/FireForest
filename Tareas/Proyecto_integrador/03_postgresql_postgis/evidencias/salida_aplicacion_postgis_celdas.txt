@@ -1,0 +1,58 @@
+Variables de conexion encontradas en Proyecto_integrador\.env: PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD (valor no mostrado).
+==============================================================================
+MIGRACION PERMANENTE DE CELDAS CONTROLADAS (COMMIT real)
+==============================================================================
+Conectando a postgres@localhost:5432/fireforest
+
+--- 1) Respaldo previo ---
+Respaldo creado: Proyecto_integrador\03_postgresql_postgis\evidencias\respaldo_celdas_anteriores.json
+  dim_celda: 2 fila(s)
+  fact_incendio: 2 fila(s)
+  fact_clima: 2 fila(s)
+
+--- 2) Ejecucion de la migracion (transaccion unica) ---
+  DO $$ DECLARE... -> comprobacion superada
+  DELETE FROM fact_incendio -> 2 fila(s) afectada(s)
+  DELETE FROM fact_clima -> 2 fila(s) afectada(s)
+  DELETE FROM dim_celda -> 2 fila(s) afectada(s)
+  INSERT INTO dim_celda -> 2 fila(s) afectada(s)
+  UPDATE dim_celda AS -> 2 fila(s) afectada(s)
+  INSERT INTO fact_clima -> 2 fila(s) afectada(s)
+  INSERT INTO fact_incendio -> 2 fila(s) afectada(s)
+  DO $$ DECLARE... -> comprobacion superada
+  DO $$ DECLARE... -> comprobacion superada
+Sentencias ejecutadas dentro de la migracion: 10
+
+COMMIT ejecutado. La migracion quedo persistida en la base de datos.
+Resumen de filas afectadas por tabla:
+  DELETE FROM fact_incendio: 2 fila(s)
+  DELETE FROM fact_clima: 2 fila(s)
+  DELETE FROM dim_celda: 2 fila(s)
+  INSERT INTO dim_celda: 2 fila(s)
+  UPDATE dim_celda AS: 2 fila(s)
+  INSERT INTO fact_clima: 2 fila(s)
+  INSERT INTO fact_incendio: 2 fila(s)
+
+--- 3) Verificacion en conexion nueva (solo lectura) ---
+
+--- Verificacion posterior (conexion nueva, solo lectura) ---
+Celdas antiguas ausentes (esperado []): []
+Celdas nuevas presentes (esperado ['LJ_TEST_001', 'LJ_TEST_002']): ['LJ_TEST_001', 'LJ_TEST_002']
+Huerfanos fact_incendio (esperado []): []
+Huerfanos fact_clima (esperado []): []
+Duplicados fact_incendio (esperado []): []
+Duplicados fact_clima (esperado []): []
+LJ_TEST_001: SRID=32717 valido=True area_m2=250000.0
+LJ_TEST_002: SRID=32717 valido=True area_m2=250000.0
+LJ_TEST_001: dentro de canton Loja (centroide)=True (poligono)=True
+LJ_TEST_002: dentro de canton Loja (centroide)=True (poligono)=True
+LJ_TEST_001: dentro de parroquia El Cisne (centroide)=True (poligono)=True
+LJ_TEST_002: dentro de parroquia El Cisne (centroide)=True (poligono)=True
+LJ_TEST_001: distancia al limite = 1085.00 m (esperado 1085.00 m, diferencia 0.005 m)
+LJ_TEST_002: distancia al limite = 1066.01 m (esperado 1066.01 m, diferencia 0.005 m)
+Consulta celda-mes: 2 fila(s) para las celdas nuevas (esperado 2)
+  {'anio': 2023, 'mes': 8, 'celda_id': 'LJ_TEST_001', 'longitud': -79.520851, 'latitud': -3.805328, 'detecciones_totales': 1, 'frp_total_mw': Decimal('18.400'), 'frp_maxima_mw': Decimal('18.400'), 'numero_dias_con_incendio': 1, 'precipitacion_acumulada_mensual_mm': Decimal('12.500'), 'precipitacion_media_diaria_mm': Decimal('12.5000000000000000'), 'precipitacion_maxima_diaria_mm': Decimal('12.500')}
+  {'anio': 2023, 'mes': 8, 'celda_id': 'LJ_TEST_002', 'longitud': -79.516342, 'latitud': -3.809842, 'detecciones_totales': 1, 'frp_total_mw': Decimal('9.700'), 'frp_maxima_mw': Decimal('9.700'), 'numero_dias_con_incendio': 1, 'precipitacion_acumulada_mensual_mm': Decimal('8.700'), 'precipitacion_media_diaria_mm': Decimal('8.7000000000000000'), 'precipitacion_maxima_diaria_mm': Decimal('8.700')}
+
+Todas las verificaciones posteriores se cumplieron.
+Log completo guardado en: Proyecto_integrador\03_postgresql_postgis\evidencias\salida_aplicacion_postgis_celdas.txt

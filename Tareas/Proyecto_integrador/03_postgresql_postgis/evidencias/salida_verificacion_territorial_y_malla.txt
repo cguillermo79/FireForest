@@ -1,0 +1,28 @@
+==============================================================================
+1) Reconstruccion de limites (INEC, disolucion por codigo DPA)
+==============================================================================
+Canton Loja (1101): area = 1891.1920 km2, valido = True
+Canton Catamayo (1103): area = 651.8932 km2, valido = True
+Parroquias reconstruidas en canton Loja: 14
+
+==============================================================================
+2) Re-verificacion de las celdas ORIGINALES (evidencia de QA)
+==============================================================================
+LJ_04521: dentro_canton_Loja(centroide)=False dentro_canton_Loja(poligono)=False dentro_canton_Catamayo=True dist_limite_Loja_m=1109.45
+LJ_04522: dentro_canton_Loja(centroide)=False dentro_canton_Loja(poligono)=False dentro_canton_Catamayo=True dist_limite_Loja_m=762.31
+
+==============================================================================
+3) Malla sistematica 500x500 m anclada a multiplos de 500 (EPSG:32717)
+==============================================================================
+Celdas totalmente contenidas en canton Loja: (ver longitud de 'qualified' tras filtro de margen) 5949
+Criterio de seleccion: ordenar por X asc, luego Y asc; tomar las 2 primeras con margen >= 1000 m
+LJ_TEST_001: esquina_SO=(664000.0,9579000.0) centroide_UTM=(664250.0,9579250.0) lon=-79.520851 lat=-3.805328 dist_limite_m=1085.01
+LJ_TEST_002: esquina_SO=(664500.0,9578500.0) centroide_UTM=(664750.0,9578750.0) lon=-79.516342 lat=-3.809842 dist_limite_m=1066.05
+
+==============================================================================
+4) Tabla de validacion completa de las celdas nuevas
+==============================================================================
+{'celda_id': 'LJ_TEST_001', 'longitud': -79.520851, 'latitud': -3.805328, 'centroide_utm_x': 664250.0, 'centroide_utm_y': 9579250.0, 'epsg': '32717', 'area_m2': 250000.0, 'canton': 'Loja', 'parroquia': 'El Cisne', 'dist_limite_canton_m': 1085.01, 'within_centroide': True, 'within_poligono_completo': True}
+{'celda_id': 'LJ_TEST_002', 'longitud': -79.516342, 'latitud': -3.809842, 'centroide_utm_x': 664750.0, 'centroide_utm_y': 9578750.0, 'epsg': '32717', 'area_m2': 250000.0, 'canton': 'Loja', 'parroquia': 'El Cisne', 'dist_limite_canton_m': 1066.05, 'within_centroide': True, 'within_poligono_completo': True}
+
+Tabla guardada en: C:\Users\Guillermo Chuncho\Documents\analisisCiencia\FireForest\Tareas\Proyecto_integrador\03_postgresql_postgis\evidencias\tabla_validacion_celdas_nuevas.csv

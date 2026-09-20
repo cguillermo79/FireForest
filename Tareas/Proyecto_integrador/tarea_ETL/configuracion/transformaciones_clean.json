@@ -1,0 +1,55 @@
+{
+  "version": "1.0",
+  "fecha": "2026-09-20",
+  "anio_estudio": 2023,
+  "celdas_esperadas": 7997,
+  "meses_esperados": 12,
+  "filas_celda_mes_esperadas": 95964,
+  "tamano_bloque_csv": 100000,
+  "salidas": {
+    "formatos": [
+      "CSV",
+      "Parquet"
+    ],
+    "orden_malla": [
+      "cell_index"
+    ],
+    "orden_mensual": [
+      "cell_index",
+      "anio",
+      "mes"
+    ]
+  },
+  "transformaciones": [
+    {
+      "id": "TR-01",
+      "nombre": "seleccion_periodo",
+      "descripcion": "Filtrar VIIRS y CHIRPS al anio 2023 sin modificar los archivos Raw."
+    },
+    {
+      "id": "TR-02",
+      "nombre": "tipado_y_periodo",
+      "descripcion": "Convertir identificadores, enteros, decimales y booleanos a tipos explicitos y construir periodo como el primer dia del mes."
+    },
+    {
+      "id": "TR-03",
+      "nombre": "normalizacion_identificador_espacial",
+      "descripcion": "Incorporar cell_id y atributos territoriales desde la malla mediante cell_index."
+    },
+    {
+      "id": "TR-04",
+      "nombre": "banderas_cobertura",
+      "descripcion": "Distinguir observacion VIIRS disponible de faltante y conservar las celdas parciales mediante una categoria territorial."
+    },
+    {
+      "id": "TR-05",
+      "nombre": "metrica_derivada_chirps",
+      "descripcion": "Calcular fraccion_dias_humedos como dias_humedos / dias_validos cuando el denominador es positivo."
+    },
+    {
+      "id": "TR-06",
+      "nombre": "banderas_atipicos",
+      "descripcion": "Aplicar los limites IQR documentados y marcar extremos sin eliminarlos ni reemplazarlos."
+    }
+  ]
+}

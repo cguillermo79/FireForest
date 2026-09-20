@@ -1,0 +1,36 @@
+[
+  {
+    "deteccion_id": "V_2023_TEST_001",
+    "celda_id": "LJ_TEST_001",
+    "fecha": "2023-08-15",
+    "hora_utc": "18:42",
+    "fuente": "VIIRS",
+    "sensor": "VIIRS_SNPP_375m",
+    "frp_mw": 18.4,
+    "fire_mask": 7,
+    "coordenadas": {
+      "longitud": -79.520851,
+      "latitud": -3.805328
+    },
+    "calidad": {
+      "valida": true
+    }
+  },
+  {
+    "deteccion_id": "V_2023_TEST_002",
+    "celda_id": "LJ_TEST_002",
+    "fecha": "2023-08-20",
+    "hora_utc": "18:47",
+    "fuente": "VIIRS",
+    "sensor": "VIIRS_SNPP_375m",
+    "frp_mw": 9.7,
+    "fire_mask": 8,
+    "coordenadas": {
+      "longitud": -79.516342,
+      "latitud": -3.809842
+    },
+    "calidad": {
+      "valida": true
+    }
+  }
+]

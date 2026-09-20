@@ -1,0 +1,29 @@
+PRUEBA DE IDEMPOTENCIA DE LA EVALUACION DE CALIDAD RAW
+Fecha de comprobación: 2026-09-20
+
+Procedimiento:
+1. Se ejecutó codigo/evaluar_calidad_raw.py sobre las fuentes Raw y el perfilado.
+2. Se calcularon los hashes SHA-256 de sus cinco salidas.
+3. Se ejecutó nuevamente el mismo script sin modificar entradas o reglas.
+4. Se compararon los hashes de ambas ejecuciones.
+
+Resultado: CUMPLE. Las cinco salidas fueron idénticas.
+
+matriz_calidad.csv
+25df718a401d38e0bd73594538c672fe76f43afd93ebc97fd945796b68a42740
+
+estadisticas_atipicos.csv
+925120c3bf039a1454579db3486b3b45344f3c88f1f5abebec77e990024da304
+
+bitacora_decisiones.csv
+52fec793781f09ba8d4cc52b841f6ce40d2482907b8df97421f1f2fe3a1ec9d8
+
+matriz_entregables_guia.csv
+c20c3c3e9f1dc4f4c0955b1e3f346948239f2d352d769f61dbcae71cac279732
+
+lista_verificacion_guia.md
+df1324a30e2a74bcfae9a78f69493ba95523400eadf7f726e16cec3ea57d34e1
+
+Esta prueba cubre la evaluación de calidad Raw y su seguimiento del estado
+Clean. La idempotencia de Clean se demuestra por separado. El flujo completo
+deberá comprobarse nuevamente después de generar Curated.
