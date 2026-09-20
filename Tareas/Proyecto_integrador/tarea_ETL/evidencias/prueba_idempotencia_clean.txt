@@ -1,0 +1,25 @@
+PRUEBA DE IDEMPOTENCIA DE LA CAPA CLEAN
+Fecha de verificación: 2026-09-20
+Comando: .venv\Scripts\python.exe Tareas\Proyecto_integrador\tarea_ETL\codigo\etl_fireforest.py
+
+Procedimiento:
+1. Se ejecutó el script y se calcularon hashes SHA-256 de sus diez archivos de datos en clean/.
+2. Se ejecutó nuevamente el mismo comando con las mismas entradas y configuración.
+3. Se recalcularon los hashes y se compararon archivo por archivo.
+
+Resultado: CUMPLE. Los diez archivos de datos generados en clean/ conservaron exactamente el mismo hash y no se anexaron ni duplicaron registros.
+
+Archivos de datos verificados:
+- chirps_2023.csv: d73b771a96649eff5904ffaf42e93eeab18019b67fe1cf26dbb5dbed9dad433d
+- chirps_2023.parquet: 53200583c2bbc6b61354c9b019507938bf17bfe7dc9a59ecf3e3e8c29e4b5d9f
+- malla_500m.csv: b12b67e0a67f73921e8abedf09f6adbfaf1a2ff2fdccda394c93723610a49400
+- malla_500m.parquet: 13c32327819e625d74e314f9c6e37a497a38ad602f88a06b3dfb1ab63a09022f
+- observaciones_viirs_sin_cobertura_2023.csv: 9bb54fa7429c65f5c4e2f17714f3a2fe2ff6fe8ee1b150ae86ff70b8dd981266
+- observaciones_viirs_sin_cobertura_2023.parquet: b81acb75a1dad20527059f3834bf7aa0694f66e51735ee0b8aedf8810c6c4004
+- rechazos_criticos_2023.csv: 02ae7dd283c98f4afefe07155732d92f33c10d5397e9b0912297d0caa1e14e25
+- rechazos_criticos_2023.parquet: 2feb12fd8f514e53e482368fa785366fc221260f636d0ee26c5fbbdf3f0d777d
+- viirs_2023.csv: 76da903e6f52f2b8abd4c56af81909c49ac048c685ae039f08abf2f0759d45a9
+- viirs_2023.parquet: ba8caea5cee04218f62213a3a89bde1dd053aa155a4f7497f886e27853a610dc
+
+El manifiesto de salidas se genera en evidencias/ y registra únicamente los
+archivos de datos, no la documentación de la carpeta.

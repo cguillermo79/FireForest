@@ -1,0 +1,29 @@
+PRUEBA DE IDEMPOTENCIA DEL PERFILADO INICIAL
+Fecha de comprobación: 2026-09-20
+
+Procedimiento:
+1. Se ejecutó codigo/perfilar_fuentes.py sobre las fuentes Raw.
+2. Se calcularon los hashes SHA-256 de las cinco salidas generadas.
+3. Se ejecutó nuevamente el mismo script, sin modificar las entradas.
+4. Se recalcularon y compararon los hashes.
+
+Resultado: CUMPLE. Las cinco salidas fueron idénticas en ambas ejecuciones.
+
+hallazgos_perfilado.csv
+fa4a1d13b1b883c148dd723c584f081bc8126fbed7934400ab8b17ffeee63954
+
+inventario_fuentes.csv
+ff94bbcb29a20a567eaafc21386ae9084933b03a037bea0d880cd2dc861fbc9f
+
+perfilado_claves_relaciones.csv
+083b8ea780089422a070f5c1cee324d2a5b6a629b289debd2cb25fc94862f841
+
+perfilado_columnas.csv
+93effa553f8fb916aeb635912d4074e16d19390ead600304f49bbeb89e786afc
+
+resumen_perfilado.md
+5ef7217093f45899b7d6a9c08b2a50ea26c6feb42665f73872fa5bf40583e969
+
+La prueba cubre únicamente el inventario y perfilado inicial. La idempotencia
+del ETL completo deberá verificarse nuevamente cuando existan las capas Clean y
+Curated.

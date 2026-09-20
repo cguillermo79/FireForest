@@ -12,6 +12,19 @@ reorganización del repositorio).
 > textual de la guía. Ni el PDF entregado ni `../fuente/avance1.tex` se
 > modificaron para producir este documento.
 
+> **Nota posterior (2026-09-15):** una validación territorial
+> determinó que las celdas controladas usadas en el informe entregado
+> (`LJ_04521`, `LJ_04522`) no pertenecen al cantón Loja. El informe
+> entregado se conserva intacto, sin modificar; el detalle completo del
+> hallazgo y su corrección (aplicada solo en la presentación, el guion
+> y la documentación técnica posteriores, no en este informe) está en
+> `fe_de_erratas_territorial.md`, en esta misma carpeta. Actualización
+> (2026-09-14): la sustitución por `LJ_TEST_001`/`LJ_TEST_002` ya se
+> aplicó de forma **permanente** en PostgreSQL (`COMMIT` real,
+> verificado en conexión nueva) y en MongoDB; ver
+> `03_postgresql_postgis/evidencias/verificacion_territorial_celdas.md`
+> §5.
+
 ## 1. Requisitos formales
 
 | Requisito de la guía | Evidencia en la entrega | Estado |

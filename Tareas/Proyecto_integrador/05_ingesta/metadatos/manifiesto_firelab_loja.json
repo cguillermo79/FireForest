@@ -1,0 +1,33 @@
+{
+  "descripcion": "Procedencia de las copias de solo lectura tomadas de FIRELAB_Loja.",
+  "verificado_utc": "2026-09-19T17:24:51+00:00",
+  "archivos": [
+    {
+      "fuente": "malla",
+      "uso": "Malla espacial de 500 m del canton Loja (EPSG:32717) para dim_celda.",
+      "origen_relativo_a_FIRELAB_Loja": "08_malla_500m/productos/malla_500m_loja_maestra.gpkg",
+      "destino_relativo_a_02_datos_raw": "malla/malla_500m_loja_maestra.gpkg",
+      "tamano_bytes": 2297856,
+      "sha256": "fccff14a88ead66340b339a9463f0e56ff78f1bedd23decd600936e1e4d177a4",
+      "modificado_origen_utc": "2026-08-26T21:21:57.807605+00:00"
+    },
+    {
+      "fuente": "viirs",
+      "uso": "Evidencia VIIRS por celda-mes 2019-2025, version v1.0.3 (la citada por el Taller NoSQL).",
+      "origen_relativo_a_FIRELAB_Loja": "09_integracion_variables/productos/viirs_500m/viirs_evidencia_500m_celda_mes_2019_2025_v1_0_3.csv",
+      "destino_relativo_a_02_datos_raw": "viirs/viirs_evidencia_500m_celda_mes_2019_2025_v1_0_3.csv",
+      "tamano_bytes": 113613311,
+      "sha256": "8b2e676a17c4dde44196cda829a1da01a6bf5e5cfce732b69958160a257cb939",
+      "modificado_origen_utc": "2026-08-27T18:22:40.493443+00:00"
+    },
+    {
+      "fuente": "chirps",
+      "uso": "Precipitacion CHIRPS por celda-mes 2019-2025.",
+      "origen_relativo_a_FIRELAB_Loja": "09_integracion_variables/productos/chirps_500m/chirps_500m_celda_mes_2019_2025.csv",
+      "destino_relativo_a_02_datos_raw": "chirps/chirps_500m_celda_mes_2019_2025.csv",
+      "tamano_bytes": 111263101,
+      "sha256": "9ec517e6de363c493298d341ae4ad97d87a5fe45fd0d5b73882a50d4315e936d",
+      "modificado_origen_utc": "2026-08-27T00:35:54.876231+00:00"
+    }
+  ]
+}

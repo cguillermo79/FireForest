@@ -1,0 +1,18 @@
+﻿categoria,requisito_guia,evidencia_planificada,estado,observacion
+Alcance,"Pregunta, población, periodo, unidad y claves",README.md,CUMPLE,Definición formal para 2023.
+Código,Script o notebook ejecutable desde el inicio,codigo/etl_fireforest.py --desde-cero,CUMPLE,"Un solo comando ejecuta perfilado, calidad Raw, Clean, Curated y seguimiento."
+Datos,Fuentes permitidas o instrucciones reproducibles,raw/README.md; ../05_ingesta/metadatos/manifiesto_firelab_loja.json,CUMPLE,Raw conservado con hashes.
+Datos,Capa Clean,clean/*.csv; clean/*.parquet,CUMPLE,"Malla, VIIRS y CHIRPS tipados por separado, con excepciones y rechazos explícitos."
+Datos,Dataset Curated,curated/fireforest_celda_mes_2023.csv; curated/fireforest_celda_mes_2023.parquet,CUMPLE,Dataset maestro de 95.964 filas por cell_id + anio + mes.
+Datos,Diccionario de datos Curated,curated/diccionario_datos.csv,CUMPLE,"Documenta las 45 variables, tipos, unidades, origen, derivación y nulabilidad."
+Calidad,Perfilado inicial,evidencias/perfilado_columnas.csv,CUMPLE,"Incluye tipos, faltantes, rangos y cardinalidad."
+Calidad,Matriz de calidad,evidencias/matriz_calidad.csv,CUMPLE,"Incluye regla, afectados, porcentaje, tratamiento y evidencia."
+Calidad,Bitácora de decisiones,evidencias/bitacora_decisiones.csv,CUMPLE,Formato exigido por la guía.
+Calidad,Al menos seis controles automatizados,evidencias/matriz_calidad.csv; evidencias/controles_clean.csv; evidencias/controles_curated.csv,CUMPLE,Se ejecutaron 16 controles Clean y 11 controles Curated.
+Calidad,Comparación antes y después,evidencias/comparacion_antes_despues.csv,CUMPLE,"Compara Raw, Clean y Curated en filas, faltantes, duplicados, atípicos y rechazos."
+Transformación,Al menos tres transformaciones,codigo/etl_fireforest.py; configuracion/transformaciones_clean.json,CUMPLE,Se implementaron seis transformaciones documentadas y la integración uno a uno.
+Integración,"Claves, cardinalidad y tipo de unión justificados",README.md; evidencias/perfilado_claves_relaciones.csv; evidencias/controles_curated.csv,CUMPLE,"Unión externa de validación uno a uno por cell_index + anio + mes, sin claves huérfanas ni multiplicación de filas."
+Reproducibilidad,"Dependencias, rutas, parámetros y orden",README.md; configuracion/requirements_etl.txt; configuracion/; codigo/README.md,CUMPLE,El comando --desde-cero ejecuta el flujo completo en el orden documentado.
+Reproducibilidad,Segunda ejecución sin duplicación,evidencias/prueba_reproducibilidad_flujo_completo.txt,CUMPLE,Dos ejecuciones completas produjeron salidas equivalentes sin duplicación.
+Documentación,Diagrama Raw a Clean a Curated,README.md,CUMPLE,Diagrama incorporado en el documento principal.
+Documentación,Conclusiones y limitaciones,README.md,CUMPLE,Conclusiones y limitaciones documentadas a partir de los resultados ejecutados.

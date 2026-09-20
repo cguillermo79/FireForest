@@ -1,0 +1,3 @@
+celda_id,longitud,latitud,centroide_utm_x,centroide_utm_y,epsg,area_m2,canton,parroquia,dist_limite_canton_m,within_centroide,within_poligono_completo
+LJ_TEST_001,-79.520851,-3.805328,664250.0,9579250.0,32717,250000.0,Loja,El Cisne,1085.01,True,True
+LJ_TEST_002,-79.516342,-3.809842,664750.0,9578750.0,32717,250000.0,Loja,El Cisne,1066.05,True,True

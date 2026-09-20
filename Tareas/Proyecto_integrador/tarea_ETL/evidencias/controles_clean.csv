@@ -1,0 +1,17 @@
+﻿control_id,dimension_calidad,fuente,regla,registros_evaluados,incumplimientos,resultado,evidencia
+CLE-01,reconciliacion,malla,La malla Clean conserva 7997 celdas.,7997,0,CUMPLE,clean/malla_500m.csv
+CLE-02,unicidad,malla,cell_index y cell_id son completos y unicos.,7997,0,CUMPLE,clean/malla_500m.csv
+CLE-03,reconciliacion,viirs,VIIRS Clean conserva 95964 claves celda-mes.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-04,unicidad,viirs,La clave cell_index + anio + mes es completa y unica.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-05,integridad_referencial,viirs,Todo registro VIIRS recibe un cell_id de la malla.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-06,completitud,viirs,Las 900 observaciones faltantes se conservan y marcan como no aptas.,95964,0,CUMPLE,clean/observaciones_viirs_sin_cobertura_2023.csv
+CLE-07,consistencia,viirs,Un faltante VIIRS no se convierte en cero y una observacion disponible mantiene metricas.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-08,consistencia,viirs,periodo y anio_mes coinciden.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-09,reconciliacion,chirps,CHIRPS Clean conserva 95964 claves celda-mes.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-10,unicidad,chirps,La clave cell_index + anio + mes es completa y unica.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-11,integridad_referencial,chirps,Todo registro CHIRPS conserva el cell_id validado contra la malla.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-12,consistencia,chirps,periodo y anio_mes coinciden.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-13,validez,chirps,fraccion_dias_humedos reproduce dias_humedos / dias_validos y queda entre 0 y 1.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-14,valores_atipicos,viirs,Los extremos FRP se marcan y no se eliminan.,95964,0,CUMPLE,clean/viirs_2023.csv
+CLE-15,valores_atipicos,chirps,Los extremos de precipitacion se marcan y no se eliminan.,95964,0,CUMPLE,clean/chirps_2023.csv
+CLE-16,rechazos,todas,No existen registros con errores criticos que requieran rechazo.,199925,0,CUMPLE,clean/rechazos_criticos_2023.csv
