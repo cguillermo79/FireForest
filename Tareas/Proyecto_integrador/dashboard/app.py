@@ -80,9 +80,14 @@ def load_data():
         df_curated["detecciones_incendio"] = df_curated["detecciones_todas_media"].fillna(0.0)
         
     # Calcular coordenadas WGS84 para visualización geoespacial
-    from pyproj import Transformer
-    transformer = Transformer.from_crs("EPSG:32717", "EPSG:4326", always_xy=True)
-    lons, lats = transformer.transform(df_malla["centro_x_m"].values, df_malla["centro_y_m"].values)
+    try:
+        from pyproj import Transformer
+        transformer = Transformer.from_crs("EPSG:32717", "EPSG:4326", always_xy=True)
+        lons, lats = transformer.transform(df_malla["centro_x_m"].values, df_malla["centro_y_m"].values)
+    except Exception:
+        # Fallback analítico UTM Zona 17S a WGS84 para Loja
+        lons = -79.20 + (df_malla["centro_x_m"].values - 695000.0) / 111320.0
+        lats = -4.00 + (df_malla["centro_y_m"].values - 9557000.0) / 110574.0
     coords_df = pd.DataFrame({"cell_id": df_malla["cell_id"], "longitud": lons, "latitud": lats})
     
     df_merged = df_curated.merge(coords_df, on="cell_id", how="left")
