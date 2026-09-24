@@ -20,9 +20,14 @@ Integrar y consultar datos ambientales y de incendios forestales mediante una ar
 
 ## Restricciones
 
-No modificar, sobrescribir ni importar directamente archivos del proyecto FIRELAB_Loja.
+FIRELAB_Loja es un proyecto independiente y de alta importancia científica. Por decisión del equipo (2026-09-19) se puede usar una parte de sus datos, solo la estrictamente necesaria para el Proyecto Integrador:
 
-Trabajar únicamente con datos independientes, muestras controladas o datos simulados.
+- Acceso de solo lectura. Nunca modificar, mover, renombrar, sobrescribir ni borrar nada dentro de FIRELAB_Loja. Tampoco ejecutar comandos que escriban en él, como `git status` dentro de ese repositorio.
+- Los datos se copian a `Tareas/Proyecto_integrador/02_datos/raw/` con `Tareas/Proyecto_integrador/05_ingesta/copiar_desde_firelab.py`, que verifica hashes y deja un manifiesto de procedencia en `05_ingesta/metadatos/`.
+- No copiar el dataset completo ni productos que el proyecto no necesite.
+- No importar código de FIRELAB_Loja. FireForest debe funcionar solo con sus copias.
+
+Fuera de esos datos, trabajar con datos independientes, muestras controladas o datos simulados.
 
 ## Convención de trabajo
 
