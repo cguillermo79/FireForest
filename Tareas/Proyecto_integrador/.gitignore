@@ -22,6 +22,10 @@
 02_datos/raw/**
 !02_datos/raw/**/
 !02_datos/raw/**/.gitkeep
+fases_desarrollo_historico/02_datos/raw/chirps/*.csv
+fases_desarrollo_historico/02_datos/raw/viirs/*.csv
+fases_desarrollo_historico/02_datos/raw/malla/*.gpkg
+fases_desarrollo_historico/tarea_ETL/*.zip
 
 # Resultados de Spark/PySpark generados localmente
 09_spark_pyspark/resultados/**
