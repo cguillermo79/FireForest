@@ -1,4 +1,4 @@
-# Entorno y credenciales
+﻿# Entorno y credenciales
 .env
 .venv/
 
@@ -13,7 +13,6 @@ __pycache__/
 # datos crudos pesados, resultados locales de Spark, etc.) viven en
 # Tareas/Proyecto_integrador/.gitignore, no aqui.
 
-
 # Residuos de compilacion LaTeX
 *.aux
 *.fdb_latexmk
@@ -23,3 +22,6 @@ __pycache__/
 *.out
 *.toc
 
+# Binarios temporales
+tmp/
+*.exe

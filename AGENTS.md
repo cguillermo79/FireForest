@@ -15,6 +15,8 @@ FIRELAB_Loja es un proyecto independiente y de alta importancia científica.
 - Utilizar únicamente copias independientes y controladas.
 - No copiar el dataset completo de FIRELAB_Loja.
 
+Excepción autorizada por el equipo (2026-09-19): se puede copiar, en modo solo lectura, la parte de los datos estrictamente necesaria para el Proyecto Integrador. La copia se hace únicamente con `Tareas/Proyecto_integrador/05_ingesta/copiar_desde_firelab.py`, que verifica hashes, no escribe nada en FIRELAB_Loja y registra la procedencia en `Tareas/Proyecto_integrador/05_ingesta/metadatos/manifiesto_firelab_loja.json`. No ejecutar `git status` ni ningún otro comando dentro de FIRELAB_Loja, porque puede escribir en su repositorio.
+
 ## Alcance de FireForest
 
 El proyecto utilizará un subconjunto controlado de datos para demostrar:
