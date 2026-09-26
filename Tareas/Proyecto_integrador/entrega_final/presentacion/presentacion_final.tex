@@ -36,7 +36,7 @@
 \setbeamercolor*{palette quaternary}{bg=VerdeOscuro, fg=white}
 \setbeamercolor{structure}{fg=VerdeOscuro}
 \setbeamercolor{section in toc}{fg=VerdeOscuro}
-\setbeamercolor{title}{fg=VerdeOscuro}
+\setbeamercolor{title}{fg=white}
 \setbeamercolor{frametitle}{bg=VerdeOscuro, fg=white}
 \setbeamercolor{alerted text}{fg=Fuego}
 \setbeamercolor{block title}{bg=VerdeMedio, fg=white}
@@ -222,6 +222,64 @@
       \bottomrule
     \end{tabularx}
   \end{table}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 5b: RESTRICCIONES Y LIMITACIONES DE LOS DATOS
+% -----------------------------------------------------------------------------
+\begin{frame}{Restricciones y Limitaciones de los Datos}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{alertblock}{Restricciones de Origen}
+        \begin{itemize}\small
+          \item \textbf{Desajuste de resoluci\'on:} VIIRS (375\,m) agregado sobre malla de 500\,m $\rightarrow$ posible sub/sobre-representaci\'on en celdas de borde.
+          \item \textbf{Cobertura nubosa:} sensores \'opticos pueden perder detecciones en \'epoca lluviosa (mar--abr).
+          \item \textbf{CHIRPS es un producto interpolado}, no estaciones terrestres puras $\rightarrow$ sesgo posible en topograf\'ia andina abrupta.
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Restricciones Temporales y de Clase}
+        \begin{itemize}\small
+          \item \textbf{Grano celda-mes:} oculta din\'amica intra-mensual (un d\'ia seco dentro de un mes lluvioso).
+          \item \textbf{Un solo a\~no (2023):} sin variabilidad interanual (fen\'omenos ENOS).
+          \item \textbf{Desbalance de clases:} solo 747 de 95.964 observaciones ($0{,}8\%$) con fuego confirmado.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 5c: CALIDAD DE DATOS Y REGLAS DE LIMPIEZA (ETL)
+% -----------------------------------------------------------------------------
+\begin{frame}{Calidad de Datos y Reglas de Limpieza (ETL)}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Problemas de Calidad Detectados}
+        \begin{itemize}\small
+          \item Celdas con geometr\'ia parcial fuera del l\'imite cantonal (\texttt{area\_dentro\_loja\_ha} $< 25$\,ha).
+          \item Registros VIIRS duplicados por m\'ultiples pasadas satelitales en el mismo d\'ia/celda.
+          \item Valores nulos en \texttt{precipitacion\_acumulada\_mm} por vac\'ios de cobertura CHIRPS.
+          \item Inconsistencias de proyecci\'on: reconciliaci\'on de CRS (\texttt{EPSG:32717} vs. WGS84) entre fuentes.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{exampleblock}{Reglas de Limpieza Aplicadas}
+        \begin{itemize}\small
+          \item Deduplicaci\'on por (\texttt{cell\_id, anio, mes}) con agregaci\'on media/suma seg\'un variable.
+          \item \texttt{coalesce()} para distinguir ausencia verificada de fuego vs. dato faltante.
+          \item Reproyecci\'on uniforme a \texttt{EPSG:32717} antes del join espacial.
+          \item Trazabilidad: hash SHA-256 por archivo fuente en \texttt{manifiesto\_firelab\_loja.json}.
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.2cm}
+  \begin{alertblock}{Transformaci\'on Principal}
+    Integraci\'on malla $\bowtie$ clima (inner join) $\bowtie$ VIIRS (left join) sobre \texttt{cell\_id}, preservando la totalidad de las 7.997 celdas aun sin evidencia de incendio.
+  \end{alertblock}
 \end{frame}
 
 % -----------------------------------------------------------------------------
