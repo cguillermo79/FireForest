@@ -49,8 +49,11 @@ def main():
     print(f"   [OK] {len(df):,} observaciones celda-mes leídas.")
 
     # 2. Filtrado de observaciones válidas
-    # Si existe cobertura_chirps_valida filtramos por ella
-    if "cobertura_chirps_valida" in df.columns:
+    # Se excluyen las celdas-mes sin cobertura satelital VIIRS (apto_analisis = False): esas filas
+    # no tienen evidencia observada de incendio y no deben interpretarse como ausencia confirmada.
+    if "apto_analisis" in df.columns:
+        df_clean = df[df["apto_analisis"] == True].copy()
+    elif "cobertura_chirps_valida" in df.columns:
         df_clean = df[df["cobertura_chirps_valida"] == True].copy()
     else:
         df_clean = df.copy()
@@ -126,7 +129,7 @@ def main():
     print(f"{'Precision':<25} | {prec:<10.4f}")
     print(f"{'F1-Score':<25} | {f1:<10.4f}")
 
-    print("\n[TABLA ML 2] MATRIZ DE CONFUSIÓN (CONJUNTO DE PRUEBA: 19.013 CELDAS-MES)")
+    print(f"\n[TABLA ML 2] MATRIZ DE CONFUSIÓN (CONJUNTO DE PRUEBA: {len(X_test):,} CELDAS-MES)")
     print(f"{'Real / Predicho':<20} | {'Pred: Sin Fuego (0)':<20} | {'Pred: Con Fuego (1)':<20}")
     print("-" * 66)
     print(f"{'Real: Sin Fuego (0)':<20} | {cm[0,0]:<20,} | {cm[0,1]:<20,}")

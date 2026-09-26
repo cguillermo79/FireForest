@@ -67,6 +67,10 @@ spark_metrics_file = base_dir / "pipeline" / "metricas_spark.json"
 if not spark_metrics_file.exists():
     spark_metrics_file = base_dir / "09_spark_pyspark" / "resultados" / "metricas_spark.json"
 
+firelab_manifest_file = base_dir / "05_ingesta" / "metadatos" / "manifiesto_firelab_loja.json"
+if not firelab_manifest_file.exists():
+    firelab_manifest_file = base_dir / "fases_desarrollo_historico" / "05_ingesta" / "metadatos" / "manifiesto_firelab_loja.json"
+
 
 @st.cache_data
 def load_data():
@@ -1197,12 +1201,21 @@ elif menu == "🛡️ 6. Auditoría y Trazabilidad":
         st.markdown("""
         Se verificaron los hashes criptográficos SHA-256 de las fuentes crudas antes de cualquier procesamiento:
         """)
-        manifest_data = pd.DataFrame([
-            {"Archivo": "malla_500m_loja_maestra.gpkg", "Hash SHA-256": "81f1aa93...0c52a", "Estado": "Inmutable / Verificado"},
-            {"Archivo": "chirps_500m_celda_mes_2019_2025.csv", "Hash SHA-256": "df7a6411...6bc12", "Estado": "Inmutable / Verificado"},
-            {"Archivo": "viirs_evidencia_500m_celda_mes_2019_2025_v1_0_3.csv", "Hash SHA-256": "b0a21d1b...0c4e1", "Estado": "Inmutable / Verificado"}
-        ])
-        st.table(manifest_data)
+        if firelab_manifest_file.exists():
+            with open(firelab_manifest_file, "r", encoding="utf-8") as f:
+                firelab_manifest = json.load(f)
+            manifest_data = pd.DataFrame([
+                {
+                    "Archivo": Path(a["destino_relativo_a_02_datos_raw"]).name,
+                    "Hash SHA-256": f"{a['sha256'][:8]}...{a['sha256'][-5:]}",
+                    "Estado": "Inmutable / Verificado"
+                }
+                for a in firelab_manifest["archivos"]
+            ])
+            st.table(manifest_data)
+            st.caption(f"Manifiesto verificado: {firelab_manifest.get('verificado_utc', 'N/D')} · fuente: `{firelab_manifest_file.relative_to(base_dir)}`")
+        else:
+            st.warning("No se encontró el manifiesto de procedencia (`manifiesto_firelab_loja.json`).")
         st.info("🔒 Ningún script escribe en FIRELAB_Loja; se opera exclusivamente con copias independientes autorizadas.")
 
     with tab3:
