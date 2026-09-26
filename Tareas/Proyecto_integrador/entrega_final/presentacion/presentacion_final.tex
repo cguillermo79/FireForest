@@ -132,7 +132,7 @@
       \end{block}
       \begin{block}{IV. Explotaci\'on, Modelado \& Cierre}
         \begin{itemize}\small
-          \item Modelo Machine Learning (Random Forest ROC 0,9927).
+          \item Modelo Machine Learning (Random Forest ROC 0,9912).
           \item Dashboard Streamlit (Mapas Satelitales y Tablas).
           \item Conclusiones, trazabilidad y gobernanza.
         \end{itemize}
@@ -194,7 +194,7 @@
     \end{column}
     \begin{column}{0.33\textwidth}
       \begin{exampleblock}{3. ML \& Dashboard}
-        \scriptsize Clasificador Random Forest (ROC 0,9927) y Dashboard Streamlit con mapas satelitales y tablas duales.
+        \scriptsize Clasificador Random Forest (ROC 0,9912) y Dashboard Streamlit con mapas satelitales y tablas duales.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -206,25 +206,21 @@
 \renewcommand{\seccionactual}{Variables \& Unidades}
 \begin{frame}{Inventario de Fuentes y Diccionario de Variables}
   \begin{table}[H]
-    \centering
-    \resizebox{\textwidth}{!}{%
-    \begin{tabularx}{1.15\textwidth}{@{}l l l X c@{}}
+    \centering\tiny
+    \begin{tabularx}{\textwidth}{@{}l X l X l@{}}
       \toprule
-      \textbf{Variable} & \textbf{Concepto} & \textbf{Fuente} & \textbf{Transformaci\'on T\'ecnica} & \textbf{Unidad} \\
+      \textbf{Variable} & \textbf{Concepto} & \textbf{Fuente} & \textbf{Transformaci\'on} & \textbf{Unidad} \\
       \midrule
-      \texttt{cell\_id} & Identificador \'unico celda 500m & INEC Malla & Malla ortogonal regular (\texttt{EPSG:32717}) & Texto \\
-      \texttt{longitud / latitud} & Coordenadas centroide & INEC Malla & Reproyecci\'on geod\'esica a WGS84 & Grados ($^\circ$) \\
-      \texttt{area\_dentro\_loja\_ha} & Superficie efectiva en cant\'on & INEC Malla & Intersecci\'on espacial vectorial con pol\'igono INEC & Hect\'areas (ha) \\
-      \texttt{precip\_acumulada\_mm} & Lluvia mensual acumulada & CHIRPS v2.0 & Asignaci\'on espacial matricial y suma mensual & Mil\'imetros (mm) \\
-      \texttt{dias\_secos\_lt1mm} & D\'ias con lluvia $<1$\,mm & CHIRPS v2.0 & Conteo mensual de d\'ias de estiaje & D\'ias (d) \\
-      \texttt{precip\_lag\_1m} & Lluvia del mes anterior & Spark Window & Retardo \texttt{lag(precip, 1)} sobre partici\'on celda & Mil\'imetros (mm) \\
-      \texttt{dias\_secos\_acum\_3m} & D\'ias secos en 3 meses & Spark Window & Suma deslizante en ventana temporal de 3 meses & D\'ias (d) \\
-      \texttt{detecciones\_incendio} & Focos de calor VIIRS en celda & NASA FIRMS & Conteo espacial de anomal\'ias t\'ermicas & Conteo (N) \\
-      \texttt{frp\_total\_mw} & Potencia radiativa del fuego & NASA FIRMS & Suma de radiaci\'on de p\'ixeles t\'ermicos activos & Megavatios (MW) \\
-      \texttt{incendio\_observado} & Presencia real de fuego & Derivada & Variable target binaria: $\text{FRP} > 0$ & Clase $\{0,1\}$ \\
+      \texttt{cell\_id} & ID \'unico celda 500m & INEC Malla & Malla ortogonal (\texttt{EPSG:32717}) & Texto \\
+      \texttt{longitud/latitud} & Coordenadas centroide & INEC Malla & Reproyecci\'on a WGS84 & Grados ($^\circ$) \\
+      \texttt{precip\_acumulada\_mm} & Lluvia mensual acumulada & CHIRPS v2.0 & Suma diaria mensual & mm \\
+      \texttt{dias\_secos\_lt1mm} & D\'ias con lluvia $<1$\,mm & CHIRPS v2.0 & Conteo mensual & D\'ias \\
+      \texttt{precip\_lag\_1m} & Lluvia mes anterior & Spark Window & \texttt{lag(precip,1)} por celda & mm \\
+      \texttt{dias\_secos\_acum\_3m} & D\'ias secos en 3 meses & Spark Window & Suma ventana deslizante 3m & D\'ias \\
+      \texttt{frp\_total\_mw} & Potencia radiativa del fuego & NASA FIRMS & Suma FRP de p\'ixeles t\'ermicos & MW \\
+      \texttt{incendio\_observado} & Presencia real de fuego & Derivada & detecciones\,$>0$ $\vee$ FRP\,$>0$ & Clase $\{0,1\}$ \\
       \bottomrule
-    \end{tabularx}%
-    }
+    \end{tabularx}
   \end{table}
 \end{frame}
 
@@ -324,7 +320,7 @@
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{alertblock}{Descubrimiento Anal\'itico de la Din\'amica}\scriptsize
-        \textbf{El fuego tiene memoria h\'idrica:} La lluvia disminuye en mayo ($29$\,mm), pero los incendios no estallan hasta agosto--septiembre ($8.683$\,MW) tras \textbf{acumular m\'as de 86 d\'ias secos consecutivos}.
+        \textbf{El fuego tiene memoria h\'idrica:} La lluvia disminuye en mayo ($29$\,mm), pero los incendios no estallan hasta agosto--octubre ($>15.700$\,MW acumulados) tras acumular cerca de \textbf{86 d\'ias secos consecutivos}.
       \end{alertblock}
       \centering
       \includegraphics[width=0.95\textwidth]{figuras/serie_temporal_clima_vs_incendios.png}
@@ -337,32 +333,33 @@
 % -----------------------------------------------------------------------------
 \renewcommand{\seccionactual}{Tablas Spark}
 \begin{frame}{Resultados Tabulares: Balance Cantonal en Apache Spark}
-  \scriptsize
   \begin{table}[H]
     \centering
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{@{}ccccrrr@{}}
       \toprule
       \textbf{Mes} & \textbf{Celdas Activas} & \textbf{Precip. Media (mm)} & \textbf{Lag 1m (mm)} & \textbf{D\'ias Secos 3m} & \textbf{Celdas Fuego} & \textbf{FRP Total (MW)} \\
       \midrule
-      Enero       & 7.997 & 64,80  & 64,80  & 21,0 d & 7   & 17,71 \\
-      Febrero     & 7.997 & 92,35  & 64,80  & 42,8 d & 0   & 0,00 \\
-      Marzo       & 7.997 & 312,28 & 92,35  & 61,8 d & 0   & 0,00 \\
+      Enero       & 7.997 & 64,80  & n/d    & 21,0 d & 7   & 17,71 \\
+      Febrero     & 7.997 & 92,35  & 64,80  & 42,7 d & 0   & 0,00 \\
+      Marzo       & 7.997 & 312,28 & 92,35  & 61,7 d & 0   & 0,00 \\
       Abril       & 7.997 & 325,82 & 312,28 & 58,5 d & 0   & 0,00 \\
       Mayo        & 7.997 & 29,03  & 325,82 & 65,5 d & 0   & 0,00 \\
-      Junio       & 7.997 & 16,73  & 29,03  & 73,7 d & 16  & 424,52 \\
+      Junio       & 7.997 & 16,73  & 29,03  & 73,8 d & 16  & 424,52 \\
       Julio       & 7.997 & 16,73  & 16,73  & 85,8 d & 26  & 191,17 \\
       \rowcolor{FuegoPalido}
-      \textbf{Agosto}     & \textbf{7.997} & \textbf{9,73}   & \textbf{16,73}  & \textbf{86,2 d} & \textbf{109} & \textbf{2.512,60} \\
+      \textbf{Agosto}     & \textbf{7.997} & \textbf{24,05}  & \textbf{16,73}  & \textbf{85,6 d} & \textbf{143} & \textbf{2.512,57} \\
       \rowcolor{FuegoPalido}
-      \textbf{Septiembre} & \textbf{7.997} & \textbf{19,84}  & \textbf{9,73}   & \textbf{86,1 d} & \textbf{353} & \textbf{8.683,16} \\
+      \textbf{Septiembre} & \textbf{7.997} & \textbf{16,61}  & \textbf{24,05}  & \textbf{85,8 d} & \textbf{306} & \textbf{6.295,15} \\
       \rowcolor{FuegoPalido}
-      \textbf{Octubre}    & \textbf{7.997} & \textbf{50,60}  & \textbf{19,84}  & \textbf{84,3 d} & \textbf{148} & \textbf{3.411,46} \\
-      Noviembre   & 7.997 & 84,95  & 50,60  & 78,4 d & 88  & 1.458,94 \\
-      Diciembre   & 7.997 & 123,89 & 84,95  & 69,9 d & 0   & 0,00 \\
+      \textbf{Octubre}    & \textbf{7.997} & \textbf{78,31}  & \textbf{16,61}  & \textbf{76,0 d} & \textbf{201} & \textbf{6.910,86} \\
+      Noviembre   & 7.997 & 68,18  & 78,31  & 69,5 d & 42  & 347,58 \\
+      Diciembre   & 7.997 & 76,65  & 68,18  & 65,9 d & 6   & 24,77 \\
       \bottomrule
-    \end{tabular}
+    \end{tabular}%
+    }
   \end{table}
-  \centering\tiny\textbf{Total acumulado 2023:} 747 celdas-mes con fuego \textbar\ 16.699,56 MW de FRP total liberada en el cant\'on.
+  \centering\tiny\textbf{Total acumulado 2023:} 747 celdas-mes con fuego \textbar\ 16.724,33 MW de FRP total liberada en el cant\'on.
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -391,11 +388,11 @@
           \toprule
           \textbf{Celda ID} & \textbf{Mes} & \textbf{Precip} & \textbf{FRP} & \textbf{Geom} & \textbf{\'Area} \\
           \midrule
-          \texttt{LJ500\_R031\_C075} & Sep & 14,8 mm & 432,6 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R031\_C076} & Sep & 14,8 mm & 410,2 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R121\_C056} & Ago & 7,9 mm  & 388,1 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R045\_C082} & Sep & 12,4 mm & 365,9 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R098\_C063} & Oct & 24,1 mm & 312,4 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C075} & Oct & 98,0 mm & 327,9 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C076} & Oct & 98,0 mm & 246,6 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R121\_C056} & Sep & 13,9 mm & 242,8 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R032\_C075} & Oct & 98,0 mm & 224,3 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C077} & Oct & 99,2 mm & 205,9 MW & Polygon & 25 ha \\
           \bottomrule
         \end{tabular}
       \end{table}
@@ -430,14 +427,14 @@
           \textbf{Periodo} & \textbf{Docs BSON} & \textbf{Fuegos Confirmados} & \textbf{FRP Suma (MW)} \\
           \midrule
           2023-01 & 46  & 7   & 17,71 \\
-          2023-06 & 51  & 16  & 424,52 \\
+          2023-06 & 53  & 16  & 424,52 \\
           2023-07 & 61  & 26  & 191,17 \\
-          2023-08 & 144 & 109 & 2.512,60 \\
+          2023-08 & 188 & 143 & 2.512,57 \\
           \rowcolor{FuegoPalido}
-          \textbf{2023-09} & \textbf{388} & \textbf{353} & \textbf{8.683,16} \\
+          \textbf{2023-09} & \textbf{348} & \textbf{306} & \textbf{6.295,15} \\
           \rowcolor{FuegoPalido}
-          \textbf{2023-10} & \textbf{183} & \textbf{148} & \textbf{3.411,46} \\
-          2023-11 & 123 & 88  & 1.458,94 \\
+          \textbf{2023-10} & \textbf{246} & \textbf{201} & \textbf{6.910,86} \\
+          2023-11 & 75  & 42  & 347,58 \\
           \bottomrule
         \end{tabular}
       \end{table}
@@ -453,14 +450,13 @@
   \begin{columns}
     \begin{column}{0.48\textwidth}
       \centering
-      \includegraphics[width=0.88\textwidth]{figuras/matriz_confusion_ml.png}\\
-      \tiny\textbf{Matriz de Confusi\'on} (19.193 celdas-mes en Test Set).
-      \vspace{0.1cm}
-      \begin{block}{M\'etricas en Evaluaci\'on Independiente}\scriptsize
+      \includegraphics[width=0.74\textwidth]{figuras/matriz_confusion_ml.png}\\
+      \tiny\textbf{Matriz de Confusi\'on} (19.013 celdas-mes en Test Set).
+      \begin{block}{M\'etricas en Evaluaci\'on Independiente}\tiny
         \begin{itemize}
-          \item \textbf{ROC-AUC:} \textbf{0,9927} (Excelente separabilidad).
-          \item \textbf{Recall / Sensibilidad:} \textbf{96,64\%} ($144 / 149$ fuegos reales capturados).
-          \item \textbf{F1-Score:} \textbf{0,7029}.
+          \item \textbf{ROC-AUC:} \textbf{0,9912} (Excelente separabilidad).
+          \item \textbf{Recall:} \textbf{95,97\%} ($143/149$ fuegos capturados).
+          \item \textbf{F1-Score:} \textbf{0,2685}.
         \end{itemize}
       \end{block}
     \end{column}
@@ -470,9 +466,9 @@
       \tiny\textbf{Importancia Relativa de Variables} (Gini Importance).
       \vspace{0.1cm}
       \begin{exampleblock}{Variables Clave}\scriptsize
-        1. \texttt{dias\_secos\_acumulados\_3m} ($20,68\%$)\\
-        2. \texttt{precipitacion\_acumulada\_mm} ($18,45\%$)\\
-        3. \texttt{precip\_lag\_1m} ($15,92\%$)
+        1. \texttt{dias\_secos\_acumulados\_3m} ($20,16\%$)\\
+        2. \texttt{precip\_lag\_2m} ($18,04\%$)\\
+        3. \texttt{precip\_media\_movil\_3m} ($13,10\%$)
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -554,8 +550,8 @@
     \begin{enumerate}\small
       \item \textbf{Pipeline Cantonal End-to-End:} Se proces\'o con \'exito la totalidad de la malla espacial cantonal de Loja (7.997 celdas $\times$ 12 meses = 95.964 observaciones), superando plenamente la prueba preliminar del Avance 1.
       \item \textbf{Eficacia del Modelo H\'ibrido:} La sinergia entre SQL (PostgreSQL/PostGIS), NoSQL (MongoDB), Data Lakehouse (Parquet) y Apache Spark resolvi\'o eficazmente la heterogeneidad de fuentes y el c\'alculo masivo de series de tiempo.
-      \item \textbf{Descubrimiento Ambiental:} El estiaje acumulado (86+ d\'ias secos en 3 meses) es el principal detonante del fuego, concentrando el 87\% de radiaci\'on t\'ermica entre agosto y octubre.
-      \item \textbf{Alta Capacidad Predictiva:} El modelo Random Forest alcanz\'o un ROC-AUC de \textbf{0,9927} y un Recall de \textbf{96,64\%}.
+      \item \textbf{Descubrimiento Ambiental:} El estiaje acumulado ($\sim$86 d\'ias secos en 3 meses) es el principal detonante del fuego, concentrando el 94\% de radiaci\'on t\'ermica entre agosto y octubre.
+      \item \textbf{Alta Capacidad Predictiva:} El modelo Random Forest alcanz\'o un ROC-AUC de \textbf{0,9912} y un Recall de \textbf{95,97\%}.
       \item \textbf{Explotaci\'on Interactiva:} Dashboard Streamlit con soporte satelital fotogr\'afico y motor dual de alta disponibilidad.
     \end{enumerate}
   \end{alertblock}
