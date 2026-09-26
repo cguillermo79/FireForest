@@ -106,7 +106,7 @@
 \renewcommand{\seccionactual}{Contenido}
 \begin{frame}{Estructura de la Sustentaci\'on}
   \begin{columns}[t]
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{block}{I. Fundamentaci\'on \& Datos}
         \begin{itemize}\small
           \item Problema territorial y pregunta de investigaci\'on.
@@ -115,7 +115,7 @@
           \item Salto de escala: De 2 celdas a la malla cantonal (7.997 celdas $\times$ 12 meses).
         \end{itemize}
       \end{block}
-      \vspace{0.45cm}
+      \vspace{0.2cm}
       \begin{block}{II. Arquitectura de Ingenier\'ia}
         \begin{itemize}\small
           \item Arquitectura multimodelo (SQL, NoSQL, Lakehouse).
@@ -131,7 +131,7 @@
           \item Resultados en MongoDB 8 (Pipelines BSON).
         \end{itemize}
       \end{block}
-      \vspace{0.45cm}
+      \vspace{0.4cm}
       \begin{block}{IV. Explotaci\'on, Modelado \& Cierre}
         \begin{itemize}\small
           \item Modelo Machine Learning (Random Forest ROC 0,9912).
@@ -149,7 +149,7 @@
 \renewcommand{\seccionactual}{Problema \& Pregunta}
 \begin{frame}{Definici\'on del Problema y Pregunta de Investigaci\'on}
   \begin{columns}
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{block}{Contexto Territorial (Cant\'on Loja)}
         \begin{itemize}\small
           \item Topograf\'ia andina contrastante ($<1.000$ a $>3.400$\,m.s.n.m.).
@@ -158,7 +158,7 @@
         \end{itemize}
       \end{block}
       \begin{alertblock}{El Desaf\'io de Ingenier\'ia de Datos}
-        \begin{itemize}\small
+        \begin{itemize}\footnotesize
           \item Fuentes dispersas, no alineadas y multiformato (INEC, NASA VIIRS 375m, UCSB CHIRPS).
           \item Desfase temporal: detecciones a grano diario vs. an\'alisis a grano \textbf{celda-mes}.
         \end{itemize}
@@ -184,17 +184,17 @@
   \end{block}
   \vspace{0.2cm}
   \begin{columns}[t]
-    \begin{column}{0.33\textwidth}
+    \begin{column}{0.3\textwidth}
       \begin{exampleblock}{1. Ingesta \& Spark}
         \scriptsize Captura inmutable con hashes SHA-256; transformaciones de ventana en PySpark (lags y d\'ias secos).
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.33\textwidth}
+    \begin{column}{0.3\textwidth}
       \begin{exampleblock}{2. Bases H\'ibridas}
         \scriptsize Esquema relacional estrella en PostgreSQL/PostGIS y repositorio documental semiestructurado en MongoDB 8.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.33\textwidth}
+    \begin{column}{0.3\textwidth}
       \begin{exampleblock}{3. ML \& Dashboard}
         \scriptsize Clasificador Random Forest (ROC 0,9912) y Dashboard Streamlit con mapas satelitales y tablas duales.
       \end{exampleblock}
@@ -230,8 +230,8 @@
 % SLIDE 5b: RESTRICCIONES Y LIMITACIONES DE LOS DATOS
 % -----------------------------------------------------------------------------
 \begin{frame}{Restricciones y Limitaciones de los Datos}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
       \begin{alertblock}{Restricciones de Origen}
         \begin{itemize}\small
           \item \textbf{Desajuste de resoluci\'on:} VIIRS (375\,m) agregado sobre malla de 500\,m $\rightarrow$ posible sub/sobre-representaci\'on en celdas de borde.
@@ -240,7 +240,7 @@
         \end{itemize}
       \end{alertblock}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{block}{Restricciones Temporales y de Clase}
         \begin{itemize}\small
           \item \textbf{Grano celda-mes:} oculta din\'amica intra-mensual (un d\'ia seco dentro de un mes lluvioso).
@@ -256,8 +256,8 @@
 % SLIDE 5c: CALIDAD DE DATOS Y REGLAS DE LIMPIEZA (ETL)
 % -----------------------------------------------------------------------------
 \begin{frame}{Calidad de Datos y Reglas de Limpieza (ETL)}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
       \begin{block}{Problemas de Calidad Detectados}
         \begin{itemize}\small
           \item Celdas con geometr\'ia parcial fuera del l\'imite cantonal (\texttt{area\_dentro\_loja\_ha} $< 25$\,ha).
@@ -267,7 +267,7 @@
         \end{itemize}
       \end{block}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{exampleblock}{Reglas de Limpieza Aplicadas}
         \begin{itemize}\small
           \item Deduplicaci\'on por (\texttt{cell\_id, anio, mes}) con agregaci\'on media/suma seg\'un variable.
@@ -310,7 +310,7 @@
     \end{column}
     \begin{column}{0.52\textwidth}
       \centering
-      \includegraphics[width=0.92\textwidth]{figuras/mapa_7997_celdas_loja.png}\\
+      \includegraphics[width=0.95\textwidth]{figuras/mapa_7997_celdas_loja.png}\\
       \tiny\textbf{Figura:} Cobertura cantonal total en CRS EPSG:32717 (Loja, Ecuador).
     \end{column}
   \end{columns}
@@ -363,8 +363,8 @@
 % -----------------------------------------------------------------------------
 \renewcommand{\seccionactual}{Apache Spark}
 \begin{frame}{Procesamiento Distribuido en Apache Spark (PySpark)}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
       \begin{block}{Funciones de Ventana Temporal (Window Functions)}
         \scriptsize
         Transformaciones computadas en memoria sobre particiones por celda:
@@ -375,17 +375,17 @@
           \item \texttt{sum(col("dias\_secos")).rowsBetween(-2, 0)}: D\'ias secos acumulados en el trimestre.
         \end{itemize}
       \end{block}
-      \vspace{0.8cm}
+      \vspace{0.2cm}
       \begin{exampleblock}{Exportaci\'on Optimizada}
         \scriptsize Data Lakehouse particionado f\'isicamente por \texttt{anio} y \texttt{mes} en formato columnar Parquet.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{alertblock}{Descubrimiento Anal\'itico de la Din\'amica}\scriptsize
         \textbf{El fuego tiene memoria h\'idrica:} La lluvia disminuye en mayo ($29$\,mm), pero los incendios no estallan hasta agosto--octubre ($>15.700$\,MW acumulados) tras acumular cerca de \textbf{86 d\'ias secos consecutivos}.
       \end{alertblock}
       \centering
-      \includegraphics[width=0.95\textwidth]{figuras/serie_temporal_clima_vs_incendios.png}
+      \includegraphics[width=0.99\textwidth]{figuras/serie_temporal_clima_vs_incendios.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -443,7 +443,7 @@
         \texttt{SELECT count(*) FROM fact\_celda\_mes f JOIN dim\_celda c ON f.cell\_id = c.celda\_id WHERE f.incendio\_observado = true;} $\to$ \textbf{747 eventos.}
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.48\textwidth}
       \scriptsize\textbf{Top 5 Celdas con Mayor Radiaci\'on FRP (PostGIS):}
       \begin{table}[H]
         \centering\tiny
@@ -524,11 +524,11 @@
         \end{itemize}
       \end{block}
     \end{column}
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.5\textwidth}
       \centering
       \includegraphics[width=0.92\textwidth]{figuras/importancia_variables_ml.png}\\
       \tiny\textbf{Importancia Relativa de Variables} (Gini Importance).
-      \vspace{0.1cm}
+      \vspace{0.5cm}
       \begin{exampleblock}{Variables Clave}\scriptsize
         1. \texttt{dias\_secos\_acumulados\_3m} ($20,16\%$)\\
         2. \texttt{precip\_lag\_2m} ($18,04\%$)\\
@@ -543,8 +543,8 @@
 % -----------------------------------------------------------------------------
 \renewcommand{\seccionactual}{Dashboard}
 \begin{frame}{Dashboard Interactivo en Streamlit / Plotly}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
       \begin{block}{Capacidades Visuales \& Cartogr\'aficas}\scriptsize
         \begin{itemize}
           \item \textbf{Mapeo Satelital HD:} Fondo fotogr\'afico satelital de alta definici\'on (Google Earth / Esri World Imagery).
@@ -552,12 +552,12 @@
           \item \textbf{Filtros din\'amicos:} Selecci\'on de mes (1--12) y exploraci\'on de las 7.997 celdas.
         \end{itemize}
       \end{block}
-      \vspace{0.8cm}
+      \vspace{0.5cm}
       \begin{alertblock}{Innovaci\'on: Motor Dual de Consultas}\scriptsize
         Funciona en vivo contra \textbf{PostgreSQL} y \textbf{MongoDB}, pero conmuta autom\'aticamente a un \textbf{motor embebido SQLite/JSON} en modo offline o en la nube para garantizar que las tablas siempre se generen sin ca\'idas.
       \end{alertblock}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{exampleblock}{M\'odulo de Consultas y Tablas (Secci\'on 3)}\scriptsize
         \begin{itemize}
           \item Pesta\~na SQL: Consultas predefinidas y modo libre.
@@ -566,7 +566,7 @@
           \item Pesta\~na Curated: Explorador interactivo de las 95.964 filas con descarga en CSV.
         \end{itemize}
       \end{exampleblock}
-      \vspace{0.8cm}
+      \vspace{0.4cm}
       \begin{block}{Simulador de Riesgo ML}\scriptsize
         Predicci\'on en tiempo real al ingresar lluvia y d\'ias secos.
       \end{block}
@@ -593,7 +593,7 @@
         Cero dependencias absolutas: el proyecto utiliza rutas relativas (\texttt{Path(\_\_file\_\_)}), permitiendo que el docente o evaluador lo clone y ejecute directamente.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{block}{Estructura Limpia del Repositorio}\scriptsize
         \begin{itemize}
           \item \texttt{datos/}: Raw, Clean y Curated Parquet.
@@ -614,7 +614,7 @@
 \renewcommand{\seccionactual}{Conclusiones}
 \begin{frame}{Conclusiones y Trabajo Futuro}
   \begin{alertblock}{Conclusiones Principales}
-    \begin{enumerate}\small
+    \begin{enumerate}\footnotesize
       \item \textbf{Pipeline Cantonal End-to-End:} Se proces\'o con \'exito la totalidad de la malla espacial cantonal de Loja (7.997 celdas $\times$ 12 meses = 95.964 observaciones), superando plenamente la prueba preliminar del Avance 1.
       \item \textbf{Eficacia del Modelo H\'ibrido:} La sinergia entre SQL (PostgreSQL/PostGIS), NoSQL (MongoDB), Data Lakehouse (Parquet) y Apache Spark resolvi\'o eficazmente la heterogeneidad de fuentes y el c\'alculo masivo de series de tiempo.
       \item \textbf{Descubrimiento Ambiental:} El estiaje acumulado ($\sim$86 d\'ias secos en 3 meses) es el principal detonante del fuego, concentrando el 94\% de radiaci\'on t\'ermica entre agosto y octubre.
@@ -623,7 +623,7 @@
     \end{enumerate}
   \end{alertblock}
   \vspace{0.2cm}
-  \begin{block}{Trabajo Futuro}\scriptsize
+  \begin{block}{Trabajo Futuro}\footnotesize
     Escalabilidad multianual a 10 a\~nos (2015--2025) e integraci\'on de \'indices de vegetaci\'on NDVI (Sentinel-2).
   \end{block}
 \end{frame}
