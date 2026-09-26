@@ -115,7 +115,7 @@
           \item Salto de escala: De 2 celdas a la malla cantonal (7.997 celdas $\times$ 12 meses).
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{block}{II. Arquitectura de Ingenier\'ia}
         \begin{itemize}\small
           \item Arquitectura multimodelo (SQL, NoSQL, Lakehouse).
@@ -131,7 +131,7 @@
           \item Resultados en MongoDB 8 (Pipelines BSON).
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{block}{IV. Explotaci\'on, Modelado \& Cierre}
         \begin{itemize}\small
           \item Modelo Machine Learning (Random Forest ROC 0,9912).
@@ -298,7 +298,7 @@
           \item Sin inferencia territorial ni estacional.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{alertblock}{Entrega Final (Malla Cantonal Completa)}
         \begin{itemize}\small
           \item \textbf{7.997 celdas espaciales de 500m $\times$ 500m}.
@@ -375,7 +375,7 @@
           \item \texttt{sum(col("dias\_secos")).rowsBetween(-2, 0)}: D\'ias secos acumulados en el trimestre.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{exampleblock}{Exportaci\'on Optimizada}
         \scriptsize Data Lakehouse particionado f\'isicamente por \texttt{anio} y \texttt{mes} en formato columnar Parquet.
       \end{exampleblock}
@@ -438,7 +438,7 @@
           \item \texttt{fact\_celda\_mes}: 95.964 filas con PK/FK.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{exampleblock}{Consulta de Auditor\'ia SQL}\tiny
         \texttt{SELECT count(*) FROM fact\_celda\_mes f JOIN dim\_celda c ON f.cell\_id = c.celda\_id WHERE f.incendio\_observado = true;} $\to$ \textbf{747 eventos.}
       \end{exampleblock}
@@ -477,7 +477,7 @@
           \item Preserva metadatos anidados de calidad satelital y bandas espectrales.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{exampleblock}{Pipeline de Agregaci\'on BSON}\tiny
         \texttt{[\{"\$group": \{"\_id": "\$periodo.anio\_mes", "fuegos": \{"\$sum": \{"\$cond": ["\$telemetria.evidencia\_fuego", 1, 0]\}\}, "frp": \{"\$sum": "\$telemetria.frp\_suma\_mw"\}\}\}]}
       \end{exampleblock}
@@ -552,7 +552,7 @@
           \item \textbf{Filtros din\'amicos:} Selecci\'on de mes (1--12) y exploraci\'on de las 7.997 celdas.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{alertblock}{Innovaci\'on: Motor Dual de Consultas}\scriptsize
         Funciona en vivo contra \textbf{PostgreSQL} y \textbf{MongoDB}, pero conmuta autom\'aticamente a un \textbf{motor embebido SQLite/JSON} en modo offline o en la nube para garantizar que las tablas siempre se generen sin ca\'idas.
       \end{alertblock}
@@ -566,7 +566,7 @@
           \item Pesta\~na Curated: Explorador interactivo de las 95.964 filas con descarga en CSV.
         \end{itemize}
       \end{exampleblock}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{block}{Simulador de Riesgo ML}\scriptsize
         Predicci\'on en tiempo real al ingresar lluvia y d\'ias secos.
       \end{block}
@@ -588,7 +588,7 @@
           \item Procedencia documentada de la malla INEC y telemetr\'ia NASA.
         \end{itemize}
       \end{block}
-      \vspace{0.15cm}
+      \vspace{0.45cm}
       \begin{exampleblock}{Autonom\'ia de Ejecuci\'on}\scriptsize
         Cero dependencias absolutas: el proyecto utiliza rutas relativas (\texttt{Path(\_\_file\_\_)}), permitiendo que el docente o evaluador lo clone y ejecute directamente.
       \end{exampleblock}
