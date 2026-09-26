@@ -15,7 +15,6 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
 \usepackage{amsmath}
-\usepackage{adjustbox}
 
 \usetheme{Madrid}
 \usecolortheme{default}
@@ -106,9 +105,8 @@
 % -----------------------------------------------------------------------------
 \renewcommand{\seccionactual}{Contenido}
 \begin{frame}{Estructura de la Sustentaci\'on}
-  \begin{adjustbox}{max totalheight=0.82\textheight, center}
   \begin{columns}[t]
-    \begin{column}{0.47\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{I. Fundamentaci\'on \& Datos}
         \begin{itemize}\small
           \item Problema territorial y pregunta de investigaci\'on.
@@ -117,6 +115,7 @@
           \item Salto de escala: De 2 celdas a la malla cantonal (7.997 celdas $\times$ 12 meses).
         \end{itemize}
       \end{block}
+      \vspace{0.45cm}
       \begin{block}{II. Arquitectura de Ingenier\'ia}
         \begin{itemize}\small
           \item Arquitectura multimodelo (SQL, NoSQL, Lakehouse).
@@ -124,25 +123,24 @@
         \end{itemize}
       \end{block}
     \end{column}
-    \begin{column}{0.47\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{III. Resultados \& Evidencias Tabulares}
         \begin{itemize}\small
           \item Resultados en Spark SQL (Lags y D\'ias Secos).
           \item Resultados en PostgreSQL / PostGIS (Pol\'igonos).
-          \item Resultados en MongoDB 8-- (Pipelines BSON).
+          \item Resultados en MongoDB 8 (Pipelines BSON).
         \end{itemize}
       \end{block}
-      \vspace{6pt}
+      \vspace{0.45cm}
       \begin{block}{IV. Explotaci\'on, Modelado \& Cierre}
         \begin{itemize}\small
-          \item Modelo Machine Learning (Random Forest ROC 0,9927).
+          \item Modelo Machine Learning (Random Forest ROC 0,9912).
           \item Dashboard Streamlit (Mapas Satelitales y Tablas).
           \item Conclusiones, trazabilidad y gobernanza.
         \end{itemize}
       \end{block}
     \end{column}
   \end{columns}
-  \end{adjustbox}
 \end{frame}
 
 % -----------------------------------------------------------------------------
@@ -151,7 +149,7 @@
 \renewcommand{\seccionactual}{Problema \& Pregunta}
 \begin{frame}{Definici\'on del Problema y Pregunta de Investigaci\'on}
   \begin{columns}
-    \begin{column}{0.51\textwidth}
+    \begin{column}{0.52\textwidth}
       \begin{block}{Contexto Territorial (Cant\'on Loja)}
         \begin{itemize}\small
           \item Topograf\'ia andina contrastante ($<1.000$ a $>3.400$\,m.s.n.m.).
@@ -160,17 +158,17 @@
         \end{itemize}
       \end{block}
       \begin{alertblock}{El Desaf\'io de Ingenier\'ia de Datos}
-        \begin{itemize}\footnotesize
+        \begin{itemize}\small
           \item Fuentes dispersas, no alineadas y multiformato (INEC, NASA VIIRS 375m, UCSB CHIRPS).
-          \item Desfase temporal: Detecciones satelitales a grano diario vs. an\'alisis territorial a grano \textbf{celda-mes}.
+          \item Desfase temporal: detecciones a grano diario vs. an\'alisis a grano \textbf{celda-mes}.
         \end{itemize}
       \end{alertblock}
     \end{column}
-    \begin{column}{0.4\textwidth}
+    \begin{column}{0.48\textwidth}
       \begin{exampleblock}{Pregunta Central de Investigaci\'on}
         \small\textit{\textquestiondown C\'omo estructurar e implementar una arquitectura h\'ibrida (SQL, NoSQL, Data Lakehouse y Spark) que permita integrar, validar y consultar de forma escalable datos heterog\'eneos de incendios forestales sobre toda la malla cantonal de Loja para alimentar simult\'aneamente consultas anal\'iticas, un dashboard cartogr\'afico y modelos predictivos?}
       \end{exampleblock}
-      \vspace{0.1cm}
+      \vspace{0.2cm}
       \textbf{Beneficiarios:} Bomberos Loja, MAATE, GAD Loja y comunidades rurales.
     \end{column}
   \end{columns}
@@ -186,19 +184,19 @@
   \end{block}
   \vspace{0.2cm}
   \begin{columns}[t]
-    \begin{column}{0.3\textwidth}
+    \begin{column}{0.33\textwidth}
       \begin{exampleblock}{1. Ingesta \& Spark}
         \scriptsize Captura inmutable con hashes SHA-256; transformaciones de ventana en PySpark (lags y d\'ias secos).
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.3\textwidth}
+    \begin{column}{0.33\textwidth}
       \begin{exampleblock}{2. Bases H\'ibridas}
         \scriptsize Esquema relacional estrella en PostgreSQL/PostGIS y repositorio documental semiestructurado en MongoDB 8.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.3\textwidth}
+    \begin{column}{0.33\textwidth}
       \begin{exampleblock}{3. ML \& Dashboard}
-        \scriptsize Clasificador Random Forest (ROC 0,9927) y Dashboard Streamlit con mapas satelitales y tablas duales.
+        \scriptsize Clasificador Random Forest (ROC 0,9912) y Dashboard Streamlit con mapas satelitales y tablas duales.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -207,62 +205,47 @@
 % -----------------------------------------------------------------------------
 % SLIDE 5: DICCIONARIO DE VARIABLES Y UNIDADES
 % -----------------------------------------------------------------------------
-
 \renewcommand{\seccionactual}{Variables \& Unidades}
 \begin{frame}{Inventario de Fuentes y Diccionario de Variables}
   \begin{table}[H]
-    \centering
-    \adjustbox{max width=\textwidth, max height=0.78\textheight}{%
-    \scriptsize
-    \begin{tabular}{@{} l p{2.5cm} p{1.5cm} p{6cm} c @{}}
+    \centering\tiny
+    \begin{tabularx}{\textwidth}{@{}l X l X l@{}}
       \toprule
-      \textbf{Variable} & \textbf{Concepto} & \textbf{Fuente} & \textbf{Transformaci\'on T\'ecnica} & \textbf{Unidad} \\
+      \textbf{Variable} & \textbf{Concepto} & \textbf{Fuente} & \textbf{Transformaci\'on} & \textbf{Unidad} \\
       \midrule
-      \texttt{cell\_id} & Identificador \'unico celda 500m & INEC Malla & Malla ortogonal regular (\texttt{EPSG:32717}) & Texto \\
-      \texttt{longitud / latitud} & Coordenadas centroide & INEC Malla & Reproyecci\'on geod\'esica a WGS84 & Grados ($^\circ$) \\
-      \texttt{area\_dentro\_loja\_ha} & Superficie efectiva en cant\'on & INEC Malla & Intersecci\'on espacial vectorial con pol\'igono INEC & Hect\'areas (ha) \\
-      \texttt{precip\_acumulada\_mm} & Lluvia mensual acumulada & CHIRPS v2.0 & Asignaci\'on espacial matricial y suma mensual & Mil\'imetros (mm) \\
-      \texttt{dias\_secos\_lt1mm} & D\'ias con lluvia $<1$\,mm & CHIRPS v2.0 & Conteo mensual de d\'ias de estiaje & D\'ias (d) \\
-      \texttt{precip\_lag\_1m} & Lluvia del mes anterior & Spark Window & Retardo \texttt{lag(precip, 1)} sobre partici\'on celda & Mil\'imetros (mm) \\
-      \texttt{dias\_secos\_acum\_3m} & D\'ias secos en 3 meses & Spark Window & Suma deslizante en ventana temporal de 3 meses & D\'ias (d) \\
-      \texttt{detecciones\_incendio} & Focos de calor VIIRS en celda & NASA FIRMS & Conteo espacial de anomal\'ias t\'ermicas & Conteo (N) \\
-      \texttt{frp\_total\_mw} & Potencia radiativa del fuego & NASA FIRMS & Suma de radiaci\'on de p\'ixeles t\'ermicos activos & Megavatios (MW) \\
-      \texttt{incendio\_observado} & Presencia real de fuego & Derivada & Variable target binaria: $\text{FRP} > 0$ & Clase $\{0,1\}$ \\
+      \texttt{cell\_id} & ID \'unico celda 500m & INEC Malla & Malla ortogonal (\texttt{EPSG:32717}) & Texto \\
+      \texttt{longitud/latitud} & Coordenadas centroide & INEC Malla & Reproyecci\'on a WGS84 & Grados ($^\circ$) \\
+      \texttt{precip\_acumulada\_mm} & Lluvia mensual acumulada & CHIRPS v2.0 & Suma diaria mensual & mm \\
+      \texttt{dias\_secos\_lt1mm} & D\'ias con lluvia $<1$\,mm & CHIRPS v2.0 & Conteo mensual & D\'ias \\
+      \texttt{precip\_lag\_1m} & Lluvia mes anterior & Spark Window & \texttt{lag(precip,1)} por celda & mm \\
+      \texttt{dias\_secos\_acum\_3m} & D\'ias secos en 3 meses & Spark Window & Suma ventana deslizante 3m & D\'ias \\
+      \texttt{frp\_total\_mw} & Potencia radiativa del fuego & NASA FIRMS & Suma FRP de p\'ixeles t\'ermicos & MW \\
+      \texttt{incendio\_observado} & Presencia real de fuego & Derivada & detecciones\,$>0$ $\vee$ FRP\,$>0$ & Clase $\{0,1\}$ \\
       \bottomrule
-    \end{tabular}%
-    }
+    \end{tabularx}
   \end{table}
 \end{frame}
 
 % -----------------------------------------------------------------------------
-% SLIDE Restricciones de los Datos
+% SLIDE 5b: RESTRICCIONES Y LIMITACIONES DE LOS DATOS
 % -----------------------------------------------------------------------------
-\renewcommand{\seccionactual}{Restricciones}
 \begin{frame}{Restricciones y Limitaciones de los Datos}
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
       \begin{alertblock}{Restricciones de Origen}
-        \begin{itemize}\footnotesize
-          \item \textbf{Desajuste de resolución:} VIIRS (375\,m) agregado
-                sobre malla de 500\,m $\rightarrow$ posible sub/sobre-representación
-                en celdas de borde.
-          \item \textbf{Cobertura nubosa:} sensores ópticos pueden perder
-                detecciones en época lluviosa (mar--abr).
-          \item \textbf{CHIRPS es un producto interpolado}, no estaciones
-                terrestres puras $\rightarrow$ sesgo posible en topografía
-                andina abrupta.
+        \begin{itemize}\small
+          \item \textbf{Desajuste de resoluci\'on:} VIIRS (375\,m) agregado sobre malla de 500\,m $\rightarrow$ posible sub/sobre-representaci\'on en celdas de borde.
+          \item \textbf{Cobertura nubosa:} sensores \'opticos pueden perder detecciones en \'epoca lluviosa (mar--abr).
+          \item \textbf{CHIRPS es un producto interpolado}, no estaciones terrestres puras $\rightarrow$ sesgo posible en topograf\'ia andina abrupta.
         \end{itemize}
       \end{alertblock}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Restricciones Temporales y de Clase}
-        \begin{itemize}\footnotesize
-          \item \textbf{Grano celda-mes:} oculta dinámica intra-mensual
-                (un día seco dentro de un mes lluvioso).
-          \item \textbf{Un solo año (2023):} sin variabilidad interanual
-                (fenómenos ENOS).
-          \item \textbf{Desbalance de clases:} solo 747 de 95.964
-                observaciones (0,8\,\%) con fuego confirmado.
+        \begin{itemize}\small
+          \item \textbf{Grano celda-mes:} oculta din\'amica intra-mensual (un d\'ia seco dentro de un mes lluvioso).
+          \item \textbf{Un solo a\~no (2023):} sin variabilidad interanual (fen\'omenos ENOS).
+          \item \textbf{Desbalance de clases:} solo 747 de 95.964 observaciones ($0{,}8\%$) con fuego confirmado.
         \end{itemize}
       \end{block}
     \end{column}
@@ -270,47 +253,34 @@
 \end{frame}
 
 % -----------------------------------------------------------------------------
-% SLIDE CALIDAD Y ETL
+% SLIDE 5c: CALIDAD DE DATOS Y REGLAS DE LIMPIEZA (ETL)
 % -----------------------------------------------------------------------------
-
-\renewcommand{\seccionactual}{Calidad \& ETL}
 \begin{frame}{Calidad de Datos y Reglas de Limpieza (ETL)}
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Problemas de Calidad Detectados}
-        \begin{itemize}\footnotesize
-          \item Celdas con geometría parcial fuera del límite cantonal
-                (\texttt{area\_dentro\_loja\_ha} $<$ 25\,ha).
-          \item Registros VIIRS duplicados por múltiples pasadas
-                satelitales en el mismo día/celda.
-          \item Valores nulos en \texttt{precipitacion\_acumulada\_mm}
-                por vacíos de cobertura CHIRPS.
-          \item Inconsistencias de proyección: reconciliación de CRS
-                (EPSG:32717 vs. WGS84) entre fuentes.
+        \begin{itemize}\small
+          \item Celdas con geometr\'ia parcial fuera del l\'imite cantonal (\texttt{area\_dentro\_loja\_ha} $< 25$\,ha).
+          \item Registros VIIRS duplicados por m\'ultiples pasadas satelitales en el mismo d\'ia/celda.
+          \item Valores nulos en \texttt{precipitacion\_acumulada\_mm} por vac\'ios de cobertura CHIRPS.
+          \item Inconsistencias de proyecci\'on: reconciliaci\'on de CRS (\texttt{EPSG:32717} vs. WGS84) entre fuentes.
         \end{itemize}
       \end{block}
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{exampleblock}{Reglas de Limpieza Aplicadas}
-        \begin{itemize}\footnotesize
-          \item Deduplicación por \texttt{(cell\_id, anio, mes)} con
-                agregación media/suma según variable.
-          \item \texttt{coalesce()} para distinguir \emph{ausencia
-                verificada} de fuego vs. dato faltante.
-          \item Reproyección uniforme a EPSG:32717 antes del join
-                espacial.
-          \item Trazabilidad: hash SHA-256 por archivo fuente en
-                \texttt{manifiesto\_firelab\_loja.json}.
+        \begin{itemize}\small
+          \item Deduplicaci\'on por (\texttt{cell\_id, anio, mes}) con agregaci\'on media/suma seg\'un variable.
+          \item \texttt{coalesce()} para distinguir ausencia verificada de fuego vs. dato faltante.
+          \item Reproyecci\'on uniforme a \texttt{EPSG:32717} antes del join espacial.
+          \item Trazabilidad: hash SHA-256 por archivo fuente en \texttt{manifiesto\_firelab\_loja.json}.
         \end{itemize}
       \end{exampleblock}
     \end{column}
   \end{columns}
-  \vspace{0.3cm}
-  \begin{alertblock}{Transformación Principal}
-    \footnotesize Integración \texttt{malla} $\bowtie$ \texttt{clima}
-    (inner join) $\bowtie$ \texttt{VIIRS} (left join) sobre
-    \texttt{cell\_id}, preservando la totalidad de las 7.997 celdas aun
-    sin evidencia de incendio.
+  \vspace{0.2cm}
+  \begin{alertblock}{Transformaci\'on Principal}
+    Integraci\'on malla $\bowtie$ clima (inner join) $\bowtie$ VIIRS (left join) sobre \texttt{cell\_id}, preservando la totalidad de las 7.997 celdas aun sin evidencia de incendio.
   \end{alertblock}
 \end{frame}
 
@@ -328,6 +298,7 @@
           \item Sin inferencia territorial ni estacional.
         \end{itemize}
       \end{block}
+      \vspace{0.45cm}
       \begin{alertblock}{Entrega Final (Malla Cantonal Completa)}
         \begin{itemize}\small
           \item \textbf{7.997 celdas espaciales de 500m $\times$ 500m}.
@@ -393,7 +364,7 @@
 \renewcommand{\seccionactual}{Apache Spark}
 \begin{frame}{Procesamiento Distribuido en Apache Spark (PySpark)}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Funciones de Ventana Temporal (Window Functions)}
         \scriptsize
         Transformaciones computadas en memoria sobre particiones por celda:
@@ -404,13 +375,14 @@
           \item \texttt{sum(col("dias\_secos")).rowsBetween(-2, 0)}: D\'ias secos acumulados en el trimestre.
         \end{itemize}
       \end{block}
+      \vspace{0.8cm}
       \begin{exampleblock}{Exportaci\'on Optimizada}
         \scriptsize Data Lakehouse particionado f\'isicamente por \texttt{anio} y \texttt{mes} en formato columnar Parquet.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{alertblock}{Descubrimiento Anal\'itico de la Din\'amica}\scriptsize
-        \textbf{El fuego tiene memoria h\'idrica:} La lluvia disminuye en mayo ($29$\,mm), pero los incendios no estallan hasta agosto--septiembre ($8.683$\,MW) tras \textbf{acumular m\'as de 86 d\'ias secos consecutivos}.
+        \textbf{El fuego tiene memoria h\'idrica:} La lluvia disminuye en mayo ($29$\,mm), pero los incendios no estallan hasta agosto--octubre ($>15.700$\,MW acumulados) tras acumular cerca de \textbf{86 d\'ias secos consecutivos}.
       \end{alertblock}
       \centering
       \includegraphics[width=0.95\textwidth]{figuras/serie_temporal_clima_vs_incendios.png}
@@ -425,34 +397,33 @@
 \begin{frame}{Resultados Tabulares: Balance Cantonal en Apache Spark}
   \begin{table}[H]
     \centering
-    \setlength{\tabcolsep}{4pt}
     \resizebox{\textwidth}{!}{%
-    \scriptsize
     \begin{tabular}{@{}ccccrrr@{}}
       \toprule
       \textbf{Mes} & \textbf{Celdas Activas} & \textbf{Precip. Media (mm)} & \textbf{Lag 1m (mm)} & \textbf{D\'ias Secos 3m} & \textbf{Celdas Fuego} & \textbf{FRP Total (MW)} \\
       \midrule
-      Enero       & 7.997 & 64,80  & 64,80  & 21,0 d & 7   & 17,71 \\
-      Febrero     & 7.997 & 92,35  & 64,80  & 42,8 d & 0   & 0,00 \\
-      Marzo       & 7.997 & 312,28 & 92,35  & 61,8 d & 0   & 0,00 \\
+      Enero       & 7.997 & 64,80  & n/d    & 21,0 d & 7   & 17,71 \\
+      Febrero     & 7.997 & 92,35  & 64,80  & 42,7 d & 0   & 0,00 \\
+      Marzo       & 7.997 & 312,28 & 92,35  & 61,7 d & 0   & 0,00 \\
       Abril       & 7.997 & 325,82 & 312,28 & 58,5 d & 0   & 0,00 \\
       Mayo        & 7.997 & 29,03  & 325,82 & 65,5 d & 0   & 0,00 \\
-      Junio       & 7.997 & 16,73  & 29,03  & 73,7 d & 16  & 424,52 \\
+      Junio       & 7.997 & 16,73  & 29,03  & 73,8 d & 16  & 424,52 \\
       Julio       & 7.997 & 16,73  & 16,73  & 85,8 d & 26  & 191,17 \\
       \rowcolor{FuegoPalido}
-      \textbf{Agosto}     & \textbf{7.997} & \textbf{9,73}   & \textbf{16,73}  & \textbf{86,2 d} & \textbf{109} & \textbf{2.512,60} \\
+      \textbf{Agosto}     & \textbf{7.997} & \textbf{24,05}  & \textbf{16,73}  & \textbf{85,6 d} & \textbf{143} & \textbf{2.512,57} \\
       \rowcolor{FuegoPalido}
-      \textbf{Septiembre} & \textbf{7.997} & \textbf{19,84}  & \textbf{9,73}   & \textbf{86,1 d} & \textbf{353} & \textbf{8.683,16} \\
+      \textbf{Septiembre} & \textbf{7.997} & \textbf{16,61}  & \textbf{24,05}  & \textbf{85,8 d} & \textbf{306} & \textbf{6.295,15} \\
       \rowcolor{FuegoPalido}
-      \textbf{Octubre}    & \textbf{7.997} & \textbf{50,60}  & \textbf{19,84}  & \textbf{84,3 d} & \textbf{148} & \textbf{3.411,46} \\
-      Noviembre   & 7.997 & 84,95  & 50,60  & 78,4 d & 88  & 1.458,94 \\
-      Diciembre   & 7.997 & 123,89 & 84,95  & 69,9 d & 0   & 0,00 \\
+      \textbf{Octubre}    & \textbf{7.997} & \textbf{78,31}  & \textbf{16,61}  & \textbf{76,0 d} & \textbf{201} & \textbf{6.910,86} \\
+      Noviembre   & 7.997 & 68,18  & 78,31  & 69,5 d & 42  & 347,58 \\
+      Diciembre   & 7.997 & 76,65  & 68,18  & 65,9 d & 6   & 24,77 \\
       \bottomrule
     \end{tabular}%
     }
   \end{table}
-  \centering\tiny\textbf{Total acumulado 2023:} 747 celdas-mes con fuego \textbar\ 16.699,56 MW de FRP total liberada en el cant\'on.
+  \centering\tiny\textbf{Total acumulado 2023:} 747 celdas-mes con fuego \textbar\ 16.724,33 MW de FRP total liberada en el cant\'on.
 \end{frame}
+
 % -----------------------------------------------------------------------------
 % SLIDE 10: RESULTADOS EN POSTGRESQL / POSTGIS
 % -----------------------------------------------------------------------------
@@ -467,11 +438,12 @@
           \item \texttt{fact\_celda\_mes}: 95.964 filas con PK/FK.
         \end{itemize}
       \end{block}
+      \vspace{0.8cm}
       \begin{exampleblock}{Consulta de Auditor\'ia SQL}\tiny
         \texttt{SELECT count(*) FROM fact\_celda\_mes f JOIN dim\_celda c ON f.cell\_id = c.celda\_id WHERE f.incendio\_observado = true;} $\to$ \textbf{747 eventos.}
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.52\textwidth}
       \scriptsize\textbf{Top 5 Celdas con Mayor Radiaci\'on FRP (PostGIS):}
       \begin{table}[H]
         \centering\tiny
@@ -479,11 +451,11 @@
           \toprule
           \textbf{Celda ID} & \textbf{Mes} & \textbf{Precip} & \textbf{FRP} & \textbf{Geom} & \textbf{\'Area} \\
           \midrule
-          \texttt{LJ500\_R031\_C075} & Sep & 14,8 mm & 432,6 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R031\_C076} & Sep & 14,8 mm & 410,2 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R121\_C056} & Ago & 7,9 mm  & 388,1 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R045\_C082} & Sep & 12,4 mm & 365,9 MW & Polygon & 25 ha \\
-          \texttt{LJ500\_R098\_C063} & Oct & 24,1 mm & 312,4 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C075} & Oct & 98,0 mm & 327,9 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C076} & Oct & 98,0 mm & 246,6 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R121\_C056} & Sep & 13,9 mm & 242,8 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R032\_C075} & Oct & 98,0 mm & 224,3 MW & Polygon & 25 ha \\
+          \texttt{LJ500\_R031\_C077} & Oct & 99,2 mm & 205,9 MW & Polygon & 25 ha \\
           \bottomrule
         \end{tabular}
       \end{table}
@@ -497,7 +469,7 @@
 \renewcommand{\seccionactual}{MongoDB}
 \begin{frame}{Resultados NoSQL en MongoDB 8 (Telemetr\'ia BSON)}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Colecci\'on Documental (\texttt{evidencia\_viirs})}\scriptsize
         \begin{itemize}
           \item Estructura semiestructurada BSON con coordenadas GeoJSON (\texttt{"Point"}).
@@ -505,11 +477,12 @@
           \item Preserva metadatos anidados de calidad satelital y bandas espectrales.
         \end{itemize}
       \end{block}
+      \vspace{0.8cm}
       \begin{exampleblock}{Pipeline de Agregaci\'on BSON}\tiny
         \texttt{[\{"\$group": \{"\_id": "\$periodo.anio\_mes", "fuegos": \{"\$sum": \{"\$cond": ["\$telemetria.evidencia\_fuego", 1, 0]\}\}, "frp": \{"\$sum": "\$telemetria.frp\_suma\_mw"\}\}\}]}
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \scriptsize\textbf{Ejecuci\'on de la Agregaci\'on en MongoDB:}
       \begin{table}[H]
         \centering\tiny
@@ -518,14 +491,14 @@
           \textbf{Periodo} & \textbf{Docs BSON} & \textbf{Fuegos Confirmados} & \textbf{FRP Suma (MW)} \\
           \midrule
           2023-01 & 46  & 7   & 17,71 \\
-          2023-06 & 51  & 16  & 424,52 \\
+          2023-06 & 53  & 16  & 424,52 \\
           2023-07 & 61  & 26  & 191,17 \\
-          2023-08 & 144 & 109 & 2.512,60 \\
+          2023-08 & 188 & 143 & 2.512,57 \\
           \rowcolor{FuegoPalido}
-          \textbf{2023-09} & \textbf{388} & \textbf{353} & \textbf{8.683,16} \\
+          \textbf{2023-09} & \textbf{348} & \textbf{306} & \textbf{6.295,15} \\
           \rowcolor{FuegoPalido}
-          \textbf{2023-10} & \textbf{183} & \textbf{148} & \textbf{3.411,46} \\
-          2023-11 & 123 & 88  & 1.458,94 \\
+          \textbf{2023-10} & \textbf{246} & \textbf{201} & \textbf{6.910,86} \\
+          2023-11 & 75  & 42  & 347,58 \\
           \bottomrule
         \end{tabular}
       \end{table}
@@ -541,26 +514,25 @@
   \begin{columns}
     \begin{column}{0.48\textwidth}
       \centering
-      \includegraphics[width=0.7\textwidth]{figuras/matriz_confusion_ml.png}\\
-      \tiny\textbf{Matriz de Confusi\'on} (19.193 celdas-mes en Test Set).
-      \vspace{0.1cm}
-      \begin{block}{M\'etricas en Evaluaci\'on Independiente}\scriptsize
+      \includegraphics[width=0.74\textwidth]{figuras/matriz_confusion_ml.png}\\
+      \tiny\textbf{Matriz de Confusi\'on} (19.013 celdas-mes en Test Set).
+      \begin{block}{M\'etricas en Evaluaci\'on Independiente}\tiny
         \begin{itemize}
-          \item \textbf{ROC-AUC:} \textbf{0,9927} (Excelente separabilidad).
-          \item \textbf{Recall / Sensibilidad:} \textbf{96,64\%} ($144 / 149$ fuegos reales capturados).
-          \item \textbf{F1-Score:} \textbf{0,7029}.
+          \item \textbf{ROC-AUC:} \textbf{0,9912} (Excelente separabilidad).
+          \item \textbf{Recall:} \textbf{95,97\%} ($143/149$ fuegos capturados).
+          \item \textbf{F1-Score:} \textbf{0,2685}.
         \end{itemize}
       \end{block}
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.52\textwidth}
       \centering
-      \includegraphics[width=0.90\textwidth]{figuras/importancia_variables_ml.png}\\
+      \includegraphics[width=0.92\textwidth]{figuras/importancia_variables_ml.png}\\
       \tiny\textbf{Importancia Relativa de Variables} (Gini Importance).
       \vspace{0.1cm}
       \begin{exampleblock}{Variables Clave}\scriptsize
-        1. \texttt{dias\_secos\_acumulados\_3m} ($20,68\%$)\\
-        2. \texttt{precipitacion\_acumulada\_mm} ($18,45\%$)\\
-        3. \texttt{precip\_lag\_1m} ($15,92\%$)
+        1. \texttt{dias\_secos\_acumulados\_3m} ($20,16\%$)\\
+        2. \texttt{precip\_lag\_2m} ($18,04\%$)\\
+        3. \texttt{precip\_media\_movil\_3m} ($13,10\%$)
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -572,7 +544,7 @@
 \renewcommand{\seccionactual}{Dashboard}
 \begin{frame}{Dashboard Interactivo en Streamlit / Plotly}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Capacidades Visuales \& Cartogr\'aficas}\scriptsize
         \begin{itemize}
           \item \textbf{Mapeo Satelital HD:} Fondo fotogr\'afico satelital de alta definici\'on (Google Earth / Esri World Imagery).
@@ -580,11 +552,12 @@
           \item \textbf{Filtros din\'amicos:} Selecci\'on de mes (1--12) y exploraci\'on de las 7.997 celdas.
         \end{itemize}
       \end{block}
+      \vspace{0.8cm}
       \begin{alertblock}{Innovaci\'on: Motor Dual de Consultas}\scriptsize
         Funciona en vivo contra \textbf{PostgreSQL} y \textbf{MongoDB}, pero conmuta autom\'aticamente a un \textbf{motor embebido SQLite/JSON} en modo offline o en la nube para garantizar que las tablas siempre se generen sin ca\'idas.
       \end{alertblock}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{exampleblock}{M\'odulo de Consultas y Tablas (Secci\'on 3)}\scriptsize
         \begin{itemize}
           \item Pesta\~na SQL: Consultas predefinidas y modo libre.
@@ -593,6 +566,7 @@
           \item Pesta\~na Curated: Explorador interactivo de las 95.964 filas con descarga en CSV.
         \end{itemize}
       \end{exampleblock}
+      \vspace{0.8cm}
       \begin{block}{Simulador de Riesgo ML}\scriptsize
         Predicci\'on en tiempo real al ingresar lluvia y d\'ias secos.
       \end{block}
@@ -606,7 +580,7 @@
 \renewcommand{\seccionactual}{Gobernanza \& GitHub}
 \begin{frame}{Gobernanza, Trazabilidad y Estructura para GitHub}
   \begin{columns}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Trazabilidad Criptogr\'afica (SHA-256)}\scriptsize
         \begin{itemize}
           \item Cada archivo de entrada posee hash verificado en \texttt{manifiesto\_firelab\_loja.json}.
@@ -614,11 +588,12 @@
           \item Procedencia documentada de la malla INEC y telemetr\'ia NASA.
         \end{itemize}
       \end{block}
+      \vspace{0.8cm}
       \begin{exampleblock}{Autonom\'ia de Ejecuci\'on}\scriptsize
         Cero dependencias absolutas: el proyecto utiliza rutas relativas (\texttt{Path(\_\_file\_\_)}), permitiendo que el docente o evaluador lo clone y ejecute directamente.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{block}{Estructura Limpia del Repositorio}\scriptsize
         \begin{itemize}
           \item \texttt{datos/}: Raw, Clean y Curated Parquet.
@@ -639,11 +614,11 @@
 \renewcommand{\seccionactual}{Conclusiones}
 \begin{frame}{Conclusiones y Trabajo Futuro}
   \begin{alertblock}{Conclusiones Principales}
-    \begin{enumerate}\footnotesize
+    \begin{enumerate}\small
       \item \textbf{Pipeline Cantonal End-to-End:} Se proces\'o con \'exito la totalidad de la malla espacial cantonal de Loja (7.997 celdas $\times$ 12 meses = 95.964 observaciones), superando plenamente la prueba preliminar del Avance 1.
       \item \textbf{Eficacia del Modelo H\'ibrido:} La sinergia entre SQL (PostgreSQL/PostGIS), NoSQL (MongoDB), Data Lakehouse (Parquet) y Apache Spark resolvi\'o eficazmente la heterogeneidad de fuentes y el c\'alculo masivo de series de tiempo.
-      \item \textbf{Descubrimiento Ambiental:} El estiaje acumulado (86+ d\'ias secos en 3 meses) es el principal detonante del fuego, concentrando el 87\% de radiaci\'on t\'ermica entre agosto y octubre.
-      \item \textbf{Alta Capacidad Predictiva:} El modelo Random Forest alcanz\'o un ROC-AUC de \textbf{0,9927} y un Recall de \textbf{96,64\%}.
+      \item \textbf{Descubrimiento Ambiental:} El estiaje acumulado ($\sim$86 d\'ias secos en 3 meses) es el principal detonante del fuego, concentrando el 94\% de radiaci\'on t\'ermica entre agosto y octubre.
+      \item \textbf{Alta Capacidad Predictiva:} El modelo Random Forest alcanz\'o un ROC-AUC de \textbf{0,9912} y un Recall de \textbf{95,97\%}.
       \item \textbf{Explotaci\'on Interactiva:} Dashboard Streamlit con soporte satelital fotogr\'afico y motor dual de alta disponibilidad.
     \end{enumerate}
   \end{alertblock}

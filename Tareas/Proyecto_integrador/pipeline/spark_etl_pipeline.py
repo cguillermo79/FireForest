@@ -47,8 +47,9 @@ def main():
     curated_dir = base_dir / "datos" / "curated"
     if not (curated_dir / "fireforest_celda_mes_2023.parquet").exists():
         curated_dir = base_dir / "tarea_ETL" / "curated"
-    output_dir = base_dir / "pipeline" / "curated_spark_parquet"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = base_dir / "pipeline"
+    parquet_out = output_dir / "curated_spark_parquet"
+    parquet_out.mkdir(parents=True, exist_ok=True)
 
     spark = get_spark_session()
     spark.sparkContext.setLogLevel("ERROR")
@@ -100,16 +101,26 @@ def main():
             F.col("frp_suma_observada_media_mw").alias("viirs_frp_suma_mw"),
             F.col("frp_maxima_media_mw").alias("viirs_frp_maxima_mw"),
             F.col("evidencia_fuego").alias("viirs_evidencia_fuego"),
-            F.col("dias_validos_media").alias("viirs_dias_validos")
+            F.col("dias_validos_media").alias("viirs_dias_validos"),
+            F.col("observacion_viirs_disponible")
         ),
         on=["cell_id", "anio", "mes"],
         how="left"
     )
 
-    # Coalesce para celdas sin detecciones de incendio (ausencia verificada vs nulo)
+    # Bandera de aptitud para analisis: replica el contrato de calidad de la capa Curated
+    # (observacion_viirs_disponible AND observado_mes AND cobertura_chirps_valida). Las celdas-mes
+    # sin cobertura VIIRS deben quedar excluidas del entrenamiento, no reinterpretadas como "sin fuego".
     df_integrado = df_integrado.withColumn(
+        "apto_analisis",
+        F.coalesce(F.col("observacion_viirs_disponible"), F.lit(False))
+        & F.coalesce(F.col("observado_mes"), F.lit(False))
+        & F.coalesce(F.col("cobertura_chirps_valida"), F.lit(False))
+    ).withColumn(
+        # Variable objetivo: se conserva nula cuando no hay observacion satelital, en lugar de
+        # coalescerse a False (lo que la reinterpretaria como ausencia confirmada de incendio).
         "incendio_observado",
-        F.when(F.col("viirs_evidencia_fuego").isNotNull(), F.col("viirs_evidencia_fuego")).otherwise(False)
+        F.col("viirs_evidencia_fuego")
     ).withColumn(
         "detecciones_incendio",
         F.coalesce(F.col("viirs_detecciones_media"), F.lit(0.0))
@@ -147,7 +158,7 @@ def main():
         # Categoria de riesgo de incendio combinando sequia y calor
         "categoria_riesgo_forestal",
         F.when(
-            (F.col("incendio_observado") == True) | (F.col("frp_total_mw") > 5.0),
+            (F.coalesce(F.col("incendio_observado"), F.lit(False)) == True) | (F.col("frp_total_mw") > 5.0),
             F.lit("ALTO_IMPACTO")
         ).when(
             (F.col("condicion_sequia_extrema") == True) & (F.col("dias_secos_lt1mm") >= 25),
@@ -241,7 +252,6 @@ def main():
     # -------------------------------------------------------------------------
     # 4. EXPORTACION DEL DATA LAKE PARQUET PARTICIONADO
     # -------------------------------------------------------------------------
-    parquet_out = output_dir / "curated_spark_parquet"
     print(f"\n4. Exportando Data Lake Curated particionado en: {parquet_out} ...")
     
     # En Windows, para evitar la dependencia de hadoop/winutils.exe, convertimos el DataFrame
