@@ -1,0 +1,661 @@
+\documentclass[11pt,a4paper]{article}
+
+% =============================================================================
+% Configuración General
+% =============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[margin=2.0cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,decorations.pathreplacing,fit}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\emergencystretch=2em
+
+% Paleta institucional (idéntica al informe y la presentación)
+\definecolor{VerdeOscuro}{RGB}{27,94,55}
+\definecolor{VerdeMedio}{RGB}{46,125,80}
+\definecolor{VerdePalido}{RGB}{213,234,217}
+\definecolor{Tierra}{RGB}{124,89,55}
+\definecolor{TierraPalido}{RGB}{237,227,213}
+\definecolor{Fuego}{RGB}{196,86,26}
+\definecolor{FuegoPalido}{RGB}{250,224,206}
+\definecolor{GrisTexto}{RGB}{51,51,51}
+\definecolor{AzulOscuro}{RGB}{31,78,121}
+\definecolor{AzulPalido}{RGB}{213,226,238}
+
+\titleformat{\section}{\Large\bfseries\color{VerdeOscuro}\raggedright}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{VerdeMedio}\raggedright}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Tierra}\raggedright}{\thesubsubsection}{0.5em}{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=VerdeOscuro,
+    urlcolor=VerdeOscuro,
+    citecolor=VerdeOscuro,
+    pdftitle={Guia de Sustentacion - FireForest},
+    pdfauthor={Chuncho Morocho, Carlos Guillermo}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small Guía de Sustentación -- FireForest}
+\fancyhead[R]{\small Diapositivas 6--18 + Dashboard}
+\fancyfoot[C]{\small\thepage}
+
+\setlist[itemize]{itemsep=2pt, topsep=3pt}
+\setlist[enumerate]{itemsep=2pt, topsep=3pt}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Cajas de color reutilizables
+\newtcolorbox{decirbox}[1][]{
+  breakable, enhanced, colback=VerdePalido, colframe=VerdeOscuro,
+  coltitle=white, fonttitle=\bfseries, title={Qué decir},
+  boxrule=0.8pt, arc=2mm, left=6pt, right=6pt, top=5pt, bottom=5pt, #1
+}
+\newtcolorbox{porquebox}[1][]{
+  breakable, enhanced, colback=AzulPalido, colframe=AzulOscuro,
+  coltitle=white, fonttitle=\bfseries, title={Por qué (justificación técnica)},
+  boxrule=0.8pt, arc=2mm, left=6pt, right=6pt, top=5pt, bottom=5pt, #1
+}
+\newtcolorbox{datobox}[1][]{
+  breakable, enhanced, colback=FuegoPalido, colframe=Fuego,
+  coltitle=white, fonttitle=\bfseries, title={Dato clave / para lucirte},
+  boxrule=0.8pt, arc=2mm, left=6pt, right=6pt, top=5pt, bottom=5pt, #1
+}
+\newtcolorbox{alertabox}[1][]{
+  breakable, enhanced, colback=TierraPalido, colframe=Tierra,
+  coltitle=white, fonttitle=\bfseries, title={Pregunta que te pueden hacer aquí},
+  boxrule=0.8pt, arc=2mm, left=6pt, right=6pt, top=5pt, bottom=5pt, #1
+}
+
+% Estilos TikZ comunes para los diagramas de flujo
+\tikzset{
+  fuente/.style={draw=Tierra, line width=1pt, rounded corners=3pt, fill=TierraPalido,
+                 align=center, minimum height=0.9cm, inner sep=5pt, font=\small},
+  proceso/.style={draw=VerdeOscuro, line width=1.1pt, rounded corners=3pt, fill=VerdePalido,
+                 align=center, minimum height=0.9cm, inner sep=5pt, font=\small},
+  motor/.style={draw=VerdeMedio, line width=1.2pt, rounded corners=4pt, fill=VerdePalido,
+                 align=center, minimum width=3.1cm, minimum height=1.0cm, font=\small\bfseries, inner sep=5pt},
+  spark/.style={draw=Fuego, line width=1.2pt, rounded corners=4pt, fill=FuegoPalido,
+                 align=center, font=\small\bfseries, inner sep=6pt},
+  salida/.style={draw=AzulOscuro, line width=1pt, rounded corners=3pt, fill=AzulPalido,
+                 align=center, minimum height=0.9cm, inner sep=5pt, font=\small},
+  flecha/.style={-{Stealth[length=2.8mm, width=2mm]}, line width=1.1pt, VerdeOscuro},
+  flecharoja/.style={-{Stealth[length=2.8mm, width=2mm]}, line width=1.1pt, Fuego},
+}
+
+\begin{document}
+
+% =============================================================================
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+{\large \textbf{ESCUELA SUPERIOR POLIT\'ECNICA DE CHIMBORAZO (ESPOCH)}\par}
+\vspace{0.15cm}
+{\large Maestr\'ia en Estad\'istica con menci\'on en Ciencia de Datos e Inteligencia Artificial\par}
+\vspace{2cm}
+
+{\Huge\bfseries\color{VerdeOscuro} GU\'IA DE SUSTENTACI\'ON\par}
+\vspace{0.5cm}
+{\Large\bfseries\color{VerdeMedio} Proyecto Integrador FireForest\par}
+\vspace{0.3cm}
+{\large Gui\'on de estudio y exposici\'on para las diapositivas 6 a 18\\ y la demostraci\'on en vivo del Dashboard\par}
+
+\vspace{2cm}
+\begin{tcolorbox}[breakable, enhanced, colback=VerdePalido, colframe=VerdeOscuro, arc=2mm, width=0.85\textwidth]
+\centering
+\textbf{Presentaci\'on:} \url{https://github.com/cguillermo79/FireForest}\\[4pt]
+\textbf{Dashboard en vivo:} \url{https://fireforest-loja.streamlit.app/}
+\end{tcolorbox}
+
+\vspace{2cm}
+{\large\bfseries Preparado para:\par}
+\vspace{0.2cm}
+{\large Chuncho Morocho, Carlos Guillermo\par}
+\vspace{0.2cm}
+{\large Grupo 4\par}
+
+\vspace{1.5cm}
+{\large Septiembre, 2026\par}
+\vfill
+\end{titlepage}
+
+% =============================================================================
+\section*{C\'omo usar esta gu\'ia}
+\addcontentsline{toc}{section}{C\'omo usar esta gu\'ia}
+Esta gu\'ia \textbf{no repite el informe palabra por palabra}: te da el gui\'on de lo que decir, el \textbf{por qu\'e t\'ecnico} de cada decisi\'on (que es lo que m\'as pregunta un jurado), diagramas de flujo para entender de un vistazo c\'omo se mueve la informaci\'on, y un banco de preguntas dif\'iciles con respuesta lista. Est\'a organizada en el mismo orden en que vas a hablar:
+
+\begin{enumerate}
+    \item Diagrama maestro del pipeline (para fijar el mapa mental completo antes de entrar en detalle).
+    \item Gui\'on diapositiva por diapositiva, de la 6 a la 18.
+    \item La historia t\'ecnica que no est\'a en ninguna diapositiva pero que debes saber contar.
+    \item Gui\'on de la demo en vivo del dashboard.
+    \item Preguntas dif\'iciles con respuesta lista.
+    \item Chuleta de n\'umeros y checklist final.
+\end{enumerate}
+
+\newpage
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{Diagrama maestro: as\'i fluye la informaci\'on en FireForest}
+\label{sec:diagrama_maestro}
+
+Antes de entrar en el detalle de cada diapositiva, fija este mapa mental: \textbf{todo} lo que vas a exponer es una etapa de este mismo flujo.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.55cm and 0.7cm, font=\footnotesize]
+
+% Fila 1: Fuentes
+\node[fuente] (f1) {\textbf{Malla INEC}\\GeoPackage, 500m};
+\node[fuente, right=of f1] (f2) {\textbf{NASA VIIRS}\\CSV/JSON, 375m};
+\node[fuente, right=of f2] (f3) {\textbf{CHIRPS v2.0}\\Parquet, precipitaci\'on};
+
+% Fila 2: Raw Lake
+\node[proceso, below=of f2, xshift=0cm, text width=10.8cm] (raw) {\textbf{Ingesta Controlada + Raw Data Lake}\\Verificaci\'on SHA-256 $\cdot$ Copia de solo lectura de FIRELAB\_Loja $\cdot$ Nunca se modifica el origen};
+
+% Fila 3: ETL Clean/Curated (pandas)
+\node[proceso, below=of raw, text width=10.8cm] (etl) {\textbf{ETL en pandas (capas Clean $\to$ Curated)}\\Tipado, deduplicaci\'on, banderas IQR, uni\'on malla $\bowtie$ clima $\bowtie$ VIIRS, bandera \texttt{apto\_analisis}};
+
+% Fila 4: Spark
+\node[spark, below=of etl, text width=10.8cm] (spark) {\textbf{Apache Spark 4.2 (PySpark)}\\Window Functions: \texttt{lag} 1m/2m, media m\'ovil 3m, d\'ias secos acumulados 3m};
+
+% Fila 5: Tres motores
+\node[motor, below=2.0cm of spark, xshift=-4.1cm] (parquet) {Parquet\\Data Lakehouse\\Snappy, columnar};
+\node[motor, below=2.0cm of spark] (pg) {PostgreSQL 18\\PostGIS\\Modelo estrella};
+\node[motor, below=2.0cm of spark, xshift=4.1cm] (mongo) {MongoDB 8\\BSON documental\\\'Indice 2dsphere};
+
+% Fila 6: Consumo
+\node[salida, below=1.1cm of pg, text width=10.8cm] (consumo) {\textbf{Capa de Explotaci\'on}\\Modelo Random Forest (ROC-AUC 0,9912) $\cdot$ Dashboard Streamlit / Plotly (Motor Dual)};
+
+% Conexiones fuentes -> raw
+\draw[flecha] (f1.south) -- ++(0,-0.25) -| (raw.north -| f1.south);
+\draw[flecha] (f2.south) -- (raw.north);
+\draw[flecha] (f3.south) -- ++(0,-0.25) -| (raw.north -| f3.south);
+
+\draw[flecha] (raw.south) -- (etl.north);
+\draw[flecharoja] (etl.south) -- (spark.north);
+
+\draw[flecha] (spark.south) -- ++(0,-0.5) -| (parquet.north);
+\draw[flecha] (spark.south) -- (pg.north);
+\draw[flecha] (spark.south) -- ++(0,-0.5) -| (mongo.north);
+
+\draw[flecha] (parquet.south) -- ++(0,-0.3) -| (consumo.north -| parquet.south);
+\draw[flecha] (pg.south) -- (consumo.north);
+\draw[flecha] (mongo.south) -- ++(0,-0.3) -| (consumo.north -| mongo.south);
+
+\end{tikzpicture}
+\caption{Flujo completo de datos del proyecto FireForest. Cada bloque naranja/verde es una diapositiva de tu bloque.}
+\label{fig:maestro}
+\end{figure}
+
+\begin{datobox}
+La flecha roja (ETL $\to$ Spark) es la m\'as importante del diagrama: ah\'i vive la historia t\'ecnica que se explica en la Secci\'on~\ref{sec:historia_viirs} y que debes poder contar aunque no est\'e en ninguna diapositiva.
+\end{datobox}
+
+\newpage
+% =============================================================================
+\section{Contexto: lo que ya expuso tu equipo (diapositivas 1--5)}
+
+No las vas a presentar t\'u, pero debes poder enlazarlas si te preguntan algo de ah\'i.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}clX@{}}
+\toprule
+\textbf{\#} & \textbf{T\'itulo} & \textbf{Una frase} \\
+\midrule
+2 & Estructura de la Sustentaci\'on & Mapa de las 4 partes de la charla (I--IV). \\
+3 & Problema y Pregunta de Investigaci\'on & Loja tiene incendios estacionales (may--nov); el reto es integrar datos dispersos a grano celda-mes. \\
+4 & Objetivos & Pipeline end-to-end con PostgreSQL/PostGIS + MongoDB + Spark + ML sobre 7.997 celdas $\times$ 12 meses. \\
+5 & Diccionario de Variables & Las variables clave del dataset final \texttt{fact\_celda\_mes}. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent\textbf{El hilo conductor de toda la charla:} pasar de un prototipo de 2 celdas (Avance 1) a una arquitectura h\'ibrida completa sobre las 7.997 celdas reales del cant\'on, con datos, calidad, procesamiento distribuido, bases de datos, ML y un dashboard --- todo trazable y reproducible.
+
+\newpage
+% =============================================================================
+\section{Tu gui\'on, diapositiva por diapositiva}
+
+\subsection{Diapositiva 6 --- Restricciones y Limitaciones de los Datos}
+
+\begin{decirbox}
+``Antes de mostrar resultados, es importante ser honestos sobre las limitaciones de las fuentes que usamos.''
+\begin{itemize}
+    \item \textbf{Restricciones de origen:} VIIRS tiene resoluci\'on nativa de 375\,m pero se agrega a una malla de 500\,m $\to$ en celdas de borde puede haber sub/sobre-representaci\'on. Los sensores \'opticos pierden detecciones bajo nubosidad (m\'as frecuente en \'epoca lluviosa, mar--abr) --- \textbf{no es que no haya fuego, es que el sat\'elite no lo vio ese d\'ia}. CHIRPS es un producto \emph{interpolado}, no pluvi\'ometros puros.
+    \item \textbf{Restricciones temporales y de clase:} grano celda-mes diluye la din\'amica intra-mensual; un solo a\~no (2023) sin variabilidad interanual; y el dato m\'as importante de memorizar: \textbf{solo 747 de 95.964 observaciones (0,8\,\%) tienen fuego confirmado}.
+\end{itemize}
+\end{decirbox}
+
+\begin{porquebox}
+Un jurado de ciencia de datos valora mucho que reconozcas las limitaciones \emph{antes} de que te las se\~nalen. Es una se\~nal de rigor, no de debilidad.
+\end{porquebox}
+
+\subsection{Diapositiva 7 --- Calidad de Datos y Reglas de Limpieza (ETL)}
+
+\begin{decirbox}
+``Detectamos 4 problemas de calidad reales y cada uno se resolvi\'o con una regla expl\'icita, documentada y auditable --- nunca de forma silenciosa.''
+\end{decirbox}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.0cm, font=\footnotesize]
+\node[proceso, text width=3.6cm] (ex) {\textbf{EXTRACT}\\\texttt{cargar\_malla}\\\texttt{cargar\_csv\_periodo}\\Sin alterar el origen};
+\node[proceso, right=of ex, text width=3.9cm] (tr) {\textbf{TRANSFORM}\\Tipado estricto\\Banderas IQR\\\texttt{preparar\_viirs/chirps}\\\texttt{construir\_curated}};
+\node[proceso, right=of tr, text width=3.6cm] (lo) {\textbf{LOAD}\\CSV + Parquet\\Diccionario\\Hash SHA-256};
+\draw[flecha] (ex.east) -- (tr.west);
+\draw[flecha] (tr.east) -- (lo.west);
+\end{tikzpicture}
+\caption{Proceso ETL: \texttt{tarea\_ETL/codigo/etl\_fireforest.py}, disparado con \texttt{main(desde\_cero)}.}
+\end{figure}
+
+\begin{decirbox}[title={Qué decir (reglas clave)}]
+\begin{itemize}
+    \item Deduplicaci\'on por \texttt{(cell\_id, anio, mes)}.
+    \item \textbf{\texttt{coalesce()} para distinguir ``ausencia verificada de fuego'' de ``dato faltante''} --- memoriza esta frase, es el concepto t\'ecnico m\'as importante de toda tu parte (ver Secci\'on~\ref{sec:historia_viirs}).
+    \item Reproyecci\'on uniforme a \texttt{EPSG:32717} antes de cualquier uni\'on espacial.
+    \item Transformaci\'on principal: malla $\bowtie$ clima (inner join) $\bowtie$ VIIRS (\textbf{left join}) sobre \texttt{cell\_id}, conservando las 7.997 celdas aunque no tengan evidencia de incendio.
+\end{itemize}
+\end{decirbox}
+
+\begin{alertabox}
+\textbf{¿Por qu\'e left join y no inner join con VIIRS?} Con inner join las celdas sin fuego desaparecer\'ian del dataset y no podr\'iamos entrenar un clasificador (se necesitan ejemplos negativos). Con left join, esas celdas quedan con nulos que despu\'es se tratan expl\'icitamente.
+\end{alertabox}
+
+\subsection{Diapositiva 8 --- Salto de Escala: de 2 Celdas a la Malla Cantonal}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & \textbf{Avance 1} & \textbf{Entrega Final} \\
+\midrule
+Celdas & 2 (\texttt{LJ\_TEST\_001/002}, El Cisne) & \textbf{7.997} (todo el cant\'on) \\
+Periodo & Sin estacionalidad & \textbf{12 meses} completos 2023 \\
+Filas & 2 & \textbf{95.964} celda-mes \\
+Fuego & --- & \textbf{747} eventos hist\'oricos \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{decirbox}
+El mapa muestra la cobertura real: degradado azul = precipitaci\'on acumulada, puntos rojos = focos VIIRS de septiembre (el mes m\'as cr\'itico), l\'inea punteada cian = l\'imite oficial INEC del cant\'on.
+\end{decirbox}
+
+\begin{datobox}
+El cant\'on Loja tiene geograf\'ia muy irregular (valle interandino + p\'aramo); por eso la malla no es un rect\'angulo --- se gener\'o por disoluci\'on de sectores censales oficiales del INEC (c\'odigo DPA 1101), no dibujando un cuadrado a mano.
+\end{datobox}
+
+\subsection{Diapositiva 9 --- Arquitectura de Datos H\'ibrida Multimodelo}
+
+\textbf{Esta es la diapositiva m\'as importante para justificar ``qu\'e se us\'o y por qu\'e''.} Repasa el diagrama maestro de la Secci\'on~\ref{sec:diagrama_maestro} y explica cada destino de Spark con su justificaci\'on:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Motor} & \textbf{Por qu\'e ESE motor y no otro} \\
+\midrule
+\textbf{Parquet (Lakehouse)} & Formato columnar, compresi\'on Snappy ($>$90\,\% menos espacio que CSV), lectura OLAP ultrarr\'apida --- alimenta el modelo de ML y el explorador del dashboard. \\
+\textbf{PostgreSQL/PostGIS} & Necesitamos \textbf{integridad referencial} (PK/FK entre celda, fecha y hecho) y \textbf{topolog\'ia espacial real} (\texttt{ST\_Area}, \texttt{ST\_Intersects}) con \'indices GiST --- un documento NoSQL no lo garantiza. \\
+\textbf{MongoDB} & La telemetr\'ia VIIRS trae metadatos anidados (bandas espectrales, banderas de calidad) que cambian de un sensor a otro --- un esquema relacional r\'igido obligar\'ia a migraciones de DDL constantes; MongoDB lo absorbe sin fricci\'on. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{alertabox}
+\textbf{``¿Por qu\'e no usar solo PostgreSQL, o solo MongoDB, para todo?''} $\to$ Un sistema mono-modelo relacional es r\'igido ante esquemas satelitales cambiantes; uno mono-modelo documental es ineficiente para consultas espaciales topol\'ogicas con garant\'ias de integridad. La arquitectura h\'ibrida usa cada motor donde es objetivamente superior.
+\end{alertabox}
+
+\subsection{Diapositiva 10 --- Procesamiento Distribuido en Apache Spark}
+
+\begin{decirbox}
+``Aqu\'i est\'a el coraz\'on t\'ecnico del pipeline: las funciones de ventana.''
+\end{decirbox}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize, node distance=0.9cm]
+\node[proceso, minimum width=2.4cm] (m1) {Mes $n{-}2$};
+\node[proceso, right=of m1, minimum width=2.4cm] (m2) {Mes $n{-}1$};
+\node[proceso, right=of m2, minimum width=2.4cm] (m3) {Mes $n$\\(celda-mes actual)};
+
+\draw[flecharoja] (m2.north) to[out=60,in=120] node[above, font=\scriptsize] {\texttt{lag(precip,1)}} (m3.north);
+\draw[flecharoja] (m1.north) to[out=60,in=120,looseness=1.6] node[above=6pt, font=\scriptsize] {\texttt{lag(precip,2)}} (m3.north);
+
+\draw[decorate, decoration={brace, amplitude=6pt, mirror}, VerdeOscuro, line width=1pt] (m1.south west) -- (m3.south east)
+  node[midway, below=8pt, font=\scriptsize\bfseries, VerdeOscuro, text width=6cm, align=center] {media m\'ovil 3m $\cdot$ d\'ias secos acumulados 3m\\(\texttt{rowsBetween(-2, 0)})};
+\end{tikzpicture}
+\caption{Funciones de ventana particionadas por celda (\texttt{Window.partitionBy("cell\_id")}).}
+\end{figure}
+
+\begin{datobox}[title={Hallazgo central --- mem\'orizalo, es la conclusi\'on cient\'ifica del proyecto}]
+\textbf{``El fuego tiene memoria h\'idrica.''} La lluvia cae en mayo (29\,mm), pero los incendios no estallan de inmediato --- se concentran en agosto--octubre ($>$15.700\,MW acumulados), \textbf{despu\'es de acumularse cerca de 86 d\'ias secos continuos}. En el gr\'afico de doble eje, las barras azules (lluvia) bajan mucho antes de que la l\'inea roja (FRP) suba.
+\end{datobox}
+
+\begin{alertabox}
+\textbf{¿Por qu\'e esto no se hace f\'acil en SQL puro?} Calcular ``el mes anterior'' y ``la media de los \'ultimos 3 meses'' por cada una de 7.997 series de tiempo independientes en SQL cl\'asico requiere subconsultas correlacionadas o CTEs recursivas --- lento y dif\'icil de mantener. Spark lo resuelve nativamente con funciones de ventana particionadas, en segundos.
+\end{alertabox}
+
+\subsection{Diapositiva 11 --- Resultados Tabulares: Balance Cantonal en Spark}
+
+\begin{decirbox}
+Recorre la tabla se\~nalando el patr\'on, no leas cada celda:
+\begin{itemize}
+    \item Enero--mayo: lluvia alta (hasta 325\,mm en abril), cero fuego.
+    \item Junio--julio: la lluvia cae a $\sim$17\,mm, empiezan los primeros focos (16 y 26 celdas).
+    \item \textbf{Agosto--octubre: pico cr\'itico} --- 143, 306 y 201 celdas con fuego; septiembre solo, 306 celdas y 6.295\,MW de FRP.
+    \item Noviembre--diciembre: la lluvia vuelve ($\sim$68--77\,mm) y el fuego cae a 42 y 6 celdas.
+    \item \textbf{Total 2023: 747 celdas-mes con fuego, 16.724,33\,MW de FRP liberados.}
+\end{itemize}
+\end{decirbox}
+
+\begin{datobox}
+La columna ``Lag 1m'' de enero dice \texttt{n/d} --- es honesto, no un error: enero es el primer mes de la serie, no existe diciembre 2022 en el dataset, as\'i que no se inventa un valor.
+\end{datobox}
+
+\subsection{Diapositiva 12 --- Resultados en PostgreSQL / PostGIS}
+
+\begin{decirbox}
+``Aqu\'i bajamos del an\'alisis agregado a la celda individual, usando el modelo dimensional en PostgreSQL.'' Esquema: \texttt{dim\_celda} (7.997 pol\'igonos, \texttt{ST\_MakeEnvelope}, SRID 32717, \'indice GiST), \texttt{dim\_fecha}, \texttt{fact\_celda\_mes} (95.964 filas con PK/FK). La consulta de auditor\'ia confirma los \textbf{747 eventos} --- el mismo n\'umero que en Spark y MongoDB, prueba de \textbf{consistencia cruzada entre motores}.
+\end{decirbox}
+
+\begin{datobox}
+El Top-5 de mayor FRP cae en \textbf{octubre} (con dos excepciones en septiembre) en la zona \texttt{R031/R032/R033} --- es decir, geogr\'aficamente \textbf{contiguas}, no dispersas al azar. Esto conecta directo con la diapositiva 14: la variable \texttt{fila} result\'o muy importante en el modelo de ML.
+\end{datobox}
+
+\begin{alertabox}
+\textbf{¿Por qu\'e PostGIS y no coordenadas sueltas en una tabla normal?} GiST permite responder ``¿qu\'e celdas intersectan este pol\'igono?'' en milisegundos sobre miles de geometr\'ias; sin \'indice espacial ser\'ia un recorrido secuencial completo cada vez.
+\end{alertabox}
+
+\subsection{Diapositiva 13 --- Resultados NoSQL en MongoDB}
+
+\begin{decirbox}
+``MongoDB guarda el detalle crudo de la telemetr\'ia satelital, con su propio pipeline de agregaci\'on nativo.'' Colecci\'on \texttt{evidencia\_viirs\_celda\_mes}: documentos BSON con coordenadas GeoJSON, \'indice \texttt{2dsphere}. El pipeline (\texttt{\$group} + \texttt{\$cond} + \texttt{\$sum}) reproduce el mismo c\'alculo mensual que Spark y PostgreSQL --- \textbf{ver\'as los mismos n\'umeros} (septiembre: 306 fuegos, 6.295,15\,MW) en las tres tecnolog\'ias.
+\end{decirbox}
+
+\begin{datobox}
+Puedes decir expl\'icitamente: \emph{``Verificamos que los tres motores, cargados de forma independiente, muestran resultados consistentes --- eso es parte de nuestra trazabilidad.''}
+\end{datobox}
+
+\begin{alertabox}
+\textbf{¿Por qu\'e BSON y no forzar esto en una tabla SQL?} Cada documento trae metadatos anidados variables que no todos los registros tienen igual --- en SQL relacional eso implicar\'ia muchas columnas nulas o tablas adicionales; en documentos BSON es natural.
+\end{alertabox}
+
+\newpage
+\subsection{Diapositiva 14 --- Modelo Predictivo de Machine Learning}
+\textbf{Esta es la diapositiva donde m\'as te pueden presionar. Prep\'arate bien.}
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize, node distance=0.65cm]
+\node[proceso, text width=3.1cm] (d1) {Dataset\\\textbf{95.964} filas};
+\node[spark, right=of d1, text width=3.3cm] (f1) {Filtro\\\texttt{apto\_analisis}\\\texttt{== True}};
+\node[proceso, right=of f1, text width=3.1cm] (d2) {\textbf{95.064} filas aptas};
+\node[motor, above right=0.5cm and 0.9cm of d2, minimum width=2.6cm] (train) {Train 80\,\%\\76.051 filas};
+\node[motor, below right=0.5cm and 0.9cm of d2, minimum width=2.6cm] (test) {Test 20\,\%\\19.013 filas};
+\node[spark, right=1.6cm of d2, yshift=0cm, text width=2.8cm] (rf) {Random\\Forest};
+\node[salida, right=of rf, text width=3.4cm] (met) {ROC-AUC 0,9912\\Recall 95,97\,\%\\Precisi\'on 15,61\,\%\\F1 0,2685};
+
+\draw[flecha] (d1.east) -- (f1.west);
+\draw[flecha] (f1.east) -- (d2.west);
+\draw[flecha] (d2.east) -- (train.west);
+\draw[flecha] (d2.east) -- (test.west);
+\draw[flecha] (train.east) -- ++(0.4,0) |- (rf.north west);
+\draw[flecha] (test.east) -- ++(0.4,0) |- (rf.south west);
+\draw[flecha] (rf.east) -- (met.west);
+\end{tikzpicture}%
+}
+\caption{Flujo de entrenamiento y evaluaci\'on del clasificador Random Forest.}
+\end{figure}
+
+\begin{decirbox}
+``Entrenamos sobre las 95.064 celdas-mes con observaci\'on satelital confirmada (excluimos 900 filas sin cobertura VIIRS, que no son \emph{sin fuego}, son \emph{sin dato} --- coherente con la diapositiva 7). Partici\'on 80/20 estratificada por la variable objetivo.''
+\end{decirbox}
+
+\begin{alertabox}[title={Anticipa esta pregunta t\'u mismo, antes de que te la hagan}]
+\textbf{``¿Por qu\'e la precisi\'on es tan baja si el ROC-AUC es casi perfecto?''}
+
+Respuesta lista (dilo con seguridad, es una fortaleza del proyecto, no una falla): \emph{``Es matem\'aticamente esperable: solo el 0,79\,\% de los casos son incendios reales --- un desbalance extremo. Priorizamos el Recall a prop\'osito, porque en gesti\'on de emergencias el costo de un falso negativo (no avisar de un incendio real) es mucho mayor que el de un falso positivo. Balanceamos los pesos de clase (\texttt{class\_weight='balanced'}) expl\'icitamente para lograr ese Recall alto, sabiendo que eso baja la precisi\'on. Es una decisi\'on de dise\~no, no una limitaci\'on no controlada.''}
+\end{alertabox}
+
+\begin{datobox}[title={Variables m\'as importantes --- y por qu\'e la \#4 es interesante}]
+1.\ \texttt{dias\_secos\_acumulados\_3m} (20,16\,\%) --- el d\'eficit h\'idrico trimestral.\\
+2.\ \texttt{precip\_lag\_2m} (18,04\,\%) y \texttt{precip\_media\_movil\_3m} (13,10\,\%) --- memoria h\'idrica antecedente.\\
+3.\ \textbf{\texttt{fila} (11,50\,\%)} --- \'indice espacial de la malla. Su alta importancia revela que \textbf{los incendios se agrupan en franjas cantonales concretas} (coherente con el Top-5 de PostGIS, diapositiva 12). Es un hallazgo genuino, no ruido --- abre trabajo futuro con variables topogr\'aficas (pendiente, orientaci\'on).
+\end{datobox}
+
+\subsection{Diapositiva 15 --- Dashboard Interactivo en Streamlit / Plotly}
+
+Esta diapositiva es tu puente hacia la demo en vivo --- no te detengas mucho, resume y pasa al navegador (gui\'on completo en la Secci\'on~\ref{sec:demo}).
+
+\begin{decirbox}[title={Menciona solo la pieza m\'as ``de ingenier\'ia''}]
+\textbf{Innovaci\'on: Motor Dual de Consultas.} El dashboard intenta conectarse en vivo a PostgreSQL y MongoDB; si no puede (por ejemplo en Streamlit Cloud, donde no hay esas bases instaladas), conmuta autom\'aticamente a un motor embebido SQLite con funciones PostGIS emuladas y un agregador JSON en memoria --- \textbf{para que nunca se caiga la demo frente al jurado}, sin importar d\'onde se ejecute.
+
+Luego: ``Se los muestro en vivo'' $\to$ cambia a la pesta\~na del navegador.
+\end{decirbox}
+
+\subsection{Diapositiva 16 --- Gobernanza, Trazabilidad y Estructura para GitHub}
+
+\begin{decirbox}
+``Cerramos con c\'omo garantizamos que este proyecto sea auditable y reproducible por cualquiera, incluyendo ustedes.''
+\begin{itemize}
+    \item \textbf{Trazabilidad criptogr\'afica:} cada archivo fuente tiene un hash SHA-256 verificado en \texttt{manifiesto\_firelab\_loja.json}.
+    \item \textbf{Protecci\'on de fuentes de terceros:} parte de la malla y telemetr\'ia hist\'orica (2019--2025) se tom\'o como \textbf{copia de solo lectura} de un proyecto cient\'ifico independiente (\texttt{FIRELAB\_Loja}), autorizada por decisi\'on formal del equipo, sin modificar ni un archivo de ese repositorio.
+    \item \textbf{Cero dependencias absolutas:} rutas relativas (\texttt{Path(\_\_file\_\_)}) --- el docente puede clonar el repo y ejecutarlo tal cual.
+    \item \textbf{Estructura limpia:} \texttt{datos/}, \texttt{bases\_datos/}, \texttt{pipeline/}, \texttt{machine\_learning/}, \texttt{dashboard/}, \texttt{entrega\_final/}.
+\end{itemize}
+\end{decirbox}
+
+\subsection{Diapositiva 17 --- Conclusiones y Trabajo Futuro}
+
+Lee las 5 conclusiones con seguridad --- ya las dominas porque son el resumen de todo lo anterior. Cierra con el trabajo futuro: escalar a 10 a\~nos de serie hist\'orica (2015--2025); incorporar NDVI (Sentinel-2) y modelos digitales de elevaci\'on.
+
+\begin{datobox}
+Conecta el NDVI/DEM del trabajo futuro con el hallazgo de la variable \texttt{fila} de la diapositiva 14 --- as\'i demuestras que el trabajo futuro nace de un hallazgo real, no es gen\'erico.
+\end{datobox}
+
+\subsection{Diapositiva 18 --- Cierre}
+Agradece y abre a preguntas.
+
+\newpage
+% =============================================================================
+\section{La historia que debes saber contar aunque no est\'e en ninguna diapositiva}
+\label{sec:historia_viirs}
+
+Si alguien pregunta \emph{``¿tuvieron alg\'un problema durante el desarrollo?''} o \emph{``¿por qu\'e la precisi\'on del modelo es tan distinta a lo esperado?''}, esta es tu mejor respuesta.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize, node distance=0.5cm]
+\node[proceso, text width=4.6cm] (antes) {\textbf{ANTES}\\Spark aplicaba \texttt{coalesce(...,\,False)} sobre celdas sin VIIRS\\$\to$ ``sin dato'' se convert\'ia en ``sin fuego''\\900 filas mal etiquetadas (0,94\,\%)};
+\node[spark, right=1.4cm of antes, text width=2.6cm] (deteccion) {Detectado y corregido antes de la entrega};
+\node[motor, right=1.4cm of deteccion, text width=4.6cm] (despues) {\textbf{DESPU\'ES}\\\texttt{apto\_analisis} calculado en Spark\\900 filas excluidas del entrenamiento\\M\'etricas honestas: Precisi\'on 55,27\,\% $\to$ 15,61\,\%};
+\draw[flecharoja] (antes.east) -- (deteccion.west);
+\draw[flecha] (deteccion.east) -- (despues.west);
+\end{tikzpicture}
+\caption{Correcci\'on documentada en la Secci\'on 7.2 del informe final.}
+\end{figure}
+
+\begin{decirbox}[title={Gui\'on sugerido (m\'emoralo o parafras\'ealo con tus palabras)}]
+``Durante el desarrollo detectamos que el motor Spark, al construir la variable objetivo \texttt{incendio\_observado}, convert\'ia las celdas \textbf{sin observaci\'on satelital VIIRS} (900 de 95.964, un 0,94\,\%) en `sin fuego' usando \texttt{coalesce}, en lugar de dejarlas como dato faltante --- igual que explicamos en la diapositiva 7 que \emph{no} deb\'ia pasar. La capa Curated en pandas s\'i lo hac\'ia bien (con la bandera \texttt{apto\_analisis}), pero Spark se implement\'o como una reintegraci\'on independiente y no hered\'o esa bandera. Lo corregimos: recalculamos \texttt{apto\_analisis} directamente en Spark y reentrenamos el modelo excluyendo esas 900 filas. El Recall casi no cambi\'o (95,97\,\% vs.\ 96,64\,\% antes de corregir), lo que confirma que el modelo s\'i detecta fuegos reales --- pero la Precisi\'on baj\'o de 55,27\,\% a 15,61\,\%, porque esas 900 filas actuaban como negativos artificialmente `limpios' que inflaban la precisi\'on sin evidencia real. El n\'umero m\'as bajo es, paradójicamente, el m\'as honesto.''
+\end{decirbox}
+
+\begin{alertabox}[title={Qu\'e demuestra esta historia (dilo expl\'icitamente si el jurado insiste)}]
+Detectas errores propios, entiendes su causa ra\'iz, los corriges con evidencia, y comunicas el impacto con n\'umeros --- exactamente lo que un jurado de ciencia de datos quiere ver.
+\end{alertabox}
+
+\newpage
+% =============================================================================
+\section{Gui\'on de la demo en vivo del Dashboard}
+\label{sec:demo}
+
+\noindent\textbf{URL:} \url{https://fireforest-loja.streamlit.app/}
+
+\begin{alertabox}[title={Antes de la sustentaci\'on}]
+Abre el link t\'u mismo unos minutos antes. Si Streamlit Cloud lo puso a ``dormir'' por inactividad, tarda 30--60 segundos en despertar la primera vez --- mejor que eso pase antes, no en vivo frente al jurado.
+\end{alertabox}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize, node distance=0.4cm and 0.4cm]
+\node[motor, minimum width=2.6cm] (s1) {1. Arquitectura\\y Motores};
+\node[motor, right=of s1, minimum width=2.6cm] (s2) {2. Explorador\\Geoespacial};
+\node[motor, right=of s2, minimum width=2.6cm] (s3) {3. Consultas\\SQL/NoSQL/Spark};
+\node[motor, below=0.8cm of s3, minimum width=2.6cm] (s4) {4. An\'alisis\\Clima vs Fuego};
+\node[motor, left=of s4, minimum width=2.6cm] (s5) {5. Predictor\\de Riesgo (ML)};
+\node[motor, left=of s5, minimum width=2.6cm] (s6) {6. Auditor\'ia y\\Trazabilidad};
+\draw[flecha] (s1.east) -- (s2.west);
+\draw[flecha] (s2.east) -- (s3.west);
+\draw[flecha] (s3.south) -- (s4.north);
+\draw[flecha] (s4.west) -- (s5.east);
+\draw[flecha] (s5.west) -- (s6.east);
+\end{tikzpicture}
+\caption{Orden sugerido de navegaci\'on durante la demo (menu lateral izquierdo del dashboard).}
+\end{figure}
+
+\subsubsection*{1. Arquitectura y Motores}
+Muestra los 4 KPIs de arriba: 7.997 celdas, 95.964 filas, 747 eventos de fuego, \textbf{27/27 controles de calidad cumplidos} (16 Clean + 11 Curated). Baja a la tabla de justificaci\'on tecnol\'ogica --- es la misma de la diapositiva 9, ahora interactiva. Di: \emph{``Esta es la misma arquitectura que expliqu\'e, ahora consumida en vivo por el dashboard.''}
+
+\subsubsection*{2. Explorador Geoespacial (7.997 celdas)}
+Mueve el slider de mes a \textbf{septiembre (9)}. Cambia la capa a \textbf{``Focos de Calor VIIRS''} y el mapa base a \textbf{``Satelital HD''}. Se\~nala el contorno cian (l\'imite oficial INEC) y los puntos rojos (focos reales). Mueve el slider a otro mes (ej.\ marzo) para mostrar que el mapa cambia y no hay fuegos --- refuerza el mensaje de estacionalidad.
+
+\subsubsection*{3. Consultas y Tablas (SQL / NoSQL / Spark)}
+Abre la pesta\~na de \textbf{Spark} y muestra la tabla de balance mensual --- son los mismos n\'umeros de tu diapositiva 11, generados en vivo. Abre el \textbf{explorador Curated} y busca la celda \texttt{LJ500\_R031\_C075} (la \#1 del Top-5 de PostGIS) --- ver\'as su fila completa con \texttt{apto\_analisis} incluido. Las pesta\~nas SQL y NoSQL ya tienen consultas predefinidas, no necesitas memorizarlas.
+
+\subsubsection*{4. An\'alisis Clima vs Incendios}
+El gr\'afico de doble eje es la versi\'on interactiva de tu diapositiva 10 --- pasa el mouse sobre cada mes para mostrar el valor exacto. El gr\'afico de dispersi\'on de la derecha (d\'ias secos vs FRP) es un plus que no est\'a en las diapositivas: muestra que los meses con m\'as d\'ias secos concentran el FRP m\'as alto --- otra forma de decir ``memoria h\'idrica''.
+
+\subsubsection*{5. Predictor de Riesgo (ML) --- la parte m\'as interactiva}
+Puedes hacer una predicci\'on en vivo. Valores sugeridos para un caso de \textbf{alto riesgo} (similar a septiembre--octubre real):
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Campo} & \textbf{Valor sugerido} \\
+\midrule
+Mes & 9 o 10 \\
+Precipitaci\'on del mes actual & 15--20\,mm \\
+D\'ias secos en el mes & $\sim$28 \\
+Precipitaci\'on mes anterior (lag 1m) & $\sim$20\,mm \\
+Precipitaci\'on hace 2 meses (lag 2m) & $\sim$18\,mm \\
+D\'ias secos acumulados (3 meses) & $\sim$80 \\
+Fila / Columna & 31 / 75 (celda real con m\'as FRP) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El medidor (gauge) mostrar\'a probabilidad alta, clasificaci\'on ``ALTO RIESGO''. Luego cambia precipitaci\'on a un valor alto (ej.\ 250\,mm) y d\'ias secos a 0 --- el riesgo debe caer a verde. \textbf{Esto demuestra en vivo que el modelo responde de forma f\'isicamente coherente}, no es una caja negra arbitraria.
+
+\subsubsection*{6. Auditor\'ia y Trazabilidad}
+Pesta\~na ``Procedencia y Hashes'': muestra los hashes SHA-256 reales del manifiesto de FIRELAB\_Loja, le\'idos en vivo del archivo JSON. Pesta\~na ``Controles de Calidad'': resume los 16+11 controles. Cierra la demo aqu\'i, conecta con la diapositiva 16 (Gobernanza) y da paso a conclusiones.
+
+\begin{alertabox}[title={Si algo falla en vivo}]
+No te pongas nervioso --- di: \emph{``esto es exactamente lo que resuelve el Motor Dual que mencion\'e: si el motor en vivo falla, conmuta autom\'aticamente al embebido''} y recarga la p\'agina. Convierte el imprevisto en una demostraci\'on de la robustez del dise\~no.
+\end{alertabox}
+
+\newpage
+% =============================================================================
+\section{Banco de preguntas dif\'iciles}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\textbf{Pregunta probable} & \textbf{Respuesta corta} \\
+\midrule
+¿Por qu\'e Spark si el dataset cabe en memoria (2\,MB)? & Decisi\'on arquitect\'onica pensando en escalar: el patr\'on de ventanas por celda se paraleliza sin cambios de c\'odigo si crece a 10 a\~nos o m\'as cantones --- no es volumen actual, es la base reutilizable para el trabajo futuro. \\
+¿Por qu\'e no usar solo pandas para todo? & Pandas fue el prototipo inicial (capa Curated). Spark demuestra el patr\'on distribuido exigido por la asignatura y es la base que s\'i escalar\'ia si el proyecto creciera. \\
+¿C\'omo garantizan que los datos de FIRELAB\_Loja no se corrompieron al copiarlos? & Verificaci\'on de hash SHA-256 de cada archivo en el momento de la copia, documentado en el manifiesto de procedencia. \\
+¿Qu\'e pasa si faltan m\'as celdas VIIRS en el futuro? & El pipeline ya tiene la bandera \texttt{apto\_analisis} dise\~nada exactamente para eso: se conservan como nulas y se excluyen del entrenamiento. \\
+¿Por qu\'e el Recall es m\'as importante que la Precisi\'on aqu\'i? & Contexto de gesti\'on de emergencias: un falso negativo (incendio no detectado) tiene costo humano/ambiental; un falso positivo solo cuesta una revisi\'on de campo. \\
+¿El modelo generaliza a otros a\~nos o cantones? & No --- validado \'unicamente para el cant\'on Loja, a\~no 2023. Es una prueba de concepto reproducible, no un modelo generalizado todav\'ia. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% =============================================================================
+\section{Chuleta de n\'umeros}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize]
+\def\kpi#1#2#3#4{
+  \node[draw=#4, line width=1.1pt, rounded corners=3pt, fill=#4!15, minimum width=3.5cm, minimum height=1.6cm, align=center, inner sep=4pt] {\textbf{\Large #1}\\#2\\{\scriptsize #3}};
+}
+\matrix[row sep=6pt, column sep=6pt] {
+  \kpi{7.997}{celdas de 500m}{Malla cantonal}{VerdeOscuro}; &
+  \kpi{95.964}{filas celda-mes}{12 meses, 2023}{VerdeOscuro}; &
+  \kpi{95.064}{filas aptas ML}{900 excluidas (0,94\,\%)}{VerdeOscuro}; \\
+  \kpi{747}{eventos de fuego}{0,79\,\% del dataset apto}{Fuego}; &
+  \kpi{0,9912}{ROC-AUC}{Separabilidad casi perfecta}{AzulOscuro}; &
+  \kpi{95,97\,\%}{Recall}{143 de 149 fuegos}{AzulOscuro}; \\
+  \kpi{15,61\,\%}{Precisi\'on}{Honesta tras la correcci\'on}{Tierra}; &
+  \kpi{16.724}{MW de FRP}{Total liberado en 2023}{Fuego}; &
+  \kpi{27/27}{controles de calidad}{16 Clean + 11 Curated}{VerdeOscuro}; \\
+};
+\end{tikzpicture}
+\caption{Los nueve n\'umeros que debes poder decir sin dudar.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Concepto} & \textbf{Valor} \\
+\midrule
+Split ML & 76.051 train / 19.013 test (80/20) \\
+Mes cr\'itico & Septiembre (306 celdas, 6.295,15\,MW) \\
+Trimestre cr\'itico & Agosto--Octubre ($>$15.700\,MW, 94\,\% del FRP anual) \\
+Latencia h\'idrica & $\sim$86 d\'ias secos antes del pico de incendios \\
+Motores & PostgreSQL 18/PostGIS $\cdot$ MongoDB 8 $\cdot$ Apache Spark 4.2 $\cdot$ Parquet/Snappy \\
+Dashboard & Streamlit + Plotly, Motor Dual (vivo $\to$ embebido SQLite/JSON) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+\section{Checklist de \'ultimo momento}
+
+\begin{itemize}[label=$\square$]
+    \item Abrir el dashboard 10--15 min antes para que ``despierte'' del modo suspendido de Streamlit Cloud.
+    \item Probar el slider del Predictor de Riesgo con los valores sugeridos de la Secci\'on~\ref{sec:demo}, una vez, antes de la sustentaci\'on.
+    \item Tener a mano la URL del repo: \url{https://github.com/cguillermo79/FireForest}
+    \item Repasar en voz alta al menos una vez el bloque de la diapositiva 14 y la ``historia VIIRS/Spark'' (Secci\'on~\ref{sec:historia_viirs}) --- son las dos partes donde m\'as te pueden presionar.
+    \item Tener claro el orden: diapositivas 6--14 $\to$ transici\'on en diapositiva 15 $\to$ demo en vivo (Secci\'on~\ref{sec:demo}) $\to$ volver a diapositivas 16--18 para cerrar.
+\end{itemize}
+
+\end{document}
